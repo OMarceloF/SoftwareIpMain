@@ -7,3 +7,6 @@
 - Commit 3 12/7/2024
     Dashboard atualizada
 
+- Commit 4 12/7/2024
+    Backend com novos Logs de erro
+
