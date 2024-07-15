@@ -22,7 +22,10 @@ const Review = () => {
 
   return (
     <div className="review">
-      <div className="left">
+      <div className="content">
+      {location.pathname === "/dashboard/review" ? (
+          <>
+            <div className="left">
         <div className="buttonLeft">
           <TfiLayoutMediaRightAlt />
           <Link to="/dashboard/review/planosDeAula"><span>Plano de Aula</span></Link>
@@ -59,6 +62,12 @@ const Review = () => {
           <GiLaserSparks />
           <Link to="/dashboard/review/feira"><span>Feira</span></Link>
         </div>
+        
+      </div>
+          </>
+       ) : (
+        <Outlet />
+      )}
       </div>
     </div>
   )

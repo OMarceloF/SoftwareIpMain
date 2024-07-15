@@ -18,12 +18,16 @@
     gap: 1rem;
   }
   .content {
-    display: block;
-    padding: 0px;
-    justify-content: flex-start !important;
+    width: 85%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    text-align: center;
   }
   .buttonLeft {
-    width: 20%;
+    width: 30%;
     background-color: white;
     color: #34495e;
   }
