@@ -31,7 +31,7 @@ const Dashboard = () => {
         </div>
         <div className="buttonLeft">
           <MdRateReview />
-          <Link to="/dashboard/review"><span>Review Semanal</span></Link>
+          <Link to="/dashboard/review"><span>Review</span></Link>
         </div>
         <div className="buttonLeft">
           <FaHistory />

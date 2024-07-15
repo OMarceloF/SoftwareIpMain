@@ -26,6 +26,10 @@
   background-color: white;
   color: #34495e;
 }
+.review .buttonLeft:hover {
+  transition: all ease 0.5s;
+  background-color: gray;
+}
 .review span {
   color: #34495e;
 }/*# sourceMappingURL=Review.css.map */

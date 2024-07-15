@@ -1,63 +1,63 @@
 import React from "react";
 import '../../../App.css';
 import './Review.css';
+import { useLocation, Link } from "react-router-dom";
 
-// Icones
-import { FaHistory } from "react-icons/fa";
-import { MdRateReview } from "react-icons/md";
-import { RxDashboard } from "react-icons/rx";
-import { IoMdHome } from "react-icons/io";
+// IconeLink
+import { TfiLayoutMediaRightAlt } from "react-icons/tfi";
+import { FaChalkboardTeacher } from "react-icons/fa";
+import { RiPagesLine } from "react-icons/ri";
+import { FaPhotoVideo } from "react-icons/fa";
+import { FaHandshake } from "react-icons/fa6";
+import { MdInventory } from "react-icons/md";
+import { IoIosContact } from "react-icons/io";
+import { GiTeacher } from "react-icons/gi";
+import { GiLaserSparks } from "react-icons/gi";
+
+
 
 const Review = () => {
+
+  const location = useLocation();
 
   return (
     <div className="review">
       <div className="left">
-        <div className="logoPage">
+        <div className="buttonLeft">
+          <TfiLayoutMediaRightAlt />
+          <Link to="/dashboard/review/planosDeAula"><span>Plano de Aula</span></Link>
         </div>
         <div className="buttonLeft">
-          <IoMdHome />
-          <a href="#"><span>Plano de Aula</span></a>
+          <FaChalkboardTeacher />
+          <Link to="/dashboard/review/aulas"><span>Aula</span></Link>
         </div>
         <div className="buttonLeft">
-          <MdRateReview />
-          <a href="#"><span>Aula</span></a>
+          <RiPagesLine />
+          <Link to="/dashboard/review/diario"><span>Diário</span></Link>
         </div>
         <div className="buttonLeft">
-          <FaHistory />
-          <a href="#"><span>Diário</span></a>
+          <FaPhotoVideo />
+          <Link to="/dashboard/review/fotosEVideos"><span>Fotos e Vídeos</span></Link>
         </div>
         <div className="buttonLeft">
-          <RxDashboard />
-          <a href="#"><span>Fotos e Vídeos</span></a>
+          <FaHandshake />
+          <Link to="/dashboard/review/propostas"><span>Propostas</span></Link>
         </div>
         <div className="buttonLeft">
-          <RxDashboard />
-          <a href="#"><span>Propostas</span></a>
+          <MdInventory />
+          <Link to="/dashboard/review/inventario"><span>Inventário</span></Link>
         </div>
         <div className="buttonLeft">
-          <RxDashboard />
-          <a href="#"><span>Inventário</span></a>
+          <IoIosContact />
+          <Link to="/dashboard/review/contato"><span>Contato</span></Link>
         </div>
         <div className="buttonLeft">
-          <RxDashboard />
-          <a href="#"><span>Contato</span></a>
+          <GiTeacher />
+          <Link to="/dashboard/review/guide"><span>Guide</span></Link>
         </div>
         <div className="buttonLeft">
-          <RxDashboard />
-          <a href="#"><span>Teachers Guide</span></a>
-        </div>
-        <div className="buttonLeft">
-          <RxDashboard />
-          <a href="#"><span>Feira</span></a>
-        </div>
-        <div className="buttonLeft">
-          <RxDashboard />
-          <a href="#"><span>PAIP</span></a>
-        </div>
-        <div className="buttonLeft">
-          <RxDashboard />
-          <a href="#"><span>OBR</span></a>
+          <GiLaserSparks />
+          <Link to="/dashboard/review/feira"><span>Feira</span></Link>
         </div>
       </div>
     </div>
