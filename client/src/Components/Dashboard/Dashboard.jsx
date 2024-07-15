@@ -27,7 +27,7 @@ const Dashboard = () => {
         </div>
         <div className="buttonLeft">
           <IoMdHome />
-          <Link to="/dashboard/review"><span>Home</span></Link>
+          <Link to="/dashboard"><span>Home</span></Link>
         </div>
         <div className="buttonLeft">
           <MdRateReview />

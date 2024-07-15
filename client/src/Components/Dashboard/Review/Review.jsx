@@ -1,7 +1,7 @@
 import React from "react";
 import '../../../App.css';
 import './Review.css';
-import { useLocation, Link } from "react-router-dom";
+import { useLocation, Outlet, Link } from "react-router-dom";
 
 // IconeLink
 import { TfiLayoutMediaRightAlt } from "react-icons/tfi";
