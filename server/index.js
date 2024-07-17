@@ -53,6 +53,22 @@ app.post('/aula', (req, res) => {
   })
 })
 
+// Adicionando uma rota para salvar dados na tabela contato
+app.post('/contato', (req, res) => {
+  const { date, retorno, comentarios } = req.body;
+
+  const SQL = 'INSERT INTO contato (date, retorno, comentarios) VALUES (?, ?, ?)';
+  const values = [date, retorno, comentarios];
+
+  db.query(SQL, values, (err, results) => {
+      if (err) {
+          console.error('Erro ao inserir dados:', err);
+          return res.status(500).send({ error: err });
+      }
+      res.status(200).send({ message: 'Dados inseridos com sucesso!' });
+  });
+});
+
 
 // Rodando o servidor
 app.listen(3002, () => {

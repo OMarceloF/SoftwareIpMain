@@ -21,14 +21,23 @@ const Aulas = () => {
 
     const handleSubmit = (event) => {
         event.preventDefault();
-        // Aqui você pode enviar os dados para o backend
+
+        const currentDate = new Date().toISOString().split('T')[0];
+
         const formData = {
-            unit,
-            rating,
-            textQuestion1,
-            textQuestion2,
+            date: currentDate,
+            unidade: unit,
+            retorno: yesNoQuestion,
+            comentarios: textQuestion2,
         };
-        console.log(formData);
+
+        axios.post('http://localhost:3002/contato', formData)
+            .then(response => {
+                console.log('Dados enviados com sucesso:', response.data);
+            })
+            .catch(error => {
+                console.error('Erro ao enviar dados:', error);
+            });
     };
 
     return (
