@@ -24,12 +24,6 @@ db.connect((err) => {
   console.log('Conectado ao banco de dados como ID', db.threadId);
 });
 
-// Rodando o servidor
-app.listen(3002, () => {
-  console.log('Server is running on port 3002');
-});
-
-
 // Criando uma rota para buscar a tabela unidades
 app.get('/unidades', (req, res) => {
   // Criando SQL para selecionar os dados
@@ -43,6 +37,28 @@ app.get('/unidades', (req, res) => {
     res.status(200).send(results);
   });
 });
+
+app.post('/aula', (req, res) => {
+  const { date, unidade, regente, nota, comentarios } = req.body;
+
+  const SQL = 'INSERT INTO aula (date, unidade, regente, nota, comentarios) VALUES (?, ?, ?, ?, ?)';
+  const values = [date, unidade, regente, nota, comentarios];
+
+  db.query(SQL, values, (err, results) => {
+    if (err){
+      console.error('Erro ao inserir dados:', err);
+      return res.status(500).send({ error: err });
+    }
+    res.status(200).send({ message: 'Dados inseridos com sucesso!' });
+  })
+})
+
+
+// Rodando o servidor
+app.listen(3002, () => {
+  console.log('Server is running on port 3002');
+});
+
 
 // Criando uma rota até o servidor para criar usuários
 app.post('/register', (req, res) => {
