@@ -1,6 +1,7 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import '../../../../App.css';
 import './Aulas.css';
+import axios from 'axios';
 
 const Aulas = () => {
   const [unit, setUnit] = useState('');
@@ -20,6 +21,18 @@ const Aulas = () => {
     console.log(formData);
   };
 
+  const [unidades, setUnidades] = useState([]);
+
+  useEffect(() => {
+    axios.get('http://localhost:3002/unidades')
+      .then(response => {
+        setUnidades(response.data);
+      })
+      .catch(error => {
+        console.error('Erro ao buscar dados:', error);
+      });
+  }, []);
+
   return (
     <form onSubmit={handleSubmit}>
       <div>
@@ -30,9 +43,9 @@ const Aulas = () => {
           onChange={(e) => setUnit(e.target.value)}
         >
           <option value="">Selecione uma unidade</option>
-          <option value="unidade1">Unidade 1</option>
-          <option value="unidade2">Unidade 2</option>
-          {/* Adicione mais opções conforme necessário */}
+          {unidades.map((unidade, index) => (
+            <option key={index} value={unidade.cidade}>{unidade.cidade}</option>
+          ))}
         </select>
       </div>
 

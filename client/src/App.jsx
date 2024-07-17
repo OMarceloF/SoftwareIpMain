@@ -11,6 +11,7 @@ import Inventario from './Components/Dashboard/Review/Components/Inventario'
 import Contato from './Components/Dashboard/Review/Components/Contato'
 import Guide from './Components/Dashboard/Review/Components/Guide'
 import Feira from './Components/Dashboard/Review/Components/Feira'
+import Unidades from './Components/Dashboard/Unidades/Unidades'
 
 // Importando React Router DOM
 import {
@@ -74,6 +75,10 @@ const router = createBrowserRouter([
             element: <Feira />
           }
         ]
+      },
+      {
+        path: 'unidades',
+        element: <Unidades />
       }
     ]
   }

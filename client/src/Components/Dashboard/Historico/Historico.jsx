@@ -2,7 +2,9 @@ import React from "react";
 
 const Historico = () => {
   return (
-    <></>
+    <>
+      Histórico
+    </>
   )
 }
 

@@ -9,6 +9,8 @@ import { FaHistory } from "react-icons/fa";
 import { MdRateReview } from "react-icons/md";
 import { RxDashboard } from "react-icons/rx";
 import { IoMdHome } from "react-icons/io";
+import { RiCommunityLine } from "react-icons/ri";
+
 
 
 // Assets
@@ -40,6 +42,10 @@ const Dashboard = () => {
         <div className="buttonLeft">
           <RxDashboard />
           <a href="#"><span>Dashboard</span></a>
+        </div>
+        <div className="buttonLeft">
+          <RiCommunityLine />
+          <Link to="/dashboard/unidades"><span>Unidades</span></Link>
         </div>
       </div>
       <div className="content">
