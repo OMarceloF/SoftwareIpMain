@@ -8,6 +8,17 @@ const Aulas = () => {
   const [rating, setRating] = useState(0);
   const [textQuestion1, setTextQuestion1] = useState('');
   const [textQuestion2, setTextQuestion2] = useState('');
+  const [unidades, setUnidades] = useState([]);
+
+  useEffect(() => {
+    axios.get('http://localhost:3002/unidades')
+      .then(response => {
+        setUnidades(response.data);
+      })
+      .catch(error => {
+        console.error('Erro ao buscar dados:', error);
+      });
+  }, []);
 
   const handleSubmit = (event) => {
     event.preventDefault();
@@ -20,18 +31,6 @@ const Aulas = () => {
     };
     console.log(formData);
   };
-
-  const [unidades, setUnidades] = useState([]);
-
-  useEffect(() => {
-    axios.get('http://localhost:3002/unidades')
-      .then(response => {
-        setUnidades(response.data);
-      })
-      .catch(error => {
-        console.error('Erro ao buscar dados:', error);
-      });
-  }, []);
 
   return (
     <form onSubmit={handleSubmit}>

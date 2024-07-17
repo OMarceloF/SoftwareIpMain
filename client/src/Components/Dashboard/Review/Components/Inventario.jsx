@@ -1,6 +1,7 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import '../../../../App.css';
 import './Inventario.css';
+import axios from 'axios';
 
 const Aulas = () => {
   const [unit, setUnit] = useState('');
@@ -8,6 +9,17 @@ const Aulas = () => {
   const [textQuestion2, setTextQuestion2] = useState('');
   const [textQuestion3, setTextQuestion3] = useState('');
   const [yesNoQuestion, setYesNoQuestion] = useState(''); 
+  const [unidades, setUnidades] = useState([]);
+
+  useEffect(() => {
+      axios.get('http://localhost:3002/unidades')
+          .then(response => {
+              setUnidades(response.data);
+          })
+          .catch(error => {
+              console.error('Erro ao buscar dados:', error);
+          });
+  }, []);
 
   const handleSubmit = (event) => {
     event.preventDefault();
@@ -23,19 +35,19 @@ const Aulas = () => {
 
   return (
     <form onSubmit={handleSubmit}>
-      <div>
-        <label htmlFor="unit">Unidade:</label>
-        <select 
-          id="unit" 
-          value={unit} 
-          onChange={(e) => setUnit(e.target.value)}
-        >
-          <option value="">Selecione uma unidade</option>
-          <option value="unidade1">Unidade 1</option>
-          <option value="unidade2">Unidade 2</option>
-          {/* Adicione mais opções conforme necessário */}
-        </select>
-      </div>
+            <div>
+                <label htmlFor="unit">Unidade:</label>
+                <select
+                    id="unit"
+                    value={unit}
+                    onChange={(e) => setUnit(e.target.value)}
+                >
+                    <option value="">Selecione uma unidade</option>
+                    {unidades.map((unidade, index) => (
+                        <option key={index} value={unidade.cidade}>{unidade.cidade}</option>
+                    ))}
+                </select>
+            </div>
 
       <div>
         <label htmlFor="textQuestion1">Regente</label>

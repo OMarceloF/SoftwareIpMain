@@ -1,3 +1,5 @@
+import './Unidades.css';
+
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 
@@ -17,9 +19,9 @@ const Unidades = () => {
     return (
         <>
             <h1>Unidades</h1>
-            <div style={{ display: 'flex', flexWrap: 'wrap' }}>
+            <div className="cards-container">
                 {unidades.map((unidade, index) => (
-                    <div key={index} style={{ border: '1px solid #ccc', borderRadius: '8px', padding: '16px', margin: '8px', width: '200px', boxShadow: '0 2px 5px rgba(0,0,0,0.1)' }}>
+                    <div key={index} className="card">
                         <h2>{unidade.cidade}</h2>
                         <p>{unidade.coordenador}</p>
                     </div>
