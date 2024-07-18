@@ -23,13 +23,19 @@ const Aulas = () => {
     const handleSubmit = (event) => {
         event.preventDefault();
         // Aqui você pode enviar os dados para o backend
+        const currentDate = new Date().toISOString().split('T')[0];
         const formData = {
-            unit,
-            rating,
-            textQuestion1,
-            textQuestion2,
+            date: currentDate,
+            unidade: unit,
+            regente: textQuestion1,
+            nota: rating,
+            comentarios: textQuestion2,
         };
-        console.log(formData);
+        
+        axios.post('http://localhost:3002/planos', formData).then(response => {
+            console.log('Dados enviados com sucesso:', response.data);
+          })
+
     };
 
     return (
