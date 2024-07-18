@@ -10,66 +10,71 @@ const Aulas = () => {
   const [unidades, setUnidades] = useState([]);
 
   useEffect(() => {
-      axios.get('http://localhost:3002/unidades')
-          .then(response => {
-              setUnidades(response.data);
-          })
-          .catch(error => {
-              console.error('Erro ao buscar dados:', error);
-          });
+    axios.get('http://localhost:3002/unidades')
+      .then(response => {
+        setUnidades(response.data);
+      })
+      .catch(error => {
+        console.error('Erro ao buscar dados:', error);
+      });
   }, []);
 
   const handleSubmit = (event) => {
     event.preventDefault();
     // Aqui você pode enviar os dados para o backend
+    const currentDate = new Date().toISOString().split('T')[0];
     const formData = {
-      unit,
-      rating,
-      textQuestion1,
-      textQuestion2,
+      date: currentDate,
+      unidade: unit,
+      regente: textQuestion1,
+      comentarios: textQuestion2,
     };
-    console.log(formData);
-  };
 
-  return (
-    <form onSubmit={handleSubmit}>
-            <div>
-                <label htmlFor="unit">Unidade:</label>
-                <select
-                    id="unit"
-                    value={unit}
-                    onChange={(e) => setUnit(e.target.value)}
-                >
-                    <option value="">Selecione uma unidade</option>
-                    {unidades.map((unidade, index) => (
-                        <option key={index} value={unidade.cidade}>{unidade.cidade}</option>
-                    ))}
-                </select>
-            </div>
+    axios.post('http://localhost:3002/propostas', formData).then(response => {
+      console.log('Dados enviados com sucesso:', response.data);
+    })
 
-      <div>
-        <label htmlFor="textQuestion1">Regente</label>
-        <input 
-          type="text" 
-          id="textQuestion1" 
-          value={textQuestion1} 
-          onChange={(e) => setTextQuestion1(e.target.value)} 
-        />
-      </div>
+};
 
-      <div>
-        <label htmlFor="textQuestion2">Observações</label>
-        <input 
-          type="text" 
-          id="textQuestion2" 
-          value={textQuestion2} 
-          onChange={(e) => setTextQuestion2(e.target.value)} 
-        />
-      </div>
+return (
+  <form onSubmit={handleSubmit}>
+    <div>
+      <label htmlFor="unit">Unidade:</label>
+      <select
+        id="unit"
+        value={unit}
+        onChange={(e) => setUnit(e.target.value)}
+      >
+        <option value="">Selecione uma unidade</option>
+        {unidades.map((unidade, index) => (
+          <option key={index} value={unidade.cidade}>{unidade.cidade}</option>
+        ))}
+      </select>
+    </div>
 
-      <button type="submit">Enviar</button>
-    </form>
-  );
+    <div>
+      <label htmlFor="textQuestion1">Regente</label>
+      <input
+        type="text"
+        id="textQuestion1"
+        value={textQuestion1}
+        onChange={(e) => setTextQuestion1(e.target.value)}
+      />
+    </div>
+
+    <div>
+      <label htmlFor="textQuestion2">Observações</label>
+      <input
+        type="text"
+        id="textQuestion2"
+        value={textQuestion2}
+        onChange={(e) => setTextQuestion2(e.target.value)}
+      />
+    </div>
+
+    <button type="submit">Enviar</button>
+  </form>
+);
 };
 
 export default Aulas;

@@ -150,6 +150,21 @@ app.post('/planos', (req, res) => {
   })
 })
 
+// Adicionando uma rota para salvar dados na tabela Planos
+app.post('/propostas', (req, res) => {
+  const { date, unidade, regente, comentarios } = req.body;
+
+  const SQL = 'INSERT INTO propostas (date, unidade, regente, comentarios) VALUES (?, ?, ?, ?)';
+  const values = [date, unidade, regente, comentarios];
+
+  db.query(SQL, values, (err, results) => {
+    if(err) {
+      console.error('Erro ao inserir dados:', err);
+      return res.status(500).send({ error: err })
+    }
+    res.status(200).send({ message: 'Dados inseridos com sucesso!' })
+  })
+})
 
 
 // Rodando o servidor
