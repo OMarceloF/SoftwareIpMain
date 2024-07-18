@@ -41,57 +41,60 @@ const Aulas = () => {
     };
 
     return (
-        <form onSubmit={handleSubmit}>
-            <div>
-                <label htmlFor="unit">Unidade:</label>
-                <select
-                    id="unit"
-                    value={unit}
-                    onChange={(e) => setUnit(e.target.value)}
-                >
-                    <option value="">Selecione uma unidade</option>
-                    {unidades.map((unidade, index) => (
-                        <option key={index} value={unidade.cidade}>{unidade.cidade}</option>
-                    ))}
-                </select>
-            </div>
-
-            <div>
-                <label>Retorno?</label>
+        <>
+            <h2>Registro de Contato com Unidades</h2>
+            <form onSubmit={handleSubmit}>
                 <div>
-                    <label>
-                        <input
-                            type="radio"
-                            value="Sim"
-                            checked={yesNoQuestion === 'Sim'}
-                            onChange={(e) => setYesNoQuestion(e.target.value)}
-                        />
-                        Sim
-                    </label>
-                    <label>
-                        <input
-                            type="radio"
-                            value="Não"
-                            checked={yesNoQuestion === 'Não'}
-                            onChange={(e) => setYesNoQuestion(e.target.value)}
-                        />
-                        Não
-                    </label>
+                    <label htmlFor="unit">Unidade:</label>
+                    <select
+                        id="unit"
+                        value={unit}
+                        onChange={(e) => setUnit(e.target.value)}
+                    >
+                        <option value="">Selecione uma unidade</option>
+                        {unidades.map((unidade, index) => (
+                            <option key={index} value={unidade.cidade}>{unidade.cidade}</option>
+                        ))}
+                    </select>
                 </div>
-            </div>
 
-            <div>
-                <label htmlFor="textQuestion2">Observações</label>
-                <input
-                    type="text"
-                    id="textQuestion2"
-                    value={textQuestion2}
-                    onChange={(e) => setTextQuestion2(e.target.value)}
-                />
-            </div>
+                <div>
+                    <label>Retorno?</label>
+                    <div>
+                        <label>
+                            <input
+                                type="radio"
+                                value="Sim"
+                                checked={yesNoQuestion === 'Sim'}
+                                onChange={(e) => setYesNoQuestion(e.target.value)}
+                            />
+                            Sim
+                        </label>
+                        <label>
+                            <input
+                                type="radio"
+                                value="Não"
+                                checked={yesNoQuestion === 'Não'}
+                                onChange={(e) => setYesNoQuestion(e.target.value)}
+                            />
+                            Não
+                        </label>
+                    </div>
+                </div>
 
-            <button type="submit">Enviar</button>
-        </form>
+                <div>
+                    <label htmlFor="textQuestion2">Observações</label>
+                    <input
+                        type="text"
+                        id="textQuestion2"
+                        value={textQuestion2}
+                        onChange={(e) => setTextQuestion2(e.target.value)}
+                    />
+                </div>
+
+                <button type="submit">Enviar</button>
+            </form>
+        </>
     );
 };
 

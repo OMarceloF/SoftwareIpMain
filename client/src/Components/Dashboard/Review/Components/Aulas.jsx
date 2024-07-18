@@ -35,66 +35,71 @@ const Aulas = () => {
         axios.post('http://localhost:3002/aula', formData).then(response => {
             console.log('Dados enviados com sucesso:', response.data);
         })
-        .catch(error => {
-            console.error('Erro ao enviar dados:', error);
-        })
+            .catch(error => {
+                console.error('Erro ao enviar dados:', error);
+            })
     };
 
     return (
-        <form onSubmit={handleSubmit}>
-            <div>
-                <label htmlFor="unit">Unidade:</label>
-                <select
-                    id="unit"
-                    value={unit}
-                    onChange={(e) => setUnit(e.target.value)}
-                >
-                    <option value="">Selecione uma unidade</option>
-                    {unidades.map((unidade, index) => (
-                        <option key={index} value={unidade.cidade}>{unidade.cidade}</option>
-                    ))}
-                </select>
+        <>
+            <div className="title-form">
+                <h2>Avaliação de Aulas Assistidas</h2>
             </div>
-
-            <div>
-                <label htmlFor="textQuestion1">Regente</label>
-                <input
-                    type="text"
-                    id="textQuestion1"
-                    value={textQuestion1}
-                    onChange={(e) => setTextQuestion1(e.target.value)}
-                />
-            </div>
-
-            <div>
-                <label>Nota:</label>
-                <div className='escolhaQuestion'>
-                    {[...Array(11).keys()].map((number) => (
-                        <label key={number}>
-                            <input
-                                type="radio"
-                                value={number}
-                                checked={rating === number}
-                                onChange={(e) => setRating(Number(e.target.value))}
-                            />
-                            {number}
-                        </label>
-                    ))}
+            <form onSubmit={handleSubmit}>
+                <div>
+                    <label htmlFor="unit">Unidade:</label>
+                    <select
+                        id="unit"
+                        value={unit}
+                        onChange={(e) => setUnit(e.target.value)}
+                    >
+                        <option value="">Selecione uma unidade</option>
+                        {unidades.map((unidade, index) => (
+                            <option key={index} value={unidade.cidade}>{unidade.cidade}</option>
+                        ))}
+                    </select>
                 </div>
-            </div>
 
-            <div>
-                <label htmlFor="textQuestion2">Observações</label>
-                <input
-                    type="text"
-                    id="textQuestion2"
-                    value={textQuestion2}
-                    onChange={(e) => setTextQuestion2(e.target.value)}
-                />
-            </div>
+                <div>
+                    <label htmlFor="textQuestion1">Regente</label>
+                    <input
+                        type="text"
+                        id="textQuestion1"
+                        value={textQuestion1}
+                        onChange={(e) => setTextQuestion1(e.target.value)}
+                    />
+                </div>
 
-            <button type="submit">Enviar</button>
-        </form>
+                <div>
+                    <label>Nota:</label>
+                    <div className='escolhaQuestion'>
+                        {[...Array(11).keys()].map((number) => (
+                            <label key={number}>
+                                <input
+                                    type="radio"
+                                    value={number}
+                                    checked={rating === number}
+                                    onChange={(e) => setRating(Number(e.target.value))}
+                                />
+                                {number}
+                            </label>
+                        ))}
+                    </div>
+                </div>
+
+                <div>
+                    <label htmlFor="textQuestion2">Observações</label>
+                    <input
+                        type="text"
+                        id="textQuestion2"
+                        value={textQuestion2}
+                        onChange={(e) => setTextQuestion2(e.target.value)}
+                    />
+                </div>
+
+                <button type="submit">Enviar</button>
+            </form>
+        </>
     );
 };
 

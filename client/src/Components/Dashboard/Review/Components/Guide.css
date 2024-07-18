@@ -1,7 +1,11 @@
 @charset "UTF-8";
 /* styles.css (ou o arquivo CSS onde você deseja adicionar estilos) */
+* {
+  background-color: transparent;
+}
+
 form {
-  max-width: 400px;
+  max-width: 900px;
   margin: 0 auto;
   padding: 20px;
   border: 1px solid #ccc;

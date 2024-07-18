@@ -150,7 +150,7 @@ app.post('/planos', (req, res) => {
   })
 })
 
-// Adicionando uma rota para salvar dados na tabela Planos
+// Adicionando uma rota para salvar dados na tabela Propostas
 app.post('/propostas', (req, res) => {
   const { date, unidade, regente, comentarios } = req.body;
 
