@@ -52,4 +52,8 @@ button:hover {
   align-items: center;
   justify-content: center;
   gap: 1rem;
+}
+
+.unidadeDiv {
+  display: none;
 }/*# sourceMappingURL=FotosEVideos.css.map */
