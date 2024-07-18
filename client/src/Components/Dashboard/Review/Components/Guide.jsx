@@ -67,7 +67,7 @@ const Aulas = () => {
 
         <div>
           <label>Conformidade com o Teachers Guide?</label>
-          <div>
+          <div className='inputsGuide'>
             <label>
               <input
                 type="radio"

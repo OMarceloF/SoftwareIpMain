@@ -60,7 +60,7 @@ const Aulas = () => {
 
                 <div>
                     <label>Retorno?</label>
-                    <div>
+                    <div className='inputsRetorno'>
                         <label>
                             <input
                                 type="radio"

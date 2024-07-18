@@ -42,7 +42,7 @@ const Aulas = () => {
 
   return (
     <>
-      <h2>Registro de Quebras e Manuntenções Solicitadas</h2>
+      <h2>Registro de Quebras e Manuntenções</h2>
       <form onSubmit={handleSubmit}>
         <div>
           <label htmlFor="unit">Unidade:</label>
@@ -90,7 +90,7 @@ const Aulas = () => {
 
         <div>
           <label>Resolvido?</label>
-          <div>
+          <div className='inputsInventario'>
             <label>
               <input
                 type="radio"

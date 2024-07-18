@@ -92,30 +92,6 @@ const Aulas = () => {
                     />
                 </div>
 
-                <div>
-                    <label>Resolvido?</label>
-                    <div>
-                        <label>
-                            <input
-                                type="radio"
-                                value="Sim"
-                                checked={yesNoQuestion === 'Sim'}
-                                onChange={(e) => setYesNoQuestion(e.target.value)}
-                            />
-                            Sim
-                        </label>
-                        <label>
-                            <input
-                                type="radio"
-                                value="Não"
-                                checked={yesNoQuestion === 'Não'}
-                                onChange={(e) => setYesNoQuestion(e.target.value)}
-                            />
-                            Não
-                        </label>
-                    </div>
-                </div>
-
                 <button type="submit">Enviar</button>
             </form>
         </>

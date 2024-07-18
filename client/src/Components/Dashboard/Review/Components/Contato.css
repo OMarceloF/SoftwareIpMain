@@ -4,6 +4,14 @@
   background-color: transparent;
 }
 
+.inputsRetorno {
+  display: flex;
+  flex-direction: row;
+  gap: 1rem;
+  justify-content: center;
+  align-items: center;
+}
+
 form {
   max-width: 900px;
   margin: 0 auto;

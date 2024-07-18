@@ -3,6 +3,14 @@
   background-color: transparent;
 }
 
+.inputsInventario {
+  display: flex;
+  flex-direction: row;
+  gap: 1rem;
+  align-items: center;
+  justify-content: center;
+}
+
 
 form {
     max-width: 900px;
