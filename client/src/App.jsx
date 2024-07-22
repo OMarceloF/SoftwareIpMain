@@ -12,6 +12,7 @@ import Contato from './Components/Dashboard/Review/Components/Contato'
 import Guide from './Components/Dashboard/Review/Components/Guide'
 import Feira from './Components/Dashboard/Review/Components/Feira'
 import Unidades from './Components/Dashboard/Unidades/Unidades'
+import CriarUnidades from './Components/Dashboard/Unidades/Components/CriarUnidades'
 
 // Importando React Router DOM
 import {
@@ -78,7 +79,13 @@ const router = createBrowserRouter([
       },
       {
         path: 'unidades',
-        element: <Unidades />
+        element: <Unidades />,
+        children: [
+          {
+            path: 'criarunidade',
+            element: <CriarUnidades />
+          }
+        ]
       }
     ]
   }

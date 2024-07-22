@@ -5,6 +5,7 @@
     "@mui/icons-material": "^5.16.0",
     "@mui/material": "^5.16.0",
     "axios": "^1.7.2",
+    "chartjs": "^0.3.24",
     "react-router-dom": "^6.24.1"
   }
 }

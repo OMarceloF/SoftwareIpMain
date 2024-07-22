@@ -9,6 +9,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "chartjs": "^0.3.24",
     "cors": "^2.8.5",
     "express": "^4.19.2",
     "express-fileupload": "^1.5.0",
