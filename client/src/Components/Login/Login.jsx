@@ -15,49 +15,44 @@ import { AiOutlineSwapRight } from "react-icons/ai";
 
 const Login = () => {
   // UseState
-  const [loginEmail, loginSetEmail] = useState('')
-  const [loginPassword, loginSetPassword] = useState('')
-  const navigateTo = useNavigate()
-
-  // Função para mostrar mensagem de erro
-  const [loginStatus, setLoginStatus] = useState('')
-  const [statusHolder, setstatusHolder] = useState('message')
+  const [loginEmail, setLoginEmail] = useState('');
+  const [loginPassword, setLoginPassword] = useState('');
+  const [loginStatus, setLoginStatus] = useState('');
+  const [statusHolder, setStatusHolder] = useState('message');
+  const navigateTo = useNavigate();
 
   const loginUser = (e) => {
-    // Prever erros
-    e.preventDefault()
+    e.preventDefault();
+    // Verificação de campos vazios
+    if (!loginEmail || !loginPassword) {
+      setLoginStatus('Credenciais não encontradas!');
+      return;
+    }
+
     // Pedindo ao Axios para criar uma API e conectar ao servidor
     Axios.post('http://localhost:3002/login', {
-      // criando variaveis para enviar ao servidor
       LoginEmail: loginEmail,
       LoginPassword: loginPassword
     }).then((response) => {
-      console.log()
-      if(response.data.message || loginEmail === '' || loginPassword === ''){
+      if (response.data.message) {
         // Se as credenciais não baterem
-        navigateTo('/') // Recarregar na pag de login
-        setLoginStatus('Credenciais não encontradas!') // Mostrar mensagem de erro
+        setLoginStatus(response.data.message); // Mostrar mensagem de erro
+      } else {
+        navigateTo('/dashboard'); // Entrar para o dashboard
       }
-      else {
-        navigateTo('/dashboard') // Entrar para o dashboard
-      }
-    })
+    }).catch((error) => {
+      setLoginStatus('Dados não encontrados!'); // Mostrar mensagem de erro
+    });
   }
 
   useEffect(() => {
-    if(loginStatus !== ''){
-      setstatusHolder('showMessage') // Mostrar mensagem de erro
+    if (loginStatus !== '') {
+      setStatusHolder('showMessage'); // Mostrar mensagem de erro
       setTimeout(() => {
-        setstatusHolder('message') // Esconder mensagem de erro depois de 4s
-      }, 4000)
+        setStatusHolder('message'); // Esconder mensagem de erro depois de 4s
+      }, 4000);
     }
-  }, [loginStatus])
-
-  // Limpar o formulário depois de clicar em enviar
-  const onSubmit = () => {
-    loginSetEmail('')
-    loginSetPassword('')
-  }
+  }, [loginStatus]);
 
   return (
     <div className="loginPage flex">
@@ -73,7 +68,7 @@ const Login = () => {
           <div className="footerDiv flex">
             <span className="text">Criar Novas Contas</span>
             <Link to={'/register'}>
-            <button className="btn">Registrar</button>
+              <button className="btn">Registrar</button>
             </Link>
           </div>
         </div>
@@ -84,32 +79,31 @@ const Login = () => {
             <h3>Entre em sua conta</h3>
           </div>
 
-          <form className="form grid" onSubmit={onSubmit}>
+          <form className="form grid" onSubmit={loginUser}>
             <span className={statusHolder}>{loginStatus}</span>
             <div className="inputDiv">
               <label htmlFor="email">E-mail</label>
               <div className="input flex">
                 <FaUserShield className='icon' />
-                <input type="text" id="email" placeholder="Digite seu email" onChange={(event) => {
-                  loginSetEmail(event.target.value)
-                }}/>
+                <input type="text" id="email" placeholder="Digite seu email" value={loginEmail} onChange={(event) => {
+                  setLoginEmail(event.target.value);
+                }} />
               </div>
             </div>
             <div className="inputDiv">
               <label htmlFor="password">Senha</label>
               <div className="input flex">
                 <BsFillShieldLockFill className='icon' />
-                <input type="password" id="password" placeholder="Digite sua Senha" onChange={(event) => {
-                  loginSetPassword(event.target.value)
+                <input type="password" id="password" placeholder="Digite sua Senha" value={loginPassword} onChange={(event) => {
+                  setLoginPassword(event.target.value);
                 }} />
               </div>
             </div>
 
-            <button type="submit" className="btn flex" onClick={loginUser}>
+            <button type="submit" className="btn flex">
               <span>Entrar</span>
               <AiOutlineSwapRight className='icon' />
             </button>
-
           </form>
         </div>
       </div>
@@ -117,4 +111,4 @@ const Login = () => {
   );
 }
 
-export default Login; 
+export default Login;
