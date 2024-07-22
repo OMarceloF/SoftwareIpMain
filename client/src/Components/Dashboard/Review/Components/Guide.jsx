@@ -3,12 +3,13 @@ import '../../../../App.css';
 import './Guide.css';
 import axios from 'axios';
 
-const Aulas = () => {
+const Guide = () => {
   const [unit, setUnit] = useState('');
   const [textQuestion3, setTextQuestion3] = useState('');
   const [yesNoQuestion, setYesNoQuestion] = useState('');
   const [unidades, setUnidades] = useState([]);
   const [turmaQuestion, setturmaQuestion] = useState('');
+  const [errorMessage, setErrorMessage] = useState('');
 
   useEffect(() => {
     axios.get('http://localhost:3002/unidades')
@@ -22,7 +23,18 @@ const Aulas = () => {
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    // Aqui você pode enviar os dados para o backend
+
+    // Validação para garantir que todos os campos necessários estão preenchidos
+    if (!unit || turmaQuestion === '' || !yesNoQuestion || !textQuestion3) {
+      setErrorMessage('Por favor, preencha todos os campos antes de enviar.');
+      setTimeout(() => {
+        setErrorMessage('');
+      }, 4000);
+      return;
+    }
+
+    setErrorMessage(''); // Clear error message if all fields are filled
+
     const currentDate = new Date().toISOString().split('T')[0];
     const formData = {
       date: currentDate,
@@ -32,14 +44,19 @@ const Aulas = () => {
       comentarios: textQuestion3,
     };
 
-    axios.post('http://localhost:3002/guide', formData).then(response => {
-      console.log('Dados enviados com sucesso:', response.data);
-    })
+    axios.post('http://localhost:3002/guide', formData)
+      .then(response => {
+        console.log('Dados enviados com sucesso:', response.data);
+      })
+      .catch(error => {
+        console.error('Erro ao enviar dados:', error);
+      });
   };
 
   return (
     <>
       <h2>Avaliação de Conformidade com o Teachers Guide</h2>
+      {errorMessage && <div className="error-message">{errorMessage}</div>}
       <form onSubmit={handleSubmit}>
         <div>
           <label htmlFor="unit">Unidade:</label>
@@ -56,7 +73,7 @@ const Aulas = () => {
         </div>
 
         <div>
-          <label htmlFor="textQuestion3">Turma:</label>
+          <label htmlFor="turmaQuestion">Turma:</label>
           <input
             type="number"
             id="turmaQuestion"
@@ -105,4 +122,4 @@ const Aulas = () => {
   );
 };
 
-export default Aulas;
+export default Guide;

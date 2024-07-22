@@ -3,12 +3,13 @@ import '../../../../App.css';
 import './Diario.css';
 import axios from 'axios';
 
-const Aulas = () => {
+const Diario = () => {
     const [unit, setUnit] = useState('');
     const [rating, setRating] = useState(0);
     const [textQuestion1, setTextQuestion1] = useState('');
     const [textQuestion2, setTextQuestion2] = useState('');
     const [unidades, setUnidades] = useState([]);
+    const [errorMessage, setErrorMessage] = useState('');
 
     useEffect(() => {
         axios.get('http://localhost:3002/unidades')
@@ -23,6 +24,17 @@ const Aulas = () => {
     const handleSubmit = (event) => {
         event.preventDefault();
         const currentDate = new Date().toISOString().split('T')[0];
+
+        if (!unit || !rating || !textQuestion1 || !textQuestion2) {
+            setErrorMessage('Por favor, preencha todos os campos antes de enviar.');
+            setTimeout(() => {
+                setErrorMessage('');
+            }, 4000);
+            return;
+        }
+
+        setErrorMessage(''); // Clear error message if all fields are filled
+
         // Aqui você pode enviar os dados para o backend
         const formData = {
             date: currentDate,
@@ -32,14 +44,19 @@ const Aulas = () => {
             comentarios: textQuestion2,
         };
 
-        axios.post('http://localhost:3002/diarios', formData).then(response => {
-            console.log('Dados enviados com sucesso:', response.data);
-        })
+        axios.post('http://localhost:3002/diarios', formData)
+            .then(response => {
+                console.log('Dados enviados com sucesso:', response.data);
+            })
+            .catch(error => {
+                console.error('Erro ao enviar dados:', error);
+            });
     };
 
     return (
         <>
             <h2>Conferencia e Avaliação de Diário</h2>
+            {errorMessage && <div className="error-message">{errorMessage}</div>}
             <form onSubmit={handleSubmit}>
                 <div>
                     <label htmlFor="unit">Unidade:</label>
@@ -98,4 +115,4 @@ const Aulas = () => {
     );
 };
 
-export default Aulas;
+export default Diario;

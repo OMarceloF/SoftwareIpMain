@@ -1,3 +1,21 @@
 .unidadeCriar {
     display: none;
 }
+
+.error-message {
+    display: block;
+    color: var(--whiteColor);
+    padding: 10px;
+    background: rgb(255, 0, 0);
+    border-radius: 3px;
+    text-align: center;
+}
+
+.success {
+    display: block;
+    color: var(--whiteColor);
+    padding: 10px;
+    background: green;
+    border-radius: 3px;
+    text-align: center;
+}

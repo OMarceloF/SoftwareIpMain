@@ -3,13 +3,14 @@ import '../../../../App.css';
 import './Inventario.css';
 import axios from 'axios';
 
-const Aulas = () => {
+const Inventario = () => {
   const [unit, setUnit] = useState('');
   const [textQuestion1, setTextQuestion1] = useState('');
   const [textQuestion2, setTextQuestion2] = useState('');
   const [textQuestion3, setTextQuestion3] = useState('');
   const [yesNoQuestion, setYesNoQuestion] = useState('');
   const [unidades, setUnidades] = useState([]);
+  const [errorMessage, setErrorMessage] = useState('');
 
   useEffect(() => {
     axios.get('http://localhost:3002/unidades')
@@ -23,7 +24,18 @@ const Aulas = () => {
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    // Aqui você pode enviar os dados para o backend
+
+    // Validação para garantir que todos os campos necessários estão preenchidos
+    if (!unit || !textQuestion1 || !textQuestion2 || !textQuestion3 || !yesNoQuestion) {
+      setErrorMessage('Por favor, preencha todos os campos antes de enviar.');
+      setTimeout(() => {
+        setErrorMessage('');
+      }, 4000);
+      return;
+    }
+
+    setErrorMessage(''); // Clear error message if all fields are filled
+
     const currentDate = new Date().toISOString().split('T')[0];
     const formData = {
       date: currentDate,
@@ -34,15 +46,19 @@ const Aulas = () => {
       resolvido: yesNoQuestion,
     };
 
-    axios.post('http://localhost:3002/inventario', formData).then(response => {
-      console.log('Dados enviados com sucesso:', response.data);
-    })
-
+    axios.post('http://localhost:3002/inventario', formData)
+      .then(response => {
+        console.log('Dados enviados com sucesso:', response.data);
+      })
+      .catch(error => {
+        console.error('Erro ao enviar dados:', error);
+      });
   };
 
   return (
     <>
-      <h2>Registro de Quebras e Manuntenções</h2>
+      <h2>Registro de Quebras e Manutenções</h2>
+      {errorMessage && <div className="error-message">{errorMessage}</div>}
       <form onSubmit={handleSubmit}>
         <div>
           <label htmlFor="unit">Unidade:</label>
@@ -59,7 +75,7 @@ const Aulas = () => {
         </div>
 
         <div>
-          <label htmlFor="textQuestion1">Regente</label>
+          <label htmlFor="textQuestion1">Regente:</label>
           <input
             type="text"
             id="textQuestion1"
@@ -69,7 +85,7 @@ const Aulas = () => {
         </div>
 
         <div>
-          <label htmlFor="textQuestion2">Observações</label>
+          <label htmlFor="textQuestion2">Observações:</label>
           <input
             type="text"
             id="textQuestion2"
@@ -118,4 +134,4 @@ const Aulas = () => {
   );
 };
 
-export default Aulas;
+export default Inventario;

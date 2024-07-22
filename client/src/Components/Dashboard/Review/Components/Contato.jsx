@@ -3,11 +3,12 @@ import '../../../../App.css';
 import './Contato.css';
 import axios from 'axios';
 
-const Aulas = () => {
+const Contato = () => {
     const [unit, setUnit] = useState('');
     const [textQuestion2, setTextQuestion2] = useState('');
     const [yesNoQuestion, setYesNoQuestion] = useState('');
     const [unidades, setUnidades] = useState([]);
+    const [errorMessage, setErrorMessage] = useState('');
 
     useEffect(() => {
         axios.get('http://localhost:3002/unidades')
@@ -22,8 +23,17 @@ const Aulas = () => {
     const handleSubmit = (event) => {
         event.preventDefault();
 
-        const currentDate = new Date().toISOString().split('T')[0];
+        if (!unit || !yesNoQuestion || !textQuestion2) {
+            setErrorMessage('Por favor, preencha todos os campos antes de enviar.');
+            setTimeout(() => {
+                setErrorMessage('');
+            }, 4000);
+            return;
+        }
 
+        setErrorMessage(''); // Clear error message if all fields are filled
+
+        const currentDate = new Date().toISOString().split('T')[0];
         const formData = {
             date: currentDate,
             unidade: unit,
@@ -43,6 +53,7 @@ const Aulas = () => {
     return (
         <>
             <h2>Registro de Contato com Unidades</h2>
+            {errorMessage && <div className="error-message">{errorMessage}</div>}
             <form onSubmit={handleSubmit}>
                 <div>
                     <label htmlFor="unit">Unidade:</label>
@@ -98,4 +109,4 @@ const Aulas = () => {
     );
 };
 
-export default Aulas;
+export default Contato;

@@ -12,6 +12,14 @@
   text-align: center;
 }
 
+.review .error-message {
+  display: block;
+  color: var(--whiteColor);
+  padding: 10px;
+  background: rgb(255, 0, 0);
+  border-radius: 3px;
+  text-align: center;
+}
 .review .left {
   width: 100%;
   display: flex;

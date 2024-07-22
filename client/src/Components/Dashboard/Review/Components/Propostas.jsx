@@ -8,6 +8,8 @@ const Aulas = () => {
   const [textQuestion1, setTextQuestion1] = useState('');
   const [textQuestion2, setTextQuestion2] = useState('');
   const [unidades, setUnidades] = useState([]);
+  const [error, setError] = useState('');
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   useEffect(() => {
     axios.get('http://localhost:3002/unidades')
@@ -21,7 +23,18 @@ const Aulas = () => {
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    // Aqui você pode enviar os dados para o backend
+
+    // Verificar se todos os campos estão preenchidos
+    if (!unit || !textQuestion1 || !textQuestion2) {
+      setError('Por favor, preencha todos os campos.');
+      setIsSubmitting(false);
+      setTimeout(() => {
+        setError('');
+      }, 4000);
+      return;
+    }
+
+    setIsSubmitting(true);
     const currentDate = new Date().toISOString().split('T')[0];
     const formData = {
       date: currentDate,
@@ -30,15 +43,22 @@ const Aulas = () => {
       comentarios: textQuestion2,
     };
 
-    axios.post('http://localhost:3002/propostas', formData).then(response => {
-      console.log('Dados enviados com sucesso:', response.data);
-    })
-
+    axios.post('http://localhost:3002/propostas', formData)
+      .then(response => {
+        console.log('Dados enviados com sucesso:', response.data);
+        setError('');
+        setIsSubmitting(false);
+      })
+      .catch(error => {
+        console.error('Erro ao enviar dados:', error);
+        setIsSubmitting(false);
+      });
   };
 
   return (
     <>
       <h2>Propostas de Aulas e Projetos de Destaque</h2>
+      {error && <p className="error-message">{error}</p>}
       <form onSubmit={handleSubmit}>
         <div>
           <label htmlFor="unit">Unidade:</label>
@@ -74,7 +94,7 @@ const Aulas = () => {
           />
         </div>
 
-        <button type="submit">Enviar</button>
+        <button type="submit" disabled={isSubmitting}>Enviar</button>
       </form>
     </>
   );
