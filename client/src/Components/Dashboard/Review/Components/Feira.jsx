@@ -46,7 +46,7 @@ const Feira = () => {
             textQuestion4,
             yesNoQuestion
         };
-        
+
         axios.post('http://localhost:3002/inventario', formData)
             .then(response => {
                 console.log('Dados enviados com sucesso:', response.data);
@@ -75,34 +75,77 @@ const Feira = () => {
                     </select>
                 </div>
 
+
                 <div>
-                    <label htmlFor="textQuestion1">Cronograma</label>
-                    <input
-                        type="text"
-                        id="textQuestion1"
-                        value={textQuestion1}
-                        onChange={(e) => setTextQuestion1(e.target.value)}
-                    />
+                    <label>Cronograma</label>
+                    <div className='inputsInventario'>
+                        <label>
+                            <input
+                                type="radio"
+                                value="Sim"
+                                checked={textQuestion1 === 'Sim'}
+                                onChange={(e) => setTextQuestion1(e.target.value)}
+                            />
+                            Sim
+                        </label>
+                        <label>
+                            <input
+                                type="radio"
+                                value="Não"
+                                checked={textQuestion1 === 'Não'}
+                                onChange={(e) => setTextQuestion1(e.target.value)}
+                            />
+                            Não
+                        </label>
+                    </div>
                 </div>
 
                 <div>
-                    <label htmlFor="textQuestion2">Estrutural</label>
-                    <input
-                        type="text"
-                        id="textQuestion2"
-                        value={textQuestion2}
-                        onChange={(e) => setTextQuestion2(e.target.value)}
-                    />
+                    <label>Estrutural</label>
+                    <div className='inputsInventario'>
+                        <label>
+                            <input
+                                type="radio"
+                                value="Sim"
+                                checked={textQuestion2 === 'Sim'}
+                                onChange={(e) => setTextQuestion2(e.target.value)}
+                            />
+                            Sim
+                        </label>
+                        <label>
+                            <input
+                                type="radio"
+                                value="Não"
+                                checked={textQuestion2 === 'Não'}
+                                onChange={(e) => setTextQuestion2(e.target.value)}
+                            />
+                            Não
+                        </label>
+                    </div>
                 </div>
 
                 <div>
-                    <label htmlFor="textQuestion3">Apresentação</label>
-                    <input
-                        type="text"
-                        id="textQuestion3"
-                        value={textQuestion3}
-                        onChange={(e) => setTextQuestion3(e.target.value)}
-                    />
+                    <label>Apresentação</label>
+                    <div className='inputsInventario'>
+                        <label>
+                            <input
+                                type="radio"
+                                value="Sim"
+                                checked={textQuestion3 === 'Sim'}
+                                onChange={(e) => setTextQuestion3(e.target.value)}
+                            />
+                            Sim
+                        </label>
+                        <label>
+                            <input
+                                type="radio"
+                                value="Não"
+                                checked={textQuestion3 === 'Não'}
+                                onChange={(e) => setTextQuestion3(e.target.value)}
+                            />
+                            Não
+                        </label>
+                    </div>
                 </div>
 
                 <div>

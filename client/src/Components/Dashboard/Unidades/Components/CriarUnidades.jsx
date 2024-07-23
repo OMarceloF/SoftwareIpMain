@@ -41,7 +41,7 @@ const Aulas = () => {
                 // Remover mensagem de sucesso após 4 segundos
                 setTimeout(() => {
                     setSuccessMessage('');
-                }, 4000);
+                }, 40000);
             })
             .catch(error => {
                 console.error('Erro ao enviar dados:', error);
