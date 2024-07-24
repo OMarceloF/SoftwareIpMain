@@ -41,7 +41,7 @@ const Dashboard = () => {
         </div>
         <div className="buttonLeft">
           <RxDashboard />
-          <a href="#"><span>Dashboard</span></a>
+          <Link to="/dashboard/dashboardGraph"><span>Dashboard</span></Link>
         </div>
         <div className="buttonLeft">
           <RiCommunityLine />

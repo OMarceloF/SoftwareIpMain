@@ -13,6 +13,7 @@ import Guide from './Components/Dashboard/Review/Components/Guide'
 import Feira from './Components/Dashboard/Review/Components/Feira'
 import Unidades from './Components/Dashboard/Unidades/Unidades'
 import CriarUnidades from './Components/Dashboard/Unidades/Components/CriarUnidades'
+import DashboardGraph from './Components/Dashboard/Dashboard/DashboardGraph'
 
 // Importando React Router DOM
 import {
@@ -76,6 +77,10 @@ const router = createBrowserRouter([
             element: <Feira />
           }
         ]
+      },
+      {
+        path: 'dashboardGraph',
+        element: <DashboardGraph />
       },
       {
         path: 'unidades',

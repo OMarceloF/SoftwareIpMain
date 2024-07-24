@@ -28,8 +28,6 @@ const Unidades = () => {
                         {unidades.map((unidade, index) => (
                             <div key={index} className="card">
                                 <h2>{unidade.cidade}</h2>
-                                <p>{unidade.coordenador}</p>
-                                <button>Veja sobre</button>
                             </div>
                         ))}
                     </div>

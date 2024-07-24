@@ -182,6 +182,17 @@ app.post('/unidades', (req, res) => {
   })
 })
 
+// Rota pra tabela aula
+app.get('/aula-data', (req, res) => {
+  const query = 'SELECT date, nota FROM aula ORDER BY date';
+  db.query(query, (error, results) => {
+    if (error) {
+      return res.status(500).send(error);
+    }
+    res.json(results);
+  });
+});
+
 
 // Rodando o servidor
 app.listen(3002, () => {
