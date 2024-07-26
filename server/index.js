@@ -182,17 +182,21 @@ app.post('/unidades', (req, res) => {
   })
 })
 
-// Rota pra tabela aula
-app.get('/aula-data', (req, res) => {
-  const query = 'SELECT date, nota FROM aula ORDER BY date';
-  db.query(query, (error, results) => {
-    if (error) {
-      return res.status(500).send(error);
+// Adicionando uma rota para buscar dados da tabela aula filtrados por unidade
+app.get('/aula/:unidade', (req, res) => {
+  const { unidade } = req.params;
+
+  const SQL = 'SELECT date, nota FROM aula WHERE unidade = ?';
+  const values = [unidade];
+
+  db.query(SQL, values, (err, results) => {
+    if (err) {
+      console.error('Erro ao buscar dados:', err);
+      return res.status(500).send({ error: err });
     }
-    res.json(results);
+    res.status(200).send(results);
   });
 });
-
 
 // Rodando o servidor
 app.listen(3002, () => {

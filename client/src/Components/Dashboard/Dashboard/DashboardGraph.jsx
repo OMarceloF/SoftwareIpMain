@@ -1,73 +1,69 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
+import Chart from 'chart.js/auto';
+import 'chartjs-adapter-date-fns'; // Importar o adaptador de data
 import axios from 'axios';
-import { Line } from 'react-chartjs-2';
-import { Chart as ChartJS, registerables } from 'chart.js';
-import { format } from 'date-fns';
 import './DashboardGraph.css';
 
-ChartJS.register(...registerables);
-
 const Dashboard = () => {
-  const [chartData, setChartData] = useState({
-    labels: [],
-    datasets: [],
-  });
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
+  const [chartData, setChartData] = useState({});
   const chartRef = useRef(null);
+  const unidade = "BH"; // Pode ser alterado conforme necessário
 
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await axios.get('http://localhost:3002/aula-data');
-        console.log(response.data); // Verificar os dados retornados
+    // Buscar dados da API
+    axios.get(`http://localhost:3002/aula/${unidade}`)
+      .then(response => {
+        const data = response.data;
+        const dates = data.map(item => new Date(item.date)); // Converter para objetos Date
+        const notas = data.map(item => item.nota);
 
-        if (Array.isArray(response.data)) {
-          const dates = response.data.map(entry => format(new Date(entry.date), 'dd/MM/yyyy'));
-          const notas = response.data.map(entry => entry.nota);
-
-          setChartData({
-            labels: dates,
-            datasets: [
-              {
-                label: 'Evolução da Nota',
-                data: notas,
-                borderColor: 'rgba(75, 192, 192, 1)',
-                backgroundColor: 'rgba(75, 192, 192, 0.2)',
-                fill: true,
-                tension: 0.4,
-              },
-            ],
-          });
-        } else {
-          console.error('Dados retornados não são um array:', response.data);
-        }
-        setLoading(false);
-      } catch (error) {
-        console.error('Error fetching data:', error);
-        setError('Erro ao buscar dados');
-        setLoading(false);
-      }
-    };
-
-    fetchData();
-  }, []);
+        // Atualizar dados do gráfico
+        setChartData({
+          labels: dates,
+          datasets: [
+            {
+              label: 'Notas',
+              data: notas,
+              borderColor: 'rgb(75, 192, 192)',
+              backgroundColor: 'rgba(75, 192, 192, 0.2)',
+            },
+          ],
+        });
+      })
+      .catch(error => console.error('Erro ao buscar dados:', error));
+  }, [unidade]);
 
   useEffect(() => {
-    return () => {
+    if (Object.keys(chartData).length > 0) {
+      const ctx = document.getElementById('myChart').getContext('2d');
+      
+      // Destruir gráfico existente se houver
       if (chartRef.current) {
         chartRef.current.destroy();
       }
-    };
-  }, []);
 
-  if (loading) return <div>Carregando...</div>;
-  if (error) return <div>{error}</div>;
+      // Criar novo gráfico
+      chartRef.current = new Chart(ctx, {
+        type: 'line',
+        data: chartData,
+        options: {
+          scales: {
+            x: {
+              type: 'time',
+              time: {
+                unit: 'day',
+              },
+            },
+          },
+        },
+      });
+    }
+  }, [chartData]);
 
   return (
     <div>
-      <h1>Dashboard</h1>
-      <Line data={chartData} ref={chartRef} />
+      <h2>Dashboard</h2>
+      <canvas id="myChart"></canvas>
     </div>
   );
 };

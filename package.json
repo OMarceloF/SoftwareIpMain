@@ -6,6 +6,7 @@
     "@mui/material": "^5.16.0",
     "axios": "^1.7.2",
     "chartjs": "^0.3.24",
+    "chartjs-adapter-date-fns": "^3.0.0",
     "date-fns": "^3.6.0",
     "react-chartjs-2": "^5.2.0",
     "react-router-dom": "^6.24.1"
