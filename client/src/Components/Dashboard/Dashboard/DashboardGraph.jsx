@@ -9,10 +9,12 @@ const Dashboard = () => {
   const [chartDataContato, setChartDataContato] = useState({});
   const [chartDataDiarios, setChartDataDiarios] = useState({});
   const [chartDataFeira, setChartDataFeira] = useState({});
+  const [chartDataFotosEVideos, setChartDataFotosEVideos] = useState({});
   const chartRefAula = useRef(null);
   const chartRefContato = useRef(null);
   const chartRefDiarios = useRef(null);
   const chartRefFeira = useRef(null);
+  const chartRefFotosEVideos = useRef(null);
   const unidade = "BH"; // Pode ser alterado conforme necessário
 
   useEffect(() => {
@@ -125,6 +127,31 @@ const Dashboard = () => {
         });
       })
       .catch(error => console.error('Erro ao buscar dados:', error));
+
+    // Buscar dados da API para fotos e videos
+    axios.get(`http://localhost:3002/fotosevideos/${unidade}`)
+    .then(response => {
+      const data = response.data;
+      const dates = data.map(item => new Date(item.date)); // Converter para objetos Date
+      const notas = data.map(item => item.nota);
+
+      // Atualizar dados do gráfico
+      setChartDataFotosEVideos({
+        labels: dates,
+        datasets: [
+          {
+            label: 'Notas',
+            data: notas,
+            borderColor: 'rgb(75, 192, 192)',
+            backgroundColor: 'rgba(75, 192, 192, 0.2)',
+          },
+        ],
+      });
+    })
+    .catch(error => console.error('Erro ao buscar dados:', error));
+
+
+    
   }, [unidade]);
 
   useEffect(() => {
@@ -259,6 +286,32 @@ const Dashboard = () => {
     }
   }, [chartDataAula, chartDataContato, chartDataDiarios, chartDataFeira]);
 
+  // Gráfico de fotos e videos
+  if (Object.keys(chartDataFotosEVideos).length > 0) {
+    const ctxPhotosEVideos = document.getElementById('myChartPhotosEVideos').getContext('2d');
+    
+    // Destruir gráfico existente se houver
+    if (chartRefFotosEVideos.current) {
+      chartRefFotosEVideos.current.destroy();
+    }
+
+    // Criar novo gráfico
+    chartRefFotosEVideos.current = new Chart(ctxPhotosEVideos, {
+      type: 'line',
+      data: chartDataFotosEVideos,
+      options: {
+        scales: {
+          x: {
+            type: 'time',
+            time: {
+              unit: 'day',
+            },
+          },
+        },
+      },
+    });
+  }
+
   return (
     <div>
       <h2>Dashboard</h2>
@@ -277,6 +330,10 @@ const Dashboard = () => {
       <div>
         <h3>Gráfico de Status (Feira)</h3>
         <canvas id="myChartFeira"></canvas>
+      </div>
+      <div>
+        <h3>Gráfico de Fotos e Vídeos</h3>
+        <canvas id="myChartPhotosEVideos"></canvas>
       </div>
     </div>
   );

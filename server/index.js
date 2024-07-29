@@ -253,6 +253,22 @@ app.get('/feira/:unidade', (req, res) => {
   });
 });
 
+// Adicionando uma rota para buscar dados da tabela fotos e videos filtrados por unidade
+app.get('/fotosevideos/:unidade', (req, res) => {
+  const { unidade } = req.params;
+
+  const SQL = 'SELECT date, nota FROM fotosevideos WHERE unidade = ?';
+  const values = [unidade];
+
+  db.query(SQL, values, (err, results) => {
+    if (err) {
+      console.error('Erro ao buscar dados:', err);
+      return res.status(500).send({ error: err });
+    }
+    res.status(200).send(results);
+  });
+});
+
 // Rodando o servidor
 app.listen(3002, () => {
   console.log('Server is running on port 3002');
