@@ -198,6 +198,61 @@ app.get('/aula/:unidade', (req, res) => {
   });
 });
 
+// Rota para buscar dados de contato filtrados por unidade
+app.get('/contato/:unidade', (req, res) => {
+  const unidade = req.params.unidade;
+  const SQL = 'SELECT date, retorno FROM contato WHERE unidade = ?';
+  db.query(SQL, [unidade], (err, results) => {
+    if (err) {
+      console.error('Erro ao buscar dados:', err);
+      return res.status(500).send({ error: err });
+    }
+    res.status(200).send(results);
+  });
+});
+
+// Adicionar rota para buscar dados da tabela diarios
+app.get('/diarios/:unidade', (req, res) => {
+  const unidade = req.params.unidade;
+  
+  // Criar SQL para selecionar os dados
+  const SQL = 'SELECT date, nota FROM diarios WHERE unidade = ?';
+  const values = [unidade];
+  
+  db.query(SQL, values, (err, results) => {
+    if (err) {
+      console.error('Erro ao buscar dados:', err);
+      return res.status(500).send({ error: err });
+    }
+    res.status(200).send(results);
+  });
+});
+
+// Rota para buscar dados da tabela feira filtrados por unidade
+app.get('/feira/:unidade', (req, res) => {
+  const unidade = req.params.unidade;
+  
+  // Criar SQL para selecionar a linha mais recente para cada coluna
+  const SQL = `
+    SELECT date, cronograma, apresentacao, estrutural
+    FROM feira
+    WHERE unidade = ?
+    ORDER BY date DESC
+  `;
+  const values = [unidade];
+  
+  db.query(SQL, values, (err, results) => {
+    if (err) {
+      console.error('Erro ao buscar dados:', err);
+      return res.status(500).send({ error: err });
+    }
+    
+    // Selecionar apenas a linha com a data mais recente
+    const latestEntry = results[0]; // A linha mais recente já está na primeira posição
+    res.status(200).send(latestEntry);
+  });
+});
+
 // Rodando o servidor
 app.listen(3002, () => {
   console.log('Server is running on port 3002');
