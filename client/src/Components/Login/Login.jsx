@@ -38,6 +38,7 @@ const Login = () => {
         // Se as credenciais não baterem
         setLoginStatus(response.data.message); // Mostrar mensagem de erro
       } else {
+        localStorage.setItem('emailStorage', loginEmail); // Salvar email no localStorage
         navigateTo('/dashboard'); // Entrar para o dashboard
       }
     }).catch((error) => {
