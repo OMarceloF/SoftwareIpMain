@@ -269,6 +269,24 @@ app.get('/fotosevideos/:unidade', (req, res) => {
   });
 });
 
+// Adicionando uma rota para buscar o role do usuário
+app.get('/getRole/:email', (req, res) => {
+  const { email } = req.params;
+
+  const SQL = 'SELECT role FROM coordenadores WHERE email = ?';
+  db.query(SQL, [email], (err, results) => {
+    if (err) {
+      console.error('Erro ao buscar o role:', err);
+      return res.status(500).send({ error: err });
+    }
+    if (results.length > 0) {
+      res.status(200).send({ role: results[0].role });
+    } else {
+      res.status(404).send({ message: 'Usuário não encontrado!' });
+    }
+  });
+});
+
 // Rodando o servidor
 app.listen(3002, () => {
   console.log('Server is running on port 3002');

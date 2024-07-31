@@ -10,7 +10,6 @@ const Aulas = () => {
     const [textQuestion2, setTextQuestion2] = useState('');
     const [unidades, setUnidades] = useState([]);
     const [errorMessage, setErrorMessage] = useState('');
-    const email = localStorage.getItem('emailStorage');
 
     useEffect(() => {
         axios.get('http://localhost:3002/unidades')
@@ -57,7 +56,6 @@ const Aulas = () => {
         <>
             <div className="title-form">
                 <h2>Avaliação de Aulas Assistidas</h2>
-                <h2>{email}</h2>
             </div>
             {errorMessage && <div className="error-message">{errorMessage}</div>}
             <form onSubmit={handleSubmit}>
