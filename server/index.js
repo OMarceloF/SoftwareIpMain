@@ -287,6 +287,24 @@ app.get('/getRole/:email', (req, res) => {
   });
 });
 
+// Adicionando uma rota para buscar o nome do usuário
+app.get('/getUsername/:email', (req, res) => {
+  const { email } = req.params;
+
+  const SQL = 'SELECT username FROM coordenadores WHERE email = ?';
+  db.query(SQL, [email], (err, results) => {
+    if (err) {
+      console.error('Erro ao buscar o name:', err);
+      return res.status(500).send({ error: err });
+    }
+    if (results.length > 0) {
+      res.status(200).send({ name: results[0].username });
+    } else {
+      res.status(404).send({ message: 'Usuário não encontrado!' });
+    }
+  });
+});
+
 // Rodando o servidor
 app.listen(3002, () => {
   console.log('Server is running on port 3002');

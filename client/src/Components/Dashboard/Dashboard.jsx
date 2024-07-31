@@ -14,6 +14,7 @@ import video from "../../LoginAssets/videoFundo.mp4";
 const Dashboard = () => {
   const location = useLocation();
   const [role, setRole] = useState('');
+  const [name, setName] = useState('');
 
   useEffect(() => {
     const email = localStorage.getItem('emailStorage');
@@ -25,6 +26,16 @@ const Dashboard = () => {
         })
         .catch(error => {
           console.error('Erro ao buscar o role:', error);
+        });
+    }
+
+    if (email) {
+      axios.get(`http://localhost:3002/getUsername/${email}`)
+        .then(response => {
+          setName(response.data.name);
+        })
+        .catch(error => {
+          console.error('Erro ao buscar o name:', error);
         });
     }
   }, []);
@@ -110,7 +121,7 @@ const Dashboard = () => {
       <div className="content">
         {location.pathname === "/dashboard" ? (
           <>
-            <h2>Bem vindo, seu papel é {role}!</h2>
+            <h2>Bem vindo, {name}!</h2>
             <video src={video} autoPlay muted loop></video>
           </>
         ) : (
