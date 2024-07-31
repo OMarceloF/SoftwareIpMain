@@ -14,6 +14,7 @@ import Feira from './Components/Dashboard/Review/Components/Feira'
 import Unidades from './Components/Dashboard/Unidades/Unidades'
 import CriarUnidades from './Components/Dashboard/Unidades/Components/CriarUnidades'
 import DashboardGraph from './Components/Dashboard/Dashboard/DashboardGraph'
+import EscolherUnidade from './Components/Dashboard/Dashboard/EscolherUnidade'
 
 // Importando React Router DOM
 import {
@@ -79,8 +80,14 @@ const router = createBrowserRouter([
         ]
       },
       {
-        path: 'dashboardGraph',
-        element: <DashboardGraph />
+        path: 'escolherUnidade',
+        element: <EscolherUnidade />,
+        children: [
+          {
+            path: 'dashboardGraph',
+            element: <DashboardGraph />
+          },
+        ]
       },
       {
         path: 'unidades',

@@ -15,7 +15,8 @@ const Dashboard = () => {
   const chartRefDiarios = useRef(null);
   const chartRefFeira = useRef(null);
   const chartRefFotosEVideos = useRef(null);
-  const unidade = "BH"; // Pode ser alterado conforme necessário
+  const unidade = localStorage.getItem('unidadeStorage');
+  console.log(unidade)
 
   useEffect(() => {
     // Buscar dados da API para aula
