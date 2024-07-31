@@ -63,7 +63,8 @@ img, video {
 }
 
 .content {
-  height: 1000px;
+  height: -moz-fit-content;
+  height: fit-content;
 }
 
 .showMessage {
