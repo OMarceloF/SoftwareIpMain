@@ -8,6 +8,7 @@ import { MdRateReview } from "react-icons/md";
 import { RxDashboard } from "react-icons/rx";
 import { IoMdHome } from "react-icons/io";
 import { RiCommunityLine } from "react-icons/ri";
+import { IoMdExit } from "react-icons/io";
 import logo from "../../LoginAssets/logoIPSemFundo.png";
 import video from "../../LoginAssets/videoFundo.mp4";
 
@@ -65,6 +66,10 @@ const Dashboard = () => {
               <RiCommunityLine />
               <Link to="/dashboard/unidades"><span>Unidades</span></Link>
             </div>
+            <div className="buttonLeft">
+              <IoMdExit />
+              <Link to="/"><span>Sair</span></Link>
+            </div>
           </>
         );
       case 'admin':
@@ -81,6 +86,10 @@ const Dashboard = () => {
             <div className="buttonLeft">
               <RiCommunityLine />
               <Link to="/dashboard/unidades"><span>Unidades</span></Link>
+            </div>
+            <div className="buttonLeft">
+              <IoMdExit />
+              <Link to="/"><span>Sair</span></Link>
             </div>
           </>
         );
@@ -102,6 +111,10 @@ const Dashboard = () => {
             <div className="buttonLeft">
               <RiCommunityLine />
               <Link to="/dashboard/unidades"><span>Unidades</span></Link>
+            </div>
+            <div className="buttonLeft">
+              <IoMdExit />
+              <Link to="/"><span>Sair</span></Link>
             </div>
           </>
         );
