@@ -118,6 +118,27 @@ const Dashboard = () => {
             </div>
           </>
         );
+      case 'supervisor':
+        return (
+          <>
+            <div className="buttonLeft">
+              <IoMdHome />
+              <Link to="/dashboard"><span>Home</span></Link>
+            </div>
+            <div className="buttonLeft">
+              <MdRateReview />
+              <Link to="/dashboard/escolherCoordenador"><span>Review</span></Link>
+            </div>
+            <div className="buttonLeft">
+              <FaHistory />
+              <a href="#"><span>Histórico</span></a>
+            </div>
+            <div className="buttonLeft">
+              <IoMdExit />
+              <Link to="/"><span>Sair</span></Link>
+            </div>
+          </>
+        );
       default:
         return null;
     }
