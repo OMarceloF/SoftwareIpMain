@@ -212,6 +212,38 @@ app.post('/aulacor', (req, res) => {
   })
 })
 
+// Adicionando uma rota para salvar dados na tabela contatoCor
+app.post('/contatocor', (req, res) => {
+  const { date, retorno, comentarios, coordenador } = req.body;
+
+  const SQL = 'INSERT INTO contatocor (date, retorno, comentarios, coordenador) VALUES (?, ?, ?, ?)';
+  const values = [date, retorno, comentarios, coordenador];
+
+  db.query(SQL, values, (err, results) => {
+    if(err) {
+      console.error('Erro ao inserir dados:', err);
+      return res.status(500).send({ error: err })
+    }
+    res.status(200).send({ message: 'Dados inseridos com sucesso!' })
+  })
+})
+
+// Adicionando uma rota para salvar dados na tabela diariosCor
+app.post('/diarioscor', (req, res) => {
+  const { date, nota, comentarios, coordenador } = req.body;
+
+  const SQL = 'INSERT INTO diarioscor (date, nota, comentarios, coordenador) VALUES (?, ?, ?, ?)';
+  const values = [date, nota, comentarios, coordenador];
+
+  db.query(SQL, values, (err, results) => {
+    if(err) {
+      console.error('Erro ao inserir dados:', err);
+      return res.status(500).send({ error: err })
+    }
+    res.status(200).send({ message: 'Dados inseridos com sucesso!' })
+  })
+})
+
 // Adicionando uma rota para buscar dados da tabela aula filtrados por unidade
 app.get('/aula/:unidade', (req, res) => {
   const { unidade } = req.params;

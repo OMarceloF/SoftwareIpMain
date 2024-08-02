@@ -38,7 +38,7 @@ const ReviewCoordenadores = () => {
               </div>
               <div className="buttonLeft">
                 <RiPagesLine />
-                <Link to="/dashboard/review/diarioCor"><span>Diário</span></Link>
+                <Link to="/dashboard/escolherCoordenador/reviewCoordenadores/diariosCor"><span>Diário</span></Link>
               </div>
               <div className="buttonLeft">
                 <FaPhotoVideo />
@@ -54,7 +54,7 @@ const ReviewCoordenadores = () => {
               </div>
               <div className="buttonLeft">
                 <IoIosContact />
-                <Link to="/dashboard/review/contatoCor"><span>Contato</span></Link>
+                <Link to="/dashboard/escolherCoordenador/reviewCoordenadores/contatoCor"><span>Contato</span></Link>
               </div>
               <div className="buttonLeft">
                 <GiTeacher />

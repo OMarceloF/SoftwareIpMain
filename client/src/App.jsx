@@ -18,6 +18,8 @@ import EscolherUnidade from './Components/Dashboard/Dashboard/EscolherUnidade'
 import ReviewCoordenadores from './Components/Dashboard/Review/ReviewCoordenadores'
 import EscolherCoordenador from './Components/Dashboard/Review/EscolherCoordenador'
 import AulaCor from './Components/Dashboard/Review/ComponentsCor/AulaCor'
+import ContatoCor from './Components/Dashboard/Review/ComponentsCor/ContatoCor'
+import DiariosCor from './Components/Dashboard/Review/ComponentsCor/DiariosCor'
 
 // Importando React Router DOM
 import {
@@ -93,6 +95,14 @@ const router = createBrowserRouter([
               {
                 path: 'aulaCor',
                 element: <AulaCor />
+              },
+              {
+                path: 'contatoCor',
+                element: <ContatoCor />
+              },
+              {
+                path: 'diariosCor',
+                element: <DiariosCor />
               }
             ]
           }
