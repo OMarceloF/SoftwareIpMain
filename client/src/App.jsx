@@ -17,6 +17,7 @@ import DashboardGraph from './Components/Dashboard/Dashboard/DashboardGraph'
 import EscolherUnidade from './Components/Dashboard/Dashboard/EscolherUnidade'
 import ReviewCoordenadores from './Components/Dashboard/Review/ReviewCoordenadores'
 import EscolherCoordenador from './Components/Dashboard/Review/EscolherCoordenador'
+import AulaCor from './Components/Dashboard/Review/ComponentsCor/AulaCor'
 
 // Importando React Router DOM
 import {
@@ -88,6 +89,12 @@ const router = createBrowserRouter([
           {
             path: 'reviewCoordenadores',
             element: <ReviewCoordenadores />,
+            children: [
+              {
+                path: 'aulaCor',
+                element: <AulaCor />
+              }
+            ]
           }
         ]
       },

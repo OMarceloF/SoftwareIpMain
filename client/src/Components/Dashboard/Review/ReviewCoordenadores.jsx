@@ -1,6 +1,6 @@
 import React from "react";
 import '../../../App.css';
-import './Review.css';
+import './ReviewCoordenadores.css';
 import { useLocation, Outlet, Link } from "react-router-dom";
 
 // IconeLink
@@ -24,7 +24,7 @@ const ReviewCoordenadores = () => {
     <div className="review">
 
       <div className="content">
-        {location.pathname === "/dashboard/reviewCoordenadores" ? (
+        {location.pathname === "/dashboard/escolherCoordenador/reviewCoordenadores" ? (
           <>
             <h2>Acompanhamento Semanal</h2>
             <div className="left">
@@ -34,7 +34,7 @@ const ReviewCoordenadores = () => {
               </div>
               <div className="buttonLeft">
                 <FaChalkboardTeacher />
-                <Link to="/dashboard/review/aulasCor"><span>Aula</span></Link>
+                <Link to="/dashboard/escolherCoordenador/reviewCoordenadores/aulaCor"><span>Aula</span></Link>
               </div>
               <div className="buttonLeft">
                 <RiPagesLine />

@@ -44,7 +44,7 @@ const EscolherCoordenador = () => {
                             </select>
                         </div>
 
-                        <Link to="/dashboard/escolherUnidade/reviewCoordenadores"><button type="submit" onClick={LocalStorageFunction()}>Avaliar</button></Link>
+                        <Link to="/dashboard/escolherCoordenador/reviewCoordenadores"><button type="submit" onClick={LocalStorageFunction()}>Avaliar</button></Link>
                     </form>
                 </>
             ) : (
