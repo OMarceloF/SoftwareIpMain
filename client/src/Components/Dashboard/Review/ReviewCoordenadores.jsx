@@ -30,7 +30,7 @@ const ReviewCoordenadores = () => {
             <div className="left">
               <div className="buttonLeft">
                 <TfiLayoutMediaRightAlt />
-                <Link to="/dashboard/review/planosDeAulaCor"><span>Plano de Aula</span></Link>
+                <Link to="/dashboard/escolherCoordenador/reviewCoordenadores/planosDeAulaCor"><span>Plano de Aula</span></Link>
               </div>
               <div className="buttonLeft">
                 <FaChalkboardTeacher />
