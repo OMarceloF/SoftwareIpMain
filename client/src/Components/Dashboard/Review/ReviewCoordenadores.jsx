@@ -46,7 +46,7 @@ const ReviewCoordenadores = () => {
               </div>
               <div className="buttonLeft">
                 <FaHandshake />
-                <Link to="/dashboard/review/propostasCor"><span>Propostas</span></Link>
+                <Link to="/dashboard/escolherCoordenador/reviewCoordenadores/propostasCor"><span>Propostas</span></Link>
               </div>
               <div className="buttonLeft">
                 <MdInventory />

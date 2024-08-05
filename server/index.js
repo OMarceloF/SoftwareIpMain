@@ -308,6 +308,22 @@ app.post('/planoscor', (req, res) => {
   })
 })
 
+// Adicionando uma rota para salvar dados na tabela propostascor
+app.post('/propostascor', (req, res) => {
+  const { coordenador, date, comentarios  } = req.body;
+
+  const SQL = 'INSERT INTO propostascor (coordenador, date, comentarios) VALUES (?, ?, ?)';
+  const values = [coordenador, date, comentarios];
+
+  db.query(SQL, values, (err, results) => {
+    if(err) {
+      console.error('Erro ao inserir dados:', err);
+      return res.status(500).send({ error: err })
+    }
+    res.status(200).send({ message: 'Dados inseridos com sucesso!' })
+  })
+})
+
 // Adicionando uma rota para buscar dados da tabela aula filtrados por unidade
 app.get('/aula/:unidade', (req, res) => {
   const { unidade } = req.params;

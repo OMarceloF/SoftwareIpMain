@@ -24,6 +24,7 @@ import FeiraCor from './Components/Dashboard/Review/ComponentsCor/FeiraCor'
 import FotosEVideosCor from './Components/Dashboard/Review/ComponentsCor/FotosEVideosCor'
 import GuideCor from './Components/Dashboard/Review/ComponentsCor/GuideCor'
 import PlanosDeAula from './Components/Dashboard/Review/ComponentsCor/PlanosDeAulaCor'
+import PropostasCor from './Components/Dashboard/Review/ComponentsCor/PropostasCor'
 
 // Importando React Router DOM
 import {
@@ -123,6 +124,10 @@ const router = createBrowserRouter([
               {
                 path: 'planosDeAulaCor',
                 element: <PlanosDeAula />
+              },
+              {
+                path: 'propostasCor',
+                element: <PropostasCor />
               }
             ]
           }
