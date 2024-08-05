@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import './FotosEVideos.css';
+import './FotosEVideosCor.css';
 import axios from 'axios';
 
 const FotosEVideos = () => {

@@ -58,7 +58,7 @@ const ReviewCoordenadores = () => {
               </div>
               <div className="buttonLeft">
                 <GiTeacher />
-                <Link to="/dashboard/review/guideCor"><span>Guide</span></Link>
+                <Link to="/dashboard/escolherCoordenador/reviewCoordenadores/guideCor"><span>Guide</span></Link>
               </div>
               <div className="buttonLeft">
                 <GiLaserSparks />
