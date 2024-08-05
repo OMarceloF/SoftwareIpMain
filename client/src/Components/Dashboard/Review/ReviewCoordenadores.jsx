@@ -42,7 +42,7 @@ const ReviewCoordenadores = () => {
               </div>
               <div className="buttonLeft">
                 <FaPhotoVideo />
-                <Link to="/dashboard/review/fotosEVideosCor"><span>Fotos e Vídeos</span></Link>
+                <Link to="/dashboard/escolherCoordenador/reviewCoordenadores/fotosEVideosCor"><span>Fotos e Vídeos</span></Link>
               </div>
               <div className="buttonLeft">
                 <FaHandshake />
