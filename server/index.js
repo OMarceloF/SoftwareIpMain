@@ -244,6 +244,22 @@ app.post('/diarioscor', (req, res) => {
   })
 })
 
+// Adicionando uma rota para salvar dados na tabela diariosCor
+app.post('/feiracor', (req, res) => {
+  const { coordenador, cronograma, estrutural, apresentacao, comentarios, date  } = req.body;
+
+  const SQL = 'INSERT INTO feiracor (coordenador, cronograma, estrutural, apresentacao, comentarios, date) VALUES (?, ?, ?, ?, ?, ?)';
+  const values = [coordenador, cronograma, estrutural, apresentacao, comentarios, date];
+
+  db.query(SQL, values, (err, results) => {
+    if(err) {
+      console.error('Erro ao inserir dados:', err);
+      return res.status(500).send({ error: err })
+    }
+    res.status(200).send({ message: 'Dados inseridos com sucesso!' })
+  })
+})
+
 // Adicionando uma rota para buscar dados da tabela aula filtrados por unidade
 app.get('/aula/:unidade', (req, res) => {
   const { unidade } = req.params;

@@ -20,6 +20,7 @@ import EscolherCoordenador from './Components/Dashboard/Review/EscolherCoordenad
 import AulaCor from './Components/Dashboard/Review/ComponentsCor/AulaCor'
 import ContatoCor from './Components/Dashboard/Review/ComponentsCor/ContatoCor'
 import DiariosCor from './Components/Dashboard/Review/ComponentsCor/DiariosCor'
+import FeiraCor from './Components/Dashboard/Review/ComponentsCor/FeiraCor'
 
 // Importando React Router DOM
 import {
@@ -103,6 +104,10 @@ const router = createBrowserRouter([
               {
                 path: 'diariosCor',
                 element: <DiariosCor />
+              },
+              {
+                path: 'feiraCor',
+                element: <FeiraCor />
               }
             ]
           }

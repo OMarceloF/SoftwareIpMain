@@ -62,7 +62,7 @@ const ReviewCoordenadores = () => {
               </div>
               <div className="buttonLeft">
                 <GiLaserSparks />
-                <Link to="/dashboard/review/feiraCor"><span>Feira</span></Link>
+                <Link to="/dashboard/escolherCoordenador/reviewCoordenadores/FeiraCor"><span>Feira</span></Link>
               </div>
 
             </div>
