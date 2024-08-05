@@ -49,10 +49,6 @@ const ReviewCoordenadores = () => {
                 <Link to="/dashboard/escolherCoordenador/reviewCoordenadores/propostasCor"><span>Propostas</span></Link>
               </div>
               <div className="buttonLeft">
-                <MdInventory />
-                <Link to="/dashboard/review/inventarioCor"><span>Inventário</span></Link>
-              </div>
-              <div className="buttonLeft">
                 <IoIosContact />
                 <Link to="/dashboard/escolherCoordenador/reviewCoordenadores/contatoCor"><span>Contato</span></Link>
               </div>
