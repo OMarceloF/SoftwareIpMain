@@ -24,10 +24,10 @@ const Aulas = () => {
 
     return (
         <div>
-            {location.pathname === "/dashboard/escolherUnidade" ? (
+            {location.pathname === "/dashboard/dashboardEscolha/escolherUnidade" ? (
                 <>
                     <div className="title-form">
-                        <h2>Avaliação de Aulas Assistidas</h2>
+                        <h2>Avaliação das unidades</h2>
                     </div>
                     <form>
                         <div>
@@ -44,7 +44,7 @@ const Aulas = () => {
                             </select>
                         </div>
 
-                        <Link to="/dashboard/escolherUnidade/dashboardGraph"><button type="submit" onClick={LocalStorageFunction()}>Enviar</button></Link>
+                        <Link to="/dashboard/dashboardEscolha/escolherUnidade/dashboardGraph"><button type="submit" onClick={LocalStorageFunction()}>Enviar</button></Link>
                     </form>
                 </>
             ) : (

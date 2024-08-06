@@ -25,6 +25,8 @@ import FotosEVideosCor from './Components/Dashboard/Review/ComponentsCor/FotosEV
 import GuideCor from './Components/Dashboard/Review/ComponentsCor/GuideCor'
 import PlanosDeAula from './Components/Dashboard/Review/ComponentsCor/PlanosDeAulaCor'
 import PropostasCor from './Components/Dashboard/Review/ComponentsCor/PropostasCor'
+import DashboardEscolha from './Components/Dashboard/Review/DashboardEscolha'
+import DashboardGraphCor from './Components/Dashboard/Dashboard/DashboardGraphCor'
 
 // Importando React Router DOM
 import {
@@ -130,17 +132,27 @@ const router = createBrowserRouter([
                 element: <PropostasCor />
               }
             ]
-          }
+          },
         ]
       },
       {
-        path: 'escolherUnidade',
-        element: <EscolherUnidade />,
+        path: 'dashboardEscolha',
+        element: <DashboardEscolha />,
         children: [
           {
-            path: 'dashboardGraph',
-            element: <DashboardGraph />
+            path: 'escolherUnidade',
+            element: <EscolherUnidade />,
+            children: [
+              {
+                path: 'dashboardGraph',
+                element: <DashboardGraph />
+              },
+            ]
           },
+          {
+            path: 'dashboardGraphCor',
+            element: <DashboardGraphCor />
+          }
         ]
       },
       {

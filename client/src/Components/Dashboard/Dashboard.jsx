@@ -60,7 +60,7 @@ const Dashboard = () => {
             </div>
             <div className="buttonLeft">
               <RxDashboard />
-              <Link to="/dashboard/escolherUnidade"><span>Dashboard</span></Link>
+              <Link to="/dashboard/dashboardEscolha"><span>Dashboard</span></Link>
             </div>
             <div className="buttonLeft">
               <RiCommunityLine />
@@ -81,7 +81,7 @@ const Dashboard = () => {
             </div>
             <div className="buttonLeft">
               <RxDashboard />
-              <Link to="/dashboard/escolherUnidade"><span>Dashboard</span></Link>
+              <Link to="/dashboard/dashboardEscolha"><span>Dashboard</span></Link>
             </div>
             <div className="buttonLeft">
               <RiCommunityLine />

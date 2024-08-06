@@ -14,7 +14,6 @@ import { GiTeacher } from "react-icons/gi";
 import { GiLaserSparks } from "react-icons/gi";
 
 
-
 const ReviewCoordenadores = () => {
 
   const location = useLocation();
