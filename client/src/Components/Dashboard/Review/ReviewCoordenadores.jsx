@@ -9,7 +9,6 @@ import { FaChalkboardTeacher } from "react-icons/fa";
 import { RiPagesLine } from "react-icons/ri";
 import { FaPhotoVideo } from "react-icons/fa";
 import { FaHandshake } from "react-icons/fa6";
-import { MdInventory } from "react-icons/md";
 import { IoIosContact } from "react-icons/io";
 import { GiTeacher } from "react-icons/gi";
 import { GiLaserSparks } from "react-icons/gi";
