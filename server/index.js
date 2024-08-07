@@ -481,6 +481,50 @@ app.post('/register', (req, res) => {
   });
 });
 
+// Rota para buscar as notas mais recentes por coordenador
+app.get('/aulacor/notas-por-coordenador', (req, res) => {
+  const SQL = `
+    SELECT coordenador, nota 
+    FROM aulacor 
+    WHERE (date, coordenador) IN (
+      SELECT MAX(date) AS date, coordenador 
+      FROM aulacor 
+      GROUP BY coordenador
+    )
+    ORDER BY coordenador ASC;
+  `;
+
+  db.query(SQL, (err, results) => {
+    if (err) {
+      console.error('Erro ao buscar dados:', err);
+      return res.status(500).send({ error: err });
+    }
+    res.status(200).send(results);
+  });
+});
+
+// Rota para o segundo gráfico
+app.get('/contatocor/retornos-por-coordenador', (req, res) => {
+  const SQL = `
+    SELECT coordenador, retorno 
+    FROM contatocor 
+    WHERE (date, coordenador) IN (
+      SELECT MAX(date) AS date, coordenador 
+      FROM contatocor 
+      GROUP BY coordenador
+    )
+    ORDER BY coordenador ASC;
+  `;
+
+  db.query(SQL, (err, results) => {
+    if (err) {
+      console.error('Erro ao buscar dados:', err);
+      return res.status(500).send({ error: err });
+    }
+    res.status(200).send(results);
+  });
+});
+
 // Criando uma rota até o servidor para logar
 app.post('/login', (req, res) => {
   const loginEmail = req.body.LoginEmail;
