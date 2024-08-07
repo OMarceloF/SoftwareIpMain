@@ -525,6 +525,26 @@ app.get('/contatocor/retornos-por-coordenador', (req, res) => {
   });
 });
 
+// Rota para obter notas mais recentes por coordenador
+app.get('/diarioscor/notas-por-coordenador', (req, res) => {
+  const query = `
+    SELECT coordenador, nota, date
+    FROM diarioscor
+    WHERE (coordenador, date) IN (
+      SELECT coordenador, MAX(date)
+      FROM diarioscor
+      GROUP BY coordenador
+    )
+  `;
+  db.query(query, (err, results) => {
+    if (err) {
+      console.error("Erro ao buscar dados de notas por coordenador:", err);
+      return res.status(500).json({ error: 'Erro ao buscar dados' });
+    }
+    res.json(results);
+  });
+});
+
 // Criando uma rota até o servidor para logar
 app.post('/login', (req, res) => {
   const loginEmail = req.body.LoginEmail;

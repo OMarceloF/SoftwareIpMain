@@ -9,12 +9,15 @@ ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend)
 const Dashboard = () => {
   const [dataNotas, setDataNotas] = useState(null); // Dados para o gráfico de notas
   const [dataRetorno, setDataRetorno] = useState(null); // Dados para o gráfico de retorno
+  const [dataDiarios, setDataDiarios] = useState(null); // Dados para o gráfico de diários
   const [error, setError] = useState(null); // Estado para armazenar erros
   const [loading, setLoading] = useState(true); // Estado para mostrar carregamento
   const chartNotasRef = useRef(null); // Referência para o canvas do gráfico de notas
   const chartRetornoRef = useRef(null); // Referência para o canvas do gráfico de retorno
+  const chartDiariosRef = useRef(null); // Referência para o canvas do gráfico de diários
   const chartNotasInstance = useRef(null); // Referência para a instância do gráfico de notas
   const chartRetornoInstance = useRef(null); // Referência para a instância do gráfico de retorno
+  const chartDiariosInstance = useRef(null); // Referência para a instância do gráfico de diários
 
   useEffect(() => {
     // Buscar dados para o gráfico de notas
@@ -39,6 +42,18 @@ const Dashboard = () => {
       .catch(error => {
         console.error("Erro ao buscar dados de retorno:", error);
         setError(error);
+      });
+
+    // Buscar dados para o gráfico de diários
+    axios.get('http://localhost:3002/diarioscor/notas-por-coordenador')
+      .then(response => {
+        console.log("Dados de diários recebidos da API:", response.data); // Log para verificar os dados recebidos
+        const filteredDataDiarios = filtrarDadosDiarios(response.data); // Filtra os dados de diários
+        setDataDiarios(filteredDataDiarios);
+      })
+      .catch(error => {
+        console.error("Erro ao buscar dados de diários:", error);
+        setError(error);
       })
       .finally(() => {
         setLoading(false);
@@ -47,7 +62,7 @@ const Dashboard = () => {
 
   useEffect(() => {
     if (dataNotas) {
-      const ctxNotas = chartNotasRef.current.getContext('2d');
+      const ctxNotas = chartNotasRef.current?.getContext('2d');
       if (ctxNotas) {
         if (chartNotasInstance.current) {
           chartNotasInstance.current.destroy();
@@ -74,9 +89,11 @@ const Dashboard = () => {
         });
       }
     }
+  }, [dataNotas]);
 
+  useEffect(() => {
     if (dataRetorno) {
-      const ctxRetorno = chartRetornoRef.current.getContext('2d');
+      const ctxRetorno = chartRetornoRef.current?.getContext('2d');
       if (ctxRetorno) {
         if (chartRetornoInstance.current) {
           chartRetornoInstance.current.destroy();
@@ -109,7 +126,37 @@ const Dashboard = () => {
         });
       }
     }
-  }, [dataNotas, dataRetorno]);
+  }, [dataRetorno]);
+
+  useEffect(() => {
+    if (dataDiarios) {
+      const ctxDiarios = chartDiariosRef.current?.getContext('2d');
+      if (ctxDiarios) {
+        if (chartDiariosInstance.current) {
+          chartDiariosInstance.current.destroy();
+        }
+        chartDiariosInstance.current = new ChartJS(ctxDiarios, {
+          type: 'bar',
+          data: {
+            labels: dataDiarios.map(item => item.coordenador),
+            datasets: [{
+              label: 'Notas Diários',
+              data: dataDiarios.map(item => item.nota),
+              backgroundColor: 'rgb(75, 192, 192)', // Cor para notas diárias
+            }],
+          },
+          options: {
+            responsive: true,
+            scales: {
+              y: {
+                beginAtZero: true,
+              },
+            },
+          },
+        });
+      }
+    }
+  }, [dataDiarios]);
 
   const filtrarDadosNotas = (dados) => {
     const filtroPorCoordenador = dados.reduce((acc, curr) => {
@@ -138,11 +185,17 @@ const Dashboard = () => {
       }
       return acc;
     }, {});
-    return Object.entries(contagemRetorno).map(([coordenador, contagem]) => ({
-      coordenador,
-      sim: contagem.sim || 0,
-      nao: contagem.nao || 0
-    }));
+    return Object.keys(contagemRetorno).map(key => ({ coordenador: key, ...contagemRetorno[key] }));
+  };
+
+  const filtrarDadosDiarios = (dados) => {
+    const filtroPorCoordenador = dados.reduce((acc, curr) => {
+      if (!acc[curr.coordenador] || new Date(curr.date) > new Date(acc[curr.coordenador].date)) {
+        acc[curr.coordenador] = curr;
+      }
+      return acc;
+    }, {});
+    return Object.values(filtroPorCoordenador);
   };
 
   if (loading) {
@@ -150,25 +203,22 @@ const Dashboard = () => {
   }
 
   if (error) {
-    return <div>Erro ao carregar dados: {error.message}</div>;
-  }
-
-  if ((!dataNotas || dataNotas.length === 0) && (!dataRetorno || dataRetorno.length === 0)) {
-    return <div>Nenhum dado disponível.</div>;
+    return <div>Erro: {error.message}</div>;
   }
 
   return (
     <div>
-      <h1>Dashboard</h1>
-      <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-        <div style={{ width: '48%' }}>
-          <h2>Notas por Coordenador</h2>
-          <canvas ref={chartNotasRef} id="myChartNotas"></canvas>
-        </div>
-        <div style={{ width: '48%' }}>
-          <h2>Retorno por Coordenador</h2>
-          <canvas ref={chartRetornoRef} id="myChartRetorno"></canvas>
-        </div>
+      <div>
+        <h2>Gráfico de Notas</h2>
+        <canvas ref={chartNotasRef} />
+      </div>
+      <div>
+        <h2>Gráfico de Retorno</h2>
+        <canvas ref={chartRetornoRef} />
+      </div>
+      <div>
+        <h2>Gráfico de Diários</h2>
+        <canvas ref={chartDiariosRef} />
       </div>
     </div>
   );
