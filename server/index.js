@@ -27,7 +27,7 @@ db.connect((err) => {
 // Criando uma rota para buscar a tabela unidades
 app.get('/unidades', (req, res) => {
   // Criando SQL para selecionar os dados
-  const SQL = 'SELECT cidade, coordenador FROM unidades';
+  const SQL = 'SELECT cidade, coordenador, endereco, telefone FROM unidades';
 
   db.query(SQL, (err, results) => {
     if (err) {
