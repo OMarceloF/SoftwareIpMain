@@ -1,5 +1,4 @@
 import './Unidades.css';
-
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { useLocation, Outlet, Link } from "react-router-dom";
@@ -24,10 +23,13 @@ const Unidades = () => {
             {location.pathname === "/dashboard/unidades" ? (
                 <>
                     <h2>Unidades</h2>
-                    <div className="cards-container">
+                    <div className="list-container">
                         {unidades.map((unidade, index) => (
-                            <div key={index} className="card">
-                                <h2>{unidade.cidade}</h2>
+                            <div key={index} className="list-item">
+                                <span>{unidade.cidade}</span>
+                                <Link to={`/dashboard/unidades/editar/${unidade.id}`}>
+                                    <button className="edit-button">Editar</button>
+                                </Link>
                             </div>
                         ))}
                     </div>
