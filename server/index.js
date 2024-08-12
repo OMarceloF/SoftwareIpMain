@@ -453,35 +453,6 @@ app.listen(3002, () => {
   console.log('Server is running on port 3002');
 });
 
-
-// Criando uma rota até o servidor para criar usuários
-app.post('/register', (req, res) => {
-  // Pegando as variáveis
-  const email = req.body.Email;
-  const username = req.body.UserName;
-  const password = req.body.Password;
-
-  // Verificando se as variáveis foram recebidas corretamente
-  console.log('Email:', email);
-  console.log('Username:', username);
-  console.log('Password:', password);
-
-  // Criando SQL para inserir os dados
-  const SQL = 'INSERT INTO coordenadores (email, username, password) VALUES (?, ?, ?)';
-  const values = [email, username, password];
-
-  // Conectando ao SQL
-  db.query(SQL, values, (err, results) => {
-    if (err) {
-      console.error('Erro ao inserir dados:', err);
-      return res.status(500).send(err);
-    } else {
-      console.log('Usuário criado com sucesso!');
-      res.status(200).send({ message: 'Usuário adicionado!' });
-    }
-  });
-});
-
 // Rota para buscar as notas mais recentes por coordenador
 app.get('/aulacor/notas-por-coordenador', (req, res) => {
   const SQL = `
