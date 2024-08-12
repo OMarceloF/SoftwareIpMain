@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import './Login.css';
 import '../../App.css';
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import Axios from "axios";
 
@@ -92,13 +92,6 @@ const Login = () => {
           <div className="textDiv">
             <h2 className="title">O Futuro da Educação Tecnológica</h2>
             <p>Lorem ipsum dolor sit amet.</p>
-          </div>
-
-          <div className="footerDiv flex">
-            <span className="text">Criar Novas Contas</span>
-            <Link to={'/register'}>
-              <button className="btn">Registrar</button>
-            </Link>
           </div>
         </div>
 
