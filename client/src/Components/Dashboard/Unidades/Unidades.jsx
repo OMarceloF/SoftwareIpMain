@@ -10,11 +10,21 @@ const Unidades = () => {
     const [modalContent, setModalContent] = useState('');
     const [selectedUnidade, setSelectedUnidade] = useState(null);
     const [name, setName] = useState('');
+    const [userRole, setUserRole] = useState('');
 
     const location = useLocation();
 
     useEffect(() => {
         const email = localStorage.getItem('emailStorage');
+        const role = localStorage.getItem('role'); // Obter o valor de userRole do localStorage
+
+        console.log('User Role from localStorage:', role); // Log para verificar o valor de userRole
+
+        if (role) {
+            setUserRole(role);
+        } else {
+            setUserRole(''); // Define uma role padrão se não estiver presente
+        }
 
         axios.get('http://localhost:3002/unidades')
             .then(response => {
@@ -37,11 +47,17 @@ const Unidades = () => {
         }
     }, []);
 
-    // Filtro para mostrar apenas as unidades que possuem o mesmo coordenador que o usuário logado
-    const filteredUnidades = unidades.filter(unidade =>
-        unidade.cidade.toLowerCase().startsWith(searchTerm.toLowerCase()) &&
-        unidade.coordenador === name // Filtra as unidades pelo coordenador
-    );
+    // Filtro para mostrar apenas as unidades que possuem o mesmo coordenador que o usuário logado, a menos que o userRole seja 'admin'
+    const filteredUnidades = unidades.filter(unidade => {
+        const matchBySearchTerm = unidade.cidade.toLowerCase().startsWith(searchTerm.toLowerCase());
+        const matchByCoordenador = userRole === 'admin' || unidade.coordenador === name;
+
+        console.log('Unidade:', unidade);
+        console.log('Match by search term:', matchBySearchTerm);
+        console.log('Match by coordenador:', matchByCoordenador);
+
+        return matchBySearchTerm && matchByCoordenador;
+    });
 
     const openModal = (content, unidade) => {
         setModalContent(content);
