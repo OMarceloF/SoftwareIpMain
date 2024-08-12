@@ -89,4 +89,62 @@
 
 div {
   margin-bottom: 0px;
+}
+
+@media screen and (max-width: 1024px) {
+  .homepage {
+    flex-direction: column;
+    height: auto;
+  }
+  .left {
+    width: 100%;
+    height: auto;
+    padding: 10px;
+  }
+  .content {
+    width: 100%;
+    padding: 20px;
+  }
+}
+@media screen and (max-width: 768px) {
+  .buttonLeft {
+    padding: 8px 16px;
+    margin: 8px 0;
+  }
+  .buttonLeft span {
+    font-size: 0.875rem;
+  }
+  .content h2, .content a {
+    font-size: 1.5rem;
+  }
+  .content video {
+    width: 100%;
+    margin-top: 15px;
+  }
+}
+@media screen and (max-width: 600px) {
+  .logoPage img {
+    width: 60%;
+  }
+  .content video {
+    width: 100%;
+    margin-top: 10px;
+  }
+}
+@media screen and (max-width: 480px) {
+  .content {
+    background-size: cover;
+    padding: 10px;
+  }
+  .content h2 {
+    font-size: 1.25rem;
+  }
+  .content a {
+    font-size: 1.25rem;
+  }
+}
+@media screen and (max-width: 400px) {
+  .buttonLeft span {
+    display: none;
+  }
 }/*# sourceMappingURL=Dashboard.css.map */

@@ -311,6 +311,11 @@ img, video {
   }
 }
 
+// Barra de Rolagem
+::-webkit-scrollbar {
+  display: none;
+}
+
 
 
 // Responsividade
@@ -322,7 +327,64 @@ img, video {
   }
 }
 
-// Barra de Rolagem
-::-webkit-scrollbar {
-  display: none;
+@media screen and (max-width: 600px) {
+  html {
+    font-size: 80%;
+  }
 }
+
+@media screen and (max-width: 768px) {
+  .loginPage, .registerPage .container {
+    flex-direction: column;
+    width: 100%;
+  }
+
+  .videoDiv {
+    width: 100%;
+  }
+
+  .formDiv {
+    width: 100%;
+  }
+}
+
+
+@media screen and (max-width: 1024px) {
+  .appDashboard main {
+    grid-template-columns: 1fr; /* Uma coluna */
+    gap: 2rem;
+  }
+}
+
+@media screen and (max-width: 600px) {
+  .formDiv h3 {
+    font-size: 1.5rem;
+  }
+
+  .btn {
+    padding: 0.6rem;
+    font-size: 0.875rem;
+  }
+
+  .videoDiv .title {
+    font-size: 1.875rem;
+  }
+}
+
+@media screen and (max-width: 480px) {
+  .videoDiv {
+    display: none;
+  }
+}
+
+@media screen and (max-width: 768px) {
+  .formDiv .input {
+    width: 100%;
+  }
+
+  .form .btn {
+    width: 100%;
+  }
+}
+
+

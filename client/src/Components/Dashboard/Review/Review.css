@@ -20,6 +20,7 @@
   border-radius: 3px;
   text-align: center;
 }
+
 .review .left {
   width: 100%;
   display: flex;
@@ -28,6 +29,7 @@
   flex-wrap: wrap;
   gap: 1rem;
 }
+
 .review .content {
   width: 85%;
   height: 100%;
@@ -37,15 +39,58 @@
   justify-content: flex-start;
   text-align: center;
 }
+
 .review .buttonLeft {
   width: 30%;
   background-color: white;
   color: #34495e;
+  transition: background-color 0.3s ease;
 }
+
 .review .buttonLeft:hover {
-  transition: all ease 0.5s;
   background-color: gray;
 }
+
 .review span {
   color: #34495e;
+}
+
+.review .buttonLeft {
+  width: 30%;
+  background-color: white;
+  color: #34495e;
+  transition: background-color 0.3s ease, transform 0.3s ease;
+}
+
+.review .buttonLeft:hover {
+  background-color: gray;
+  transform: scale(1.05);
+}
+
+@media (max-width: 768px) {
+  .review {
+    width: 100%;
+  }
+  .review .left {
+    flex-direction: column;
+    align-items: center;
+  }
+  .review .buttonLeft {
+    width: 80%;
+    margin-bottom: 1rem;
+  }
+  .review .content {
+    width: 100%;
+    padding: 0 10px;
+  }
+}
+@media (max-width: 480px) {
+  .review .buttonLeft {
+    width: 100%;
+    font-size: 0.875rem;
+    padding: 8px;
+  }
+  .review .error-message {
+    font-size: 0.875rem;
+  }
 }/*# sourceMappingURL=Review.css.map */

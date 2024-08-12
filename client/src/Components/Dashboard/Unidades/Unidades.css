@@ -139,4 +139,81 @@ button:hover {
 
 .modal-content button:hover {
   background-color: #0033a0;
+}
+
+button, .edit-button, .info-button {
+  outline: none;
+}
+
+button:focus, .edit-button:focus, .info-button:focus,
+button:active, .edit-button:active, .info-button:active {
+  background-color: #002f75;
+  outline: 2px solid #fff;
+  outline-offset: 2px;
+}
+
+.edit-button, .info-button {
+  transition: background-color 0.3s ease;
+}
+
+button {
+  transition: background-color 0.3s ease;
+}
+
+.modal-content {
+  margin: 0 10px;
+  width: 90%;
+  max-width: 500px;
+  padding: 20px;
+}
+
+.search-icon {
+  color: #333;
+}
+
+.modal-content .edit-icon {
+  color: #0044cc;
+}
+
+.modal-content .edit-icon:hover {
+  color: #002f75;
+}
+
+@media (max-width: 768px) {
+  .modal-content {
+    width: 80%;
+    padding: 15px;
+  }
+  .list-item {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  .list-item span {
+    font-size: 1em;
+    margin-bottom: 10px;
+  }
+  .edit-button, .info-button {
+    width: 100%;
+    margin-top: 10px;
+    margin-left: 0;
+  }
+}
+@media (max-width: 480px) {
+  .search-container input {
+    font-size: 0.9em;
+    padding: 8px;
+  }
+  .modal-content {
+    width: 95%;
+  }
+  .modal-content h2 {
+    font-size: 1.2em;
+  }
+  .modal-content .info-item span {
+    font-size: 1em;
+  }
+  button {
+    padding: 8px 16px;
+    font-size: 0.9em;
+  }
 }/*# sourceMappingURL=Unidades.css.map */
