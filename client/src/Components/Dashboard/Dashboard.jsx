@@ -17,6 +17,10 @@ const Dashboard = () => {
   const [role, setRole] = useState('');
   const [name, setName] = useState('');
 
+  const handleClick = () => {
+    window.location.reload();
+  };
+
   useEffect(() => {
     const email = localStorage.getItem('emailStorage');
 
@@ -148,7 +152,7 @@ const Dashboard = () => {
     <div className="homepage">
       <div className="left">
         <div className="logoPage">
-          <img src={logo} alt="logo" />
+          <img src={logo} alt="logo" onClick={handleClick} style={{ cursor: 'pointer' }}  />
         </div>
         {renderMenuOptions()}
       </div>
