@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import './Login.css';
 import '../../App.css';
 import { Link, useNavigate } from "react-router-dom";
+import axios from "axios";
 import Axios from "axios";
 
 // Importando Assets
@@ -19,6 +20,7 @@ const Login = () => {
   const [loginPassword, setLoginPassword] = useState('');
   const [loginStatus, setLoginStatus] = useState('');
   const [statusHolder, setStatusHolder] = useState('message');
+  const [role, setRole] = useState('');
   const navigateTo = useNavigate();
 
   const loginUser = (e) => {
@@ -40,11 +42,37 @@ const Login = () => {
       } else {
         localStorage.setItem('emailStorage', loginEmail); // Salvar email no localStorage
         navigateTo('/dashboard'); // Entrar para o dashboard
+        // Após o login bem-sucedido
+        localStorage.setItem('isAuthenticated', 'true');
       }
     }).catch((error) => {
       setLoginStatus('Dados não encontrados!'); // Mostrar mensagem de erro
     });
   }
+
+  useEffect(() => {
+    const email = localStorage.getItem('emailStorage');
+    console.log('Email:', email);
+  
+    if (email) {
+      axios.get(`http://localhost:3002/getRole/${email}`)
+        .then(response => {
+          const userRole = response.data.role; // Certifique-se de que `response.data.role` existe
+          setRole(userRole);
+        })
+        .catch(error => {
+          console.error('Erro ao buscar o role:', error);
+        });
+    }
+  }, []);
+  
+  useEffect(() => {
+    if (role) {
+      console.log('Role:', role);
+      localStorage.setItem('role', role); // Salva o papel do usuário no localStorage
+    }
+  }, [role]);
+  
 
   useEffect(() => {
     if (loginStatus !== '') {

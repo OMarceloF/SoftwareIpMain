@@ -1,39 +1,41 @@
-import './App.css'
-import Dashboard from './Components/Dashboard/Dashboard'
-import Login from './Components/Login/Login'
-import Register from './Components/Register/Register'
-import Review from './Components/Dashboard/Review/Review'
-import Aulas from './Components/Dashboard/Review/Components/Aulas'
-import Diario from './Components/Dashboard/Review/Components/Diario'
-import Planos from './Components/Dashboard/Review/Components/Planos'
-import Propostas from './Components/Dashboard/Review/Components/Propostas'
-import Inventario from './Components/Dashboard/Review/Components/Inventario'
-import Contato from './Components/Dashboard/Review/Components/Contato'
-import Guide from './Components/Dashboard/Review/Components/Guide'
-import Feira from './Components/Dashboard/Review/Components/Feira'
-import Unidades from './Components/Dashboard/Unidades/Unidades'
-import CriarUnidades from './Components/Dashboard/Unidades/Components/CriarUnidades'
-import DashboardGraph from './Components/Dashboard/Dashboard/DashboardGraph'
-import EscolherUnidade from './Components/Dashboard/Dashboard/EscolherUnidade'
-import ReviewCoordenadores from './Components/Dashboard/Review/ReviewCoordenadores'
-import EscolherCoordenador from './Components/Dashboard/Review/EscolherCoordenador'
-import AulaCor from './Components/Dashboard/Review/ComponentsCor/AulaCor'
-import ContatoCor from './Components/Dashboard/Review/ComponentsCor/ContatoCor'
-import DiariosCor from './Components/Dashboard/Review/ComponentsCor/DiariosCor'
-import FeiraCor from './Components/Dashboard/Review/ComponentsCor/FeiraCor'
-import FotosEVideosCor from './Components/Dashboard/Review/ComponentsCor/FotosEVideosCor'
-import GuideCor from './Components/Dashboard/Review/ComponentsCor/GuideCor'
-import PlanosDeAula from './Components/Dashboard/Review/ComponentsCor/PlanosDeAulaCor'
-import PropostasCor from './Components/Dashboard/Review/ComponentsCor/PropostasCor'
-import DashboardEscolha from './Components/Dashboard/Review/DashboardEscolha'
-import DashboardGraphCor from './Components/Dashboard/Dashboard/DashboardGraphCor'
+import './App.css';
+import Dashboard from './Components/Dashboard/Dashboard';
+import Login from './Components/Login/Login';
+import Register from './Components/Register/Register';
+import Review from './Components/Dashboard/Review/Review';
+import Aulas from './Components/Dashboard/Review/Components/Aulas';
+import Diario from './Components/Dashboard/Review/Components/Diario';
+import Planos from './Components/Dashboard/Review/Components/Planos';
+import Propostas from './Components/Dashboard/Review/Components/Propostas';
+import Inventario from './Components/Dashboard/Review/Components/Inventario';
+import Contato from './Components/Dashboard/Review/Components/Contato';
+import Guide from './Components/Dashboard/Review/Components/Guide';
+import Feira from './Components/Dashboard/Review/Components/Feira';
+import Unidades from './Components/Dashboard/Unidades/Unidades';
+import CriarUnidades from './Components/Dashboard/Unidades/Components/CriarUnidades';
+import DashboardGraph from './Components/Dashboard/Dashboard/DashboardGraph';
+import EscolherUnidade from './Components/Dashboard/Dashboard/EscolherUnidade';
+import ReviewCoordenadores from './Components/Dashboard/Review/ReviewCoordenadores';
+import EscolherCoordenador from './Components/Dashboard/Review/EscolherCoordenador';
+import AulaCor from './Components/Dashboard/Review/ComponentsCor/AulaCor';
+import ContatoCor from './Components/Dashboard/Review/ComponentsCor/ContatoCor';
+import DiariosCor from './Components/Dashboard/Review/ComponentsCor/DiariosCor';
+import FeiraCor from './Components/Dashboard/Review/ComponentsCor/FeiraCor';
+import FotosEVideosCor from './Components/Dashboard/Review/ComponentsCor/FotosEVideosCor';
+import GuideCor from './Components/Dashboard/Review/ComponentsCor/GuideCor';
+import PlanosDeAula from './Components/Dashboard/Review/ComponentsCor/PlanosDeAulaCor';
+import PropostasCor from './Components/Dashboard/Review/ComponentsCor/PropostasCor';
+import DashboardEscolha from './Components/Dashboard/Review/DashboardEscolha';
+import DashboardGraphCor from './Components/Dashboard/Dashboard/DashboardGraphCor';
+import FotosEVideos from './Components/Dashboard/Review/Components/FotosEVideos';
 
 // Importando React Router DOM
 import {
   createBrowserRouter,
   RouterProvider,
-} from 'react-router-dom'
-import FotosEVideos from './Components/Dashboard/Review/Components/FotosEVideos'
+} from 'react-router-dom';
+
+import ProtectedRoute from './Components/ProtectedRoute'; // Importar o componente ProtectedRoute
 
 // Criando uma rota
 const router = createBrowserRouter([
@@ -47,89 +49,89 @@ const router = createBrowserRouter([
   },
   {
     path: '/dashboard',
-    element: <Dashboard />,
+    element: <ProtectedRoute element={Dashboard} allowedRoles={['user', 'admin', 'supervisor', 'dev']} />,
     children: [
       {
         path: 'review',
-        element: <Review />,
+        element: <ProtectedRoute element={Review} allowedRoles={['user', 'dev']} />,
         children: [
           {
             path: 'planosDeAula',
-            element: <Planos />
+            element: <ProtectedRoute element={Planos} allowedRoles={['user', 'dev']} />
           },
           {
             path: 'aulas',
-            element: <Aulas />
+            element: <ProtectedRoute element={Aulas} allowedRoles={['user', 'dev']} />
           },
           {
             path: 'diario',
-            element: <Diario />
+            element: <ProtectedRoute element={Diario} allowedRoles={['user', 'dev']} />
           },
           {
             path: 'fotosEVideos',
-            element: <FotosEVideos />
+            element: <ProtectedRoute element={FotosEVideos} allowedRoles={['user', 'dev']} />
           },
           {
             path: 'propostas',
-            element: <Propostas />
+            element: <ProtectedRoute element={Propostas} allowedRoles={['user', 'dev']} />
           },
           {
             path: 'inventario',
-            element: <Inventario />
+            element: <ProtectedRoute element={Inventario} allowedRoles={['user', 'dev']} />
           },
           {
             path: 'contato',
-            element: <Contato />
+            element: <ProtectedRoute element={Contato} allowedRoles={['user', 'dev']} />
           },
           {
             path: 'guide',
-            element: <Guide />
+            element: <ProtectedRoute element={Guide} allowedRoles={['user', 'dev']} />
           },
           {
             path: 'feira',
-            element: <Feira />
+            element: <ProtectedRoute element={Feira} allowedRoles={['user', 'dev']} />
           }
         ]
       },
       {
         path: 'escolherCoordenador',
-        element: <EscolherCoordenador />,
+        element: <ProtectedRoute element={EscolherCoordenador} allowedRoles={['supervisor', 'dev']} />,
         children: [
           {
             path: 'reviewCoordenadores',
-            element: <ReviewCoordenadores />,
+            element: <ProtectedRoute element={ReviewCoordenadores} allowedRoles={['supervisor', 'dev']} />,
             children: [
               {
                 path: 'aulaCor',
-                element: <AulaCor />
+                element: <ProtectedRoute element={AulaCor} allowedRoles={['supervisor', 'dev']} />
               },
               {
                 path: 'contatoCor',
-                element: <ContatoCor />
+                element: <ProtectedRoute element={ContatoCor} allowedRoles={['supervisor', 'dev']} />
               },
               {
                 path: 'diariosCor',
-                element: <DiariosCor />
+                element: <ProtectedRoute element={DiariosCor} allowedRoles={['supervisor', 'dev']} />
               },
               {
                 path: 'feiraCor',
-                element: <FeiraCor />
+                element: <ProtectedRoute element={FeiraCor} allowedRoles={['supervisor', 'dev']} />
               },
               {
                 path: 'fotosEVideosCor',
-                element: <FotosEVideosCor />
+                element: <ProtectedRoute element={FotosEVideosCor} allowedRoles={['supervisor', 'dev']} />
               },
               {
                 path: 'guideCor',
-                element: <GuideCor />
+                element: <ProtectedRoute element={GuideCor} allowedRoles={['supervisor', 'dev']} />
               },
               {
                 path: 'planosDeAulaCor',
-                element: <PlanosDeAula />
+                element: <ProtectedRoute element={PlanosDeAula} allowedRoles={['supervisor', 'dev']} />
               },
               {
                 path: 'propostasCor',
-                element: <PropostasCor />
+                element: <ProtectedRoute element={PropostasCor} allowedRoles={['supervisor', 'dev']} />
               }
             ]
           },
@@ -137,44 +139,44 @@ const router = createBrowserRouter([
       },
       {
         path: 'dashboardEscolha',
-        element: <DashboardEscolha />,
+        element: <ProtectedRoute element={DashboardEscolha} allowedRoles={['dev', 'admin']} />,
         children: [
           {
             path: 'escolherUnidade',
-            element: <EscolherUnidade />,
+            element: <ProtectedRoute element={EscolherUnidade} allowedRoles={['dev', 'admin']} />,
             children: [
               {
                 path: 'dashboardGraph',
-                element: <DashboardGraph />
+                element: <ProtectedRoute element={DashboardGraph} allowedRoles={['dev', 'admin']} />
               },
             ]
           },
           {
             path: 'dashboardGraphCor',
-            element: <DashboardGraphCor />
+            element: <ProtectedRoute element={DashboardGraphCor} allowedRoles={['dev', 'admin']} />
           }
         ]
       },
       {
         path: 'unidades',
-        element: <Unidades />,
+        element: <ProtectedRoute element={Unidades} allowedRoles={['admin', 'user', 'dev']} />,
         children: [
           {
             path: 'criarunidade',
-            element: <CriarUnidades />
+            element: <ProtectedRoute element={CriarUnidades} allowedRoles={['admin', 'user', 'dev']} />
           }
         ]
       }
     ]
   }
-])
+]);
 
 function App() {
   return (
     <div>
-      <RouterProvider router={router}></RouterProvider>
+      <RouterProvider router={router} />
     </div>
-  )
+  );
 }
 
-export default App
+export default App;
