@@ -453,20 +453,22 @@ app.listen(3002, () => {
   console.log('Server is running on port 3002');
 });
 
-// Rota para buscar as notas mais recentes por coordenador
+// Rota para buscar as notas mais recentes por coordenador, filtradas por mês
 app.get('/aulacor/notas-por-coordenador', (req, res) => {
+  const { month } = req.query; // Captura o mês da query string
   const SQL = `
     SELECT coordenador, nota 
     FROM aulacor 
     WHERE (date, coordenador) IN (
       SELECT MAX(date) AS date, coordenador 
       FROM aulacor 
+      WHERE MONTH(date) = ?  -- Filtra pelo mês
       GROUP BY coordenador
     )
     ORDER BY coordenador ASC;
   `;
 
-  db.query(SQL, (err, results) => {
+  db.query(SQL, [month], (err, results) => {
     if (err) {
       console.error('Erro ao buscar dados:', err);
       return res.status(500).send({ error: err });
@@ -475,20 +477,22 @@ app.get('/aulacor/notas-por-coordenador', (req, res) => {
   });
 });
 
-// Rota para o segundo gráfico
+// Rota para o segundo gráfico, filtrada por mês
 app.get('/contatocor/retornos-por-coordenador', (req, res) => {
+  const { month } = req.query;
   const SQL = `
     SELECT coordenador, retorno 
     FROM contatocor 
     WHERE (date, coordenador) IN (
       SELECT MAX(date) AS date, coordenador 
       FROM contatocor 
+      WHERE MONTH(date) = ?  -- Filtra pelo mês
       GROUP BY coordenador
     )
     ORDER BY coordenador ASC;
   `;
 
-  db.query(SQL, (err, results) => {
+  db.query(SQL, [month], (err, results) => {
     if (err) {
       console.error('Erro ao buscar dados:', err);
       return res.status(500).send({ error: err });
@@ -497,18 +501,20 @@ app.get('/contatocor/retornos-por-coordenador', (req, res) => {
   });
 });
 
-// Rota para obter notas mais recentes por coordenador
+// Rota para obter notas mais recentes por coordenador, filtradas por mês
 app.get('/diarioscor/notas-por-coordenador', (req, res) => {
+  const { month } = req.query;
   const query = `
     SELECT coordenador, nota, date
     FROM diarioscor
     WHERE (coordenador, date) IN (
       SELECT coordenador, MAX(date)
       FROM diarioscor
+      WHERE MONTH(date) = ?  -- Filtra pelo mês
       GROUP BY coordenador
     )
   `;
-  db.query(query, (err, results) => {
+  db.query(query, [month], (err, results) => {
     if (err) {
       console.error("Erro ao buscar dados de notas por coordenador:", err);
       return res.status(500).json({ error: 'Erro ao buscar dados' });
@@ -516,6 +522,7 @@ app.get('/diarioscor/notas-por-coordenador', (req, res) => {
     res.json(results);
   });
 });
+
 
 // Criando uma rota até o servidor para logar
 app.post('/login', (req, res) => {

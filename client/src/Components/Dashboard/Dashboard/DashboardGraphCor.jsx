@@ -7,24 +7,42 @@ import { Bar } from 'react-chartjs-2';
 ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend);
 
 const Dashboard = () => {
-  const [dataNotas, setDataNotas] = useState(null); // Dados para o gráfico de notas
-  const [dataRetorno, setDataRetorno] = useState(null); // Dados para o gráfico de retorno
-  const [dataDiarios, setDataDiarios] = useState(null); // Dados para o gráfico de diários
-  const [error, setError] = useState(null); // Estado para armazenar erros
-  const [loading, setLoading] = useState(true); // Estado para mostrar carregamento
-  const chartNotasRef = useRef(null); // Referência para o canvas do gráfico de notas
-  const chartRetornoRef = useRef(null); // Referência para o canvas do gráfico de retorno
-  const chartDiariosRef = useRef(null); // Referência para o canvas do gráfico de diários
-  const chartNotasInstance = useRef(null); // Referência para a instância do gráfico de notas
-  const chartRetornoInstance = useRef(null); // Referência para a instância do gráfico de retorno
-  const chartDiariosInstance = useRef(null); // Referência para a instância do gráfico de diários
+  const [dataNotas, setDataNotas] = useState(null);
+  const [dataRetorno, setDataRetorno] = useState(null);
+  const [dataDiarios, setDataDiarios] = useState(null);
+  const [selectedMonth, setSelectedMonth] = useState('Janeiro'); // Estado para o mês selecionado
+  const [error, setError] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const chartNotasRef = useRef(null);
+  const chartRetornoRef = useRef(null);
+  const chartDiariosRef = useRef(null);
+  const chartNotasInstance = useRef(null);
+  const chartRetornoInstance = useRef(null);
+  const chartDiariosInstance = useRef(null);
 
   useEffect(() => {
+    const monthMapping = {
+      'Janeiro': 1,
+      'Fevereiro': 2,
+      'Março': 3,
+      'Abril': 4,
+      'Maio': 5,
+      'Junho': 6,
+      'Julho': 7,
+      'Agosto': 8,
+      'Setembro': 9,
+      'Outubro': 10,
+      'Novembro': 11,
+      'Dezembro': 12
+    };
+
+    const monthNumber = monthMapping[selectedMonth];
+
     // Buscar dados para o gráfico de notas
-    axios.get('http://localhost:3002/aulacor/notas-por-coordenador')
+    axios.get(`http://localhost:3002/aulacor/notas-por-coordenador?month=${monthNumber}`)
       .then(response => {
-        console.log("Dados de notas recebidos da API:", response.data); // Log para verificar os dados recebidos
-        const filteredDataNotas = filtrarDadosNotas(response.data); // Filtra os dados de notas
+        console.log("Dados de notas recebidos da API:", response.data); 
+        const filteredDataNotas = filtrarDadosNotas(response.data);
         setDataNotas(filteredDataNotas);
       })
       .catch(error => {
@@ -33,10 +51,10 @@ const Dashboard = () => {
       });
 
     // Buscar dados para o gráfico de retorno
-    axios.get('http://localhost:3002/contatocor/retornos-por-coordenador')
+    axios.get(`http://localhost:3002/contatocor/retornos-por-coordenador?month=${monthNumber}`)
       .then(response => {
-        console.log("Dados de retorno recebidos da API:", response.data); // Log para verificar os dados recebidos
-        const filteredDataRetorno = filtrarDadosRetorno(response.data); // Filtra os dados de retorno
+        console.log("Dados de retorno recebidos da API:", response.data); 
+        const filteredDataRetorno = filtrarDadosRetorno(response.data);
         setDataRetorno(filteredDataRetorno);
       })
       .catch(error => {
@@ -45,10 +63,10 @@ const Dashboard = () => {
       });
 
     // Buscar dados para o gráfico de diários
-    axios.get('http://localhost:3002/diarioscor/notas-por-coordenador')
+    axios.get(`http://localhost:3002/diarioscor/notas-por-coordenador?month=${monthNumber}`)
       .then(response => {
-        console.log("Dados de diários recebidos da API:", response.data); // Log para verificar os dados recebidos
-        const filteredDataDiarios = filtrarDadosDiarios(response.data); // Filtra os dados de diários
+        console.log("Dados de diários recebidos da API:", response.data); 
+        const filteredDataDiarios = filtrarDadosDiarios(response.data);
         setDataDiarios(filteredDataDiarios);
       })
       .catch(error => {
@@ -58,7 +76,7 @@ const Dashboard = () => {
       .finally(() => {
         setLoading(false);
       });
-  }, []);
+  }, [selectedMonth]);
 
   useEffect(() => {
     if (dataNotas) {
@@ -106,12 +124,12 @@ const Dashboard = () => {
               {
                 label: 'Retorno Sim',
                 data: dataRetorno.map(item => item.sim),
-                backgroundColor: 'rgb(16, 35, 205)', // Azul para 'Sim'
+                backgroundColor: 'rgb(16, 35, 205)', 
               },
               {
                 label: 'Retorno Não',
                 data: dataRetorno.map(item => item.nao),
-                backgroundColor: 'rgb(255, 99, 132)', // Vermelho para 'Não'
+                backgroundColor: 'rgb(255, 99, 132)', 
               },
             ],
           },
@@ -142,7 +160,7 @@ const Dashboard = () => {
             datasets: [{
               label: 'Notas Diários',
               data: dataDiarios.map(item => item.nota),
-              backgroundColor: 'rgb(75, 192, 192)', // Cor para notas diárias
+              backgroundColor: 'rgb(75, 192, 192)',
             }],
           },
           options: {
@@ -198,6 +216,11 @@ const Dashboard = () => {
     return Object.values(filtroPorCoordenador);
   };
 
+  const handleMonthChange = (event) => {
+    setSelectedMonth(event.target.value);
+    console.log("Mês selecionado:", event.target.value);
+  };
+
   if (loading) {
     return <div>Carregando...</div>;
   }
@@ -208,6 +231,24 @@ const Dashboard = () => {
 
   return (
     <div>
+      <div>
+        <label htmlFor="month-select">Selecione o Mês: </label>
+        <select id="month-select" value={selectedMonth} onChange={handleMonthChange}>
+          <option value="Janeiro">Janeiro</option>
+          <option value="Fevereiro">Fevereiro</option>
+          <option value="Março">Março</option>
+          <option value="Abril">Abril</option>
+          <option value="Maio">Maio</option>
+          <option value="Junho">Junho</option>
+          <option value="Julho">Julho</option>
+          <option value="Agosto">Agosto</option>
+          <option value="Setembro">Setembro</option>
+          <option value="Outubro">Outubro</option>
+          <option value="Novembro">Novembro</option>
+          <option value="Dezembro">Dezembro</option>
+        </select>
+      </div>
+
       <div>
         <h2>Gráfico de Notas</h2>
         <canvas ref={chartNotasRef} />
