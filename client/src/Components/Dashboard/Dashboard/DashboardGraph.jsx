@@ -1,6 +1,5 @@
 import React, { useEffect, useState, useRef } from 'react';
 import Chart from 'chart.js/auto';
-import 'chartjs-adapter-date-fns'; // Importar o adaptador de data
 import axios from 'axios';
 import './DashboardGraph.css';
 
@@ -10,23 +9,25 @@ const Dashboard = () => {
   const [chartDataDiarios, setChartDataDiarios] = useState({});
   const [chartDataFeira, setChartDataFeira] = useState({});
   const [chartDataFotosEVideos, setChartDataFotosEVideos] = useState({});
+  const [selectedMonth, setSelectedMonth] = useState(new Date().getMonth() + 1); // Mês atual
   const chartRefAula = useRef(null);
   const chartRefContato = useRef(null);
   const chartRefDiarios = useRef(null);
   const chartRefFeira = useRef(null);
   const chartRefFotosEVideos = useRef(null);
   const unidade = localStorage.getItem('unidadeStorage');
-  console.log(unidade)
+
+  const handleMonthChange = (event) => {
+    setSelectedMonth(event.target.value);
+  };
 
   useEffect(() => {
-    // Buscar dados da API para aula
     axios.get(`http://localhost:3002/aula/${unidade}`)
       .then(response => {
-        const data = response.data;
-        const dates = data.map(item => new Date(item.date)); // Converter para objetos Date
+        const data = response.data.filter(item => new Date(item.date).getMonth() + 1 === parseInt(selectedMonth));
+        const dates = data.map(item => new Date(item.date).toLocaleDateString());
         const notas = data.map(item => item.nota);
 
-        // Atualizar dados do gráfico
         setChartDataAula({
           labels: dates,
           datasets: [
@@ -41,14 +42,12 @@ const Dashboard = () => {
       })
       .catch(error => console.error('Erro ao buscar dados:', error));
 
-    // Buscar dados da API para contato
     axios.get(`http://localhost:3002/contato/${unidade}`)
       .then(response => {
-        const data = response.data;
-        
-        // Contar "Sim" e "Não" por data
+        const data = response.data.filter(item => new Date(item.date).getMonth() + 1 === parseInt(selectedMonth));
+
         const dateCounts = data.reduce((acc, item) => {
-          const date = new Date(item.date).toDateString();
+          const date = new Date(item.date).toLocaleDateString();
           if (!acc[date]) {
             acc[date] = { Sim: 0, Nao: 0 };
           }
@@ -60,7 +59,6 @@ const Dashboard = () => {
         const simCounts = dates.map(date => dateCounts[date].Sim);
         const naoCounts = dates.map(date => dateCounts[date].Nao);
 
-        // Atualizar dados do gráfico
         setChartDataContato({
           labels: dates,
           datasets: [
@@ -79,14 +77,12 @@ const Dashboard = () => {
       })
       .catch(error => console.error('Erro ao buscar dados:', error));
 
-    // Buscar dados da API para diarios
     axios.get(`http://localhost:3002/diarios/${unidade}`)
       .then(response => {
-        const data = response.data;
-        const dates = data.map(item => new Date(item.date)); // Converter para objetos Date
+        const data = response.data.filter(item => new Date(item.date).getMonth() + 1 === parseInt(selectedMonth));
+        const dates = data.map(item => new Date(item.date).toLocaleDateString());
         const notas = data.map(item => item.nota);
 
-        // Atualizar dados do gráfico
         setChartDataDiarios({
           labels: dates,
           datasets: [
@@ -101,13 +97,11 @@ const Dashboard = () => {
       })
       .catch(error => console.error('Erro ao buscar dados:', error));
 
-    // Buscar dados da API para feira
     axios.get(`http://localhost:3002/feira/${unidade}`)
       .then(response => {
         const data = response.data;
         const { cronograma, apresentacao, estrutural } = data;
 
-        // Atualizar dados do gráfico
         setChartDataFeira({
           labels: ['Cronograma', 'Apresentação', 'Estrutural'],
           datasets: [
@@ -129,14 +123,12 @@ const Dashboard = () => {
       })
       .catch(error => console.error('Erro ao buscar dados:', error));
 
-    // Buscar dados da API para fotos e videos
     axios.get(`http://localhost:3002/fotosevideos/${unidade}`)
     .then(response => {
-      const data = response.data;
-      const dates = data.map(item => new Date(item.date)); // Converter para objetos Date
+      const data = response.data.filter(item => new Date(item.date).getMonth() + 1 === parseInt(selectedMonth));
+      const dates = data.map(item => new Date(item.date).toLocaleDateString());
       const notas = data.map(item => item.nota);
 
-      // Atualizar dados do gráfico
       setChartDataFotosEVideos({
         labels: dates,
         datasets: [
@@ -151,47 +143,32 @@ const Dashboard = () => {
     })
     .catch(error => console.error('Erro ao buscar dados:', error));
 
-
-    
-  }, [unidade]);
+  }, [unidade, selectedMonth]);
 
   useEffect(() => {
-    // Gráfico de aula
     if (Object.keys(chartDataAula).length > 0) {
       const ctxAula = document.getElementById('myChartAula').getContext('2d');
-      
-      // Destruir gráfico existente se houver
       if (chartRefAula.current) {
         chartRefAula.current.destroy();
       }
-
-      // Criar novo gráfico
       chartRefAula.current = new Chart(ctxAula, {
         type: 'line',
         data: chartDataAula,
         options: {
           scales: {
             x: {
-              type: 'time',
-              time: {
-                unit: 'day',
-              },
+              type: 'category',
             },
           },
         },
       });
     }
 
-    // Gráfico de contato
     if (Object.keys(chartDataContato).length > 0) {
       const ctxContato = document.getElementById('myChartContato').getContext('2d');
-      
-      // Destruir gráfico existente se houver
       if (chartRefContato.current) {
         chartRefContato.current.destroy();
       }
-
-      // Criar novo gráfico
       chartRefContato.current = new Chart(ctxContato, {
         type: 'bar',
         data: chartDataContato,
@@ -222,42 +199,29 @@ const Dashboard = () => {
       });
     }
 
-    // Gráfico de diarios
     if (Object.keys(chartDataDiarios).length > 0) {
       const ctxDiarios = document.getElementById('myChartDiarios').getContext('2d');
-      
-      // Destruir gráfico existente se houver
       if (chartRefDiarios.current) {
         chartRefDiarios.current.destroy();
       }
-
-      // Criar novo gráfico
       chartRefDiarios.current = new Chart(ctxDiarios, {
         type: 'line',
         data: chartDataDiarios,
         options: {
           scales: {
             x: {
-              type: 'time',
-              time: {
-                unit: 'day',
-              },
+              type: 'category',
             },
           },
         },
       });
     }
 
-    // Gráfico de feira
     if (Object.keys(chartDataFeira).length > 0) {
       const ctxFeira = document.getElementById('myChartFeira').getContext('2d');
-      
-      // Destruir gráfico existente se houver
       if (chartRefFeira.current) {
         chartRefFeira.current.destroy();
       }
-
-      // Criar novo gráfico
       chartRefFeira.current = new Chart(ctxFeira, {
         type: 'bar',
         data: chartDataFeira,
@@ -278,63 +242,70 @@ const Dashboard = () => {
                 label: function (context) {
                   const value = context.raw;
                   return value === 1 ? 'Sim' : 'Não';
-                }
-              }
-            }
+                },
+              },
+            },
           },
         },
       });
     }
-  }, [chartDataAula, chartDataContato, chartDataDiarios, chartDataFeira]);
 
-  // Gráfico de fotos e videos
-  if (Object.keys(chartDataFotosEVideos).length > 0) {
-    const ctxPhotosEVideos = document.getElementById('myChartPhotosEVideos').getContext('2d');
-    
-    // Destruir gráfico existente se houver
-    if (chartRefFotosEVideos.current) {
-      chartRefFotosEVideos.current.destroy();
-    }
-
-    // Criar novo gráfico
-    chartRefFotosEVideos.current = new Chart(ctxPhotosEVideos, {
-      type: 'line',
-      data: chartDataFotosEVideos,
-      options: {
-        scales: {
-          x: {
-            type: 'time',
-            time: {
-              unit: 'day',
+    if (Object.keys(chartDataFotosEVideos).length > 0) {
+      const ctxPhotosEVideos = document.getElementById('myChartPhotosEVideos').getContext('2d');
+      if (chartRefFotosEVideos.current) {
+        chartRefFotosEVideos.current.destroy();
+      }
+      chartRefFotosEVideos.current = new Chart(ctxPhotosEVideos, {
+        type: 'line',
+        data: chartDataFotosEVideos,
+        options: {
+          scales: {
+            x: {
+              type: 'category',
             },
           },
         },
-      },
-    });
-  }
+      });
+    }
+
+  }, [chartDataAula, chartDataContato, chartDataDiarios, chartDataFeira, chartDataFotosEVideos]);
 
   return (
     <div>
-      <h2>Dashboard</h2>
       <div>
-        <h3>Gráfico de Notas (Aula)</h3>
-        <canvas id="myChartAula"></canvas>
+        <label htmlFor="month-select">Selecione o Mês:</label>
+        <select id="month-select" value={selectedMonth} onChange={handleMonthChange}>
+          <option value="1">Janeiro</option>
+          <option value="2">Fevereiro</option>
+          <option value="3">Março</option>
+          <option value="4">Abril</option>
+          <option value="5">Maio</option>
+          <option value="6">Junho</option>
+          <option value="7">Julho</option>
+          <option value="8">Agosto</option>
+          <option value="9">Setembro</option>
+          <option value="10">Outubro</option>
+          <option value="11">Novembro</option>
+          <option value="12">Dezembro</option>
+        </select>
       </div>
-      <div>
-        <h3>Gráfico de Retornos</h3>
-        <canvas id="myChartContato"></canvas>
-      </div>
-      <div>
-        <h3>Gráfico de Notas (Diarios)</h3>
-        <canvas id="myChartDiarios"></canvas>
-      </div>
-      <div>
-        <h3>Gráfico de Status (Feira)</h3>
-        <canvas id="myChartFeira"></canvas>
-      </div>
-      <div>
-        <h3>Gráfico de Fotos e Vídeos</h3>
-        <canvas id="myChartPhotosEVideos"></canvas>
+
+      <div className="dashboard-graphs">
+        <div className="graph-container">
+          <canvas id="myChartAula"></canvas>
+        </div>
+        <div className="graph-container">
+          <canvas id="myChartContato"></canvas>
+        </div>
+        <div className="graph-container">
+          <canvas id="myChartDiarios"></canvas>
+        </div>
+        <div className="graph-container">
+          <canvas id="myChartFeira"></canvas>
+        </div>
+        <div className="graph-container">
+          <canvas id="myChartPhotosEVideos"></canvas>
+        </div>
       </div>
     </div>
   );
