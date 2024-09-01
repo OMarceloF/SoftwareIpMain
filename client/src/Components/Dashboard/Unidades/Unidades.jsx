@@ -11,8 +11,34 @@ const Unidades = () => {
     const [selectedUnidade, setSelectedUnidade] = useState(null);
     const [name, setName] = useState('');
     const [userRole, setUserRole] = useState('');
+    const [editEndereco, setEditEndereco] = useState('');
+    const [editTelefone, setEditTelefone] = useState('');
+    const [editCoordenador, setEditCoordenador] = useState('');
 
     const location = useLocation();
+
+    const handleSave = () => {
+        axios.put(`http://localhost:3002/unidades/${selectedUnidade.cidade}`, {
+            endereco: editEndereco,
+            telefone: editTelefone,
+            coordenador: editCoordenador,
+        })
+        .then(response => {
+            // Atualize o estado das unidades com os novos dados
+            setUnidades(prevUnidades =>
+                prevUnidades.map(unidade =>
+                    unidade.cidade === selectedUnidade.cidade
+                        ? { ...unidade, endereco: editEndereco, telefone: editTelefone, coordenador: editCoordenador }
+                        : unidade
+                )
+            );
+            closeModal(); // Fecha o modal após salvar
+        })
+        .catch(error => {
+            console.error('Erro ao atualizar a unidade:', error);
+        });
+    };
+    
 
     useEffect(() => {
         const email = localStorage.getItem('emailStorage');
@@ -63,6 +89,12 @@ const Unidades = () => {
         setModalContent(content);
         setSelectedUnidade(unidade);
         setIsModalOpen(true);
+        setModalContent(content);
+        setSelectedUnidade(unidade);
+        setEditEndereco(unidade.endereco);
+        setEditTelefone(unidade.telefone);
+        setEditCoordenador(unidade.coordenador);
+        setIsModalOpen(true);
     };
 
     const closeModal = () => {
@@ -110,19 +142,33 @@ const Unidades = () => {
                                     <>
                                         <h2>{selectedUnidade.cidade}</h2>
                                         <div className="info-item">
-                                            <span>Endereço: {selectedUnidade.endereco}</span>
-                                            <span className="edit-icon">✏️</span>
+                                            <span>Endereço: </span>
+                                            <input
+                                                type="text"
+                                                value={editEndereco}
+                                                onChange={(e) => setEditEndereco(e.target.value)}
+                                            />
                                         </div>
                                         <div className="info-item">
-                                            <span>Telefone de Contato: {selectedUnidade.telefone}</span>
-                                            <span className="edit-icon">✏️</span>
+                                            <span>Telefone de Contato: </span>
+                                            <input
+                                                type="text"
+                                                value={editTelefone}
+                                                onChange={(e) => setEditTelefone(e.target.value)}
+                                            />
                                         </div>
                                         <div className="info-item">
-                                            <span>Coordenador: {selectedUnidade.coordenador}</span>
-                                            <span className="edit-icon">✏️</span>
+                                            <span>Coordenador: </span>
+                                            <input
+                                                type="text"
+                                                value={editCoordenador}
+                                                onChange={(e) => setEditCoordenador(e.target.value)}
+                                            />
                                         </div>
+                                        <button onClick={handleSave}>Salvar</button>
                                     </>
                                 )}
+
                                 <button onClick={closeModal}>Fechar</button>
                             </div>
                         </div>

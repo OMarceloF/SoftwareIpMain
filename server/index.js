@@ -523,6 +523,27 @@ app.get('/diarioscor/notas-por-coordenador', (req, res) => {
   });
 });
 
+app.put('/unidades/:cidade', (req, res) => {
+  const { cidade } = req.params;
+  const { endereco, telefone, coordenador } = req.body;
+
+  const query = `UPDATE unidades SET endereco = ?, telefone = ?, coordenador = ? WHERE cidade = ?`;
+  const values = [endereco, telefone, coordenador, cidade];
+
+  db.query(query, values, (err, results) => {
+      if (err) {
+          console.error('Erro ao atualizar a unidade:', err);
+          return res.status(500).send('Erro ao atualizar a unidade');
+      }
+      if (results.affectedRows > 0) {
+          res.send({ message: 'Unidade atualizada com sucesso' });
+      } else {
+          res.status(404).send({ message: 'Unidade não encontrada' });
+      }
+  });
+});
+
+
 
 // Criando uma rota até o servidor para logar
 app.post('/login', (req, res) => {
