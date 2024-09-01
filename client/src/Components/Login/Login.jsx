@@ -20,7 +20,6 @@ const Login = () => {
   const [loginPassword, setLoginPassword] = useState('');
   const [loginStatus, setLoginStatus] = useState('');
   const [statusHolder, setStatusHolder] = useState('message');
-  const [role, setRole] = useState('');
   const navigateTo = useNavigate();
 
   const loginUser = (e) => {
@@ -40,39 +39,23 @@ const Login = () => {
         // Se as credenciais não baterem
         setLoginStatus(response.data.message); // Mostrar mensagem de erro
       } else {
-        localStorage.setItem('emailStorage', loginEmail); // Salvar email no localStorage
-        navigateTo('/dashboard'); // Entrar para o dashboard
-        // Após o login bem-sucedido
-        localStorage.setItem('isAuthenticated', 'true');
+        // Após o login bem-sucedido, buscar o papel do usuário
+        axios.get(`http://localhost:3002/getRole/${loginEmail}`)
+          .then(roleResponse => {
+            const userRole = roleResponse.data.role; 
+            localStorage.setItem('emailStorage', loginEmail); // Salvar email no localStorage
+            localStorage.setItem('isAuthenticated', 'true');
+            localStorage.setItem('role', userRole); // Salva o papel do usuário no localStorage
+            navigateTo('/dashboard'); // Entrar para o dashboard
+          })
+          .catch(error => {
+            console.error('Erro ao buscar o role:', error);
+          });
       }
     }).catch((error) => {
       setLoginStatus('Dados não encontrados!'); // Mostrar mensagem de erro
     });
   }
-
-  useEffect(() => {
-    const email = localStorage.getItem('emailStorage');
-    console.log('Email:', email);
-  
-    if (email) {
-      axios.get(`http://localhost:3002/getRole/${email}`)
-        .then(response => {
-          const userRole = response.data.role; // Certifique-se de que `response.data.role` existe
-          setRole(userRole);
-        })
-        .catch(error => {
-          console.error('Erro ao buscar o role:', error);
-        });
-    }
-  }, []);
-  
-  useEffect(() => {
-    if (role) {
-      console.log('Role:', role);
-      localStorage.setItem('role', role); // Salva o papel do usuário no localStorage
-    }
-  }, [role]);
-  
 
   useEffect(() => {
     if (loginStatus !== '') {
