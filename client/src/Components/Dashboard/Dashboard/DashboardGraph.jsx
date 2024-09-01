@@ -292,18 +292,23 @@ const Dashboard = () => {
 
       <div className="dashboard-graphs">
         <div className="graph-container">
+          <h2>Aula</h2>
           <canvas id="myChartAula"></canvas>
         </div>
         <div className="graph-container">
+          <h2>Contato</h2>
           <canvas id="myChartContato"></canvas>
         </div>
         <div className="graph-container">
+          <h2>Diarios</h2>
           <canvas id="myChartDiarios"></canvas>
         </div>
         <div className="graph-container">
+          <h2>Feira</h2>
           <canvas id="myChartFeira"></canvas>
         </div>
         <div className="graph-container">
+          <h2>Fotos e Vídeos</h2>
           <canvas id="myChartPhotosEVideos"></canvas>
         </div>
       </div>
