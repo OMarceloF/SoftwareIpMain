@@ -15,6 +15,10 @@ const Dashboard = () => {
   const chartRefDiarios = useRef(null);
   const chartRefFeira = useRef(null);
   const chartRefFotosEVideos = useRef(null);
+  const [chartDataGuide, setChartDataGuide] = useState({});
+  const chartRefGuide = useRef(null);
+  const [chartDataPlanos, setChartDataPlanos] = useState({});
+  const chartRefPlanos = useRef(null);
   const unidade = localStorage.getItem('unidadeStorage');
 
   const handleMonthChange = (event) => {
@@ -124,24 +128,79 @@ const Dashboard = () => {
       .catch(error => console.error('Erro ao buscar dados:', error));
 
     axios.get(`http://localhost:3002/fotosevideos/${unidade}`)
-    .then(response => {
-      const data = response.data.filter(item => new Date(item.date).getMonth() + 1 === parseInt(selectedMonth));
-      const dates = data.map(item => new Date(item.date).toLocaleDateString());
-      const notas = data.map(item => item.nota);
+      .then(response => {
+        const data = response.data.filter(item => new Date(item.date).getMonth() + 1 === parseInt(selectedMonth));
+        const dates = data.map(item => new Date(item.date).toLocaleDateString());
+        const notas = data.map(item => item.nota);
 
-      setChartDataFotosEVideos({
-        labels: dates,
-        datasets: [
-          {
-            label: 'Notas',
-            data: notas,
-            borderColor: 'rgb(75, 192, 192)',
-            backgroundColor: 'rgba(75, 192, 192, 0.2)',
-          },
-        ],
-      });
-    })
-    .catch(error => console.error('Erro ao buscar dados:', error));
+        setChartDataFotosEVideos({
+          labels: dates,
+          datasets: [
+            {
+              label: 'Notas',
+              data: notas,
+              borderColor: 'rgb(75, 192, 192)',
+              backgroundColor: 'rgba(75, 192, 192, 0.2)',
+            },
+          ],
+        });
+      })
+      .catch(error => console.error('Erro ao buscar dados:', error));
+
+    axios.get(`http://localhost:3002/guide/${unidade}`)
+      .then(response => {
+        const data = response.data.filter(item => new Date(item.date).getMonth() + 1 === parseInt(selectedMonth));
+
+        const dateCounts = data.reduce((acc, item) => {
+          const date = new Date(item.date).toLocaleDateString();
+          if (!acc[date]) {
+            acc[date] = { Sim: 0, Nao: 0 };
+          }
+          acc[date][item.conformidade] += 1;
+          return acc;
+        }, {});
+
+        const dates = Object.keys(dateCounts);
+        const simCounts = dates.map(date => dateCounts[date].Sim);
+        const naoCounts = dates.map(date => dateCounts[date].Nao);
+
+        setChartDataGuide({
+          labels: dates,
+          datasets: [
+            {
+              label: 'Sim',
+              data: simCounts,
+              backgroundColor: 'rgba(75, 192, 192, 0.7)',
+            },
+            {
+              label: 'Não',
+              data: naoCounts,
+              backgroundColor: 'rgba(255, 99, 132, 0.7)',
+            },
+          ],
+        });
+      })
+      .catch(error => console.error('Erro ao buscar dados:', error));
+
+      axios.get(`http://localhost:3002/planos/${unidade}`)
+      .then(response => {
+        const data = response.data.filter(item => new Date(item.date).getMonth() + 1 === parseInt(selectedMonth));
+        const dates = data.map(item => new Date(item.date).toLocaleDateString());
+        const notas = data.map(item => item.nota);
+
+        setChartDataPlanos({
+          labels: dates,
+          datasets: [
+            {
+              label: 'Notas',
+              data: notas,
+              borderColor: 'rgb(255, 159, 64)',
+              backgroundColor: 'rgba(255, 159, 64, 0.2)',
+            },
+          ],
+        });
+      })
+      .catch(error => console.error('Erro ao buscar dados:', error));
 
   }, [unidade, selectedMonth]);
 
@@ -268,7 +327,60 @@ const Dashboard = () => {
       });
     }
 
-  }, [chartDataAula, chartDataContato, chartDataDiarios, chartDataFeira, chartDataFotosEVideos]);
+    if (Object.keys(chartDataGuide).length > 0) {
+      const ctxGuide = document.getElementById('myChartGuide').getContext('2d');
+      if (chartRefGuide.current) {
+        chartRefGuide.current.destroy();
+      }
+      chartRefGuide.current = new Chart(ctxGuide, {
+        type: 'bar',
+        data: chartDataGuide,
+        options: {
+          scales: {
+            x: {
+              type: 'category',
+              stacked: true,
+              title: {
+                display: true,
+                text: 'Data'
+              }
+            },
+            y: {
+              stacked: true,
+              title: {
+                display: true,
+                text: 'Contagem'
+              }
+            }
+          },
+          plugins: {
+            legend: {
+              position: 'top',
+            },
+          },
+        },
+      });
+    }
+
+    if (Object.keys(chartDataPlanos).length > 0) {
+      const ctxPlanos = document.getElementById('myChartPlanos').getContext('2d');
+      if (chartRefPlanos.current) {
+        chartRefPlanos.current.destroy();
+      }
+      chartRefPlanos.current = new Chart(ctxPlanos, {
+        type: 'line',
+        data: chartDataPlanos,
+        options: {
+          scales: {
+            x: {
+              type: 'category',
+            },
+          },
+        },
+      });
+    }
+
+  }, [chartDataAula, chartDataContato, chartDataDiarios, chartDataFeira, chartDataFotosEVideos, chartDataGuide, chartDataPlanos]);
 
   return (
     <div>
@@ -310,6 +422,14 @@ const Dashboard = () => {
         <div className="graph-container">
           <h2>Fotos e Vídeos</h2>
           <canvas id="myChartPhotosEVideos"></canvas>
+        </div>
+        <div className="graph-container">
+          <h2>Guia de Conformidade</h2>
+          <canvas id="myChartGuide"></canvas>
+        </div>
+        <div className="graph-container">
+          <h2>Planos de Aula</h2>
+          <canvas id="myChartPlanos"></canvas>
         </div>
       </div>
     </div>

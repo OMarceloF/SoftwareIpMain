@@ -412,6 +412,38 @@ app.get('/fotosevideos/:unidade', (req, res) => {
   });
 });
 
+// Adicionando uma rota para buscar dados da tabela guide filtrados por unidade
+app.get('/guide/:unidade', (req, res) => {
+  const { unidade } = req.params;
+
+  const SQL = 'SELECT date, conformidade FROM guide WHERE unidade = ?';
+  const values = [unidade];
+
+  db.query(SQL, values, (err, results) => {
+    if (err) {
+      console.error('Erro ao buscar dados:', err);
+      return res.status(500).send({ error: err });
+    }
+    res.status(200).send(results);
+  });
+});
+
+// Adicionando uma rota para buscar dados da tabela planos filtrados por unidade
+app.get('/planos/:unidade', (req, res) => {
+  const { unidade } = req.params;
+
+  const SQL = 'SELECT date, nota FROM planos WHERE unidade = ?';
+  const values = [unidade];
+
+  db.query(SQL, values, (err, results) => {
+    if (err) {
+      console.error('Erro ao buscar dados:', err);
+      return res.status(500).send({ error: err });
+    }
+    res.status(200).send(results);
+  });
+});
+
 // Adicionando uma rota para buscar o role do usuário
 app.get('/getRole/:email', (req, res) => {
   const { email } = req.params;
