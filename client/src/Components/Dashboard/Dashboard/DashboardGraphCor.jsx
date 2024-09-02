@@ -14,6 +14,7 @@ const Dashboard = () => {
   const [selectedMonth, setSelectedMonth] = useState('Janeiro');
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [dataFotosEVideos, setDataFotosEVideos] = useState(null);
   const chartNotasRef = useRef(null);
   const chartRetornoRef = useRef(null);
   const chartDiariosRef = useRef(null);
@@ -22,6 +23,8 @@ const Dashboard = () => {
   const chartRetornoInstance = useRef(null);
   const chartDiariosInstance = useRef(null);
   const chartFeiraInstance = useRef(null); // Novo instance ref para o gráfico de feiracor
+  const chartFotosEVideosRef = useRef(null);
+  const chartFotosEVideosInstance = useRef(null);
 
   useEffect(() => {
     const monthMapping = {
@@ -88,6 +91,19 @@ const Dashboard = () => {
       })
       .catch(error => {
         console.error("Erro ao buscar dados de feiracor:", error);
+        setError(error);
+      })
+      .finally(() => {
+        setLoading(false);
+      });
+
+      axios.get(`http://localhost:3002/fotosevideoscor/notas-por-coordenador?month=${monthNumber}`)
+      .then(response => {
+        console.log("Dados de fotosevideoscor recebidos da API:", response.data);
+        setDataFotosEVideos(response.data);
+      })
+      .catch(error => {
+        console.error("Erro ao buscar dados de fotosevideoscor:", error);
         setError(error);
       })
       .finally(() => {
@@ -227,6 +243,39 @@ const Dashboard = () => {
     }
   }, [dataFeira]);
 
+  useEffect(() => {
+    if (dataFotosEVideos) {
+      const ctxFotosEVideos = chartFotosEVideosRef.current?.getContext('2d');
+      if (ctxFotosEVideos) {
+        if (chartFotosEVideosInstance.current) {
+          chartFotosEVideosInstance.current.destroy();
+        }
+        chartFotosEVideosInstance.current = new ChartJS(ctxFotosEVideos, {
+          type: 'bar',
+          data: {
+            labels: dataFotosEVideos.map(item => item.coordenador),
+            datasets: [{
+              label: 'Notas Fotos e Vídeos',
+              data: dataFotosEVideos.map(item => item.nota),
+              backgroundColor: 'rgba(54, 162, 235, 0.7)',
+              borderColor: 'rgba(54, 162, 235, 1)',
+              borderWidth: 1,
+            }],
+          },
+          options: {
+            responsive: true,
+            maintainAspectRatio: true,
+            scales: {
+              y: {
+                beginAtZero: true,
+              },
+            },
+          },
+        });
+      }
+    }
+  }, [dataFotosEVideos]);
+
   const filtrarDadosNotas = (dados) => {
     const filtroPorCoordenador = dados.reduce((acc, curr) => {
       if (!acc[curr.coordenador] || new Date(curr.date) > new Date(acc[curr.coordenador].date)) {
@@ -335,6 +384,10 @@ const Dashboard = () => {
       <div>
         <h2>Gráfico de Feira</h2>
         <canvas ref={chartFeiraRef} />
+      </div>
+      <div>
+        <h2>Gráfico de Fotos e Vídeos</h2>
+        <canvas ref={chartFotosEVideosRef} />
       </div>
     </div>
   );

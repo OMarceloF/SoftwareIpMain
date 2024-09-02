@@ -589,6 +589,36 @@ app.get('/feiracor/notas-por-coordenador', (req, res) => {
   });
 });
 
+app.get('/fotosevideoscor/notas-por-coordenador', (req, res) => {
+  const { month } = req.query;
+
+  if (!month) {
+    return res.status(400).json({ error: "O parâmetro 'month' é obrigatório." });
+  }
+
+  const query = `
+    SELECT coordenador, nota
+    FROM fotosevideoscor AS f
+    WHERE f.date = (
+      SELECT MAX(f2.date)
+      FROM fotosevideoscor AS f2
+      WHERE f2.coordenador = f.coordenador
+        AND MONTH(f2.date) = ?
+    )
+    AND MONTH(f.date) = ?
+    GROUP BY coordenador, nota
+  `;
+
+  db.query(query, [month, month], (error, results) => {
+    if (error) {
+      console.error('Erro ao buscar dados de fotosevideoscor:', error);
+      return res.status(500).json({ error: 'Erro ao buscar dados.' });
+    }
+
+    res.json(results);
+  });
+});
+
 app.put('/unidades/:cidade', (req, res) => {
   const { cidade } = req.params;
   const { endereco, telefone, coordenador } = req.body;
