@@ -1,1 +1,5 @@
-/*# sourceMappingURL=DashboardGraphCor.css.map */
+@charset "UTF-8";
+canvas {
+  width: 100% !important;
+  height: 400px !important; /* Ajuste a altura conforme necessário */
+}/*# sourceMappingURL=DashboardGraphCor.css.map */

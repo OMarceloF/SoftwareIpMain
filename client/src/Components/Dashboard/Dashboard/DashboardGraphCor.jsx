@@ -10,15 +10,18 @@ const Dashboard = () => {
   const [dataNotas, setDataNotas] = useState(null);
   const [dataRetorno, setDataRetorno] = useState(null);
   const [dataDiarios, setDataDiarios] = useState(null);
-  const [selectedMonth, setSelectedMonth] = useState('Janeiro'); // Estado para o mês selecionado
+  const [dataFeira, setDataFeira] = useState(null); // Novo estado para o gráfico de feiracor
+  const [selectedMonth, setSelectedMonth] = useState('Janeiro');
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(true);
   const chartNotasRef = useRef(null);
   const chartRetornoRef = useRef(null);
   const chartDiariosRef = useRef(null);
+  const chartFeiraRef = useRef(null); // Novo ref para o gráfico de feiracor
   const chartNotasInstance = useRef(null);
   const chartRetornoInstance = useRef(null);
   const chartDiariosInstance = useRef(null);
+  const chartFeiraInstance = useRef(null); // Novo instance ref para o gráfico de feiracor
 
   useEffect(() => {
     const monthMapping = {
@@ -76,8 +79,23 @@ const Dashboard = () => {
       .finally(() => {
         setLoading(false);
       });
+
+    // Buscar dados para o gráfico de feiracor
+    axios.get(`http://localhost:3002/feiracor/notas-por-coordenador?month=${monthNumber}`)
+      .then(response => {
+        console.log("Dados de feiracor recebidos da API:", response.data);
+        setDataFeira(response.data);
+      })
+      .catch(error => {
+        console.error("Erro ao buscar dados de feiracor:", error);
+        setError(error);
+      })
+      .finally(() => {
+        setLoading(false);
+      });
   }, [selectedMonth]);
 
+  // Lógica de criação dos gráficos
   useEffect(() => {
     if (dataNotas) {
       const ctxNotas = chartNotasRef.current?.getContext('2d');
@@ -176,6 +194,39 @@ const Dashboard = () => {
     }
   }, [dataDiarios]);
 
+  useEffect(() => {
+    if (dataFeira) {
+      const ctxFeira = chartFeiraRef.current?.getContext('2d');
+      if (ctxFeira) {
+        if (chartFeiraInstance.current) {
+          chartFeiraInstance.current.destroy();
+        }
+        chartFeiraInstance.current = new ChartJS(ctxFeira, {
+          type: 'bar',
+          data: {
+            labels: dataFeira.map(item => item.coordenador),
+            datasets: [{
+              label: 'Notas Feira',
+              data: dataFeira.map(item => item.nota),
+              backgroundColor: 'rgba(255, 159, 64, 0.7)', // Cor das barras
+              borderColor: 'rgba(255, 159, 64, 1)',
+              borderWidth: 1,
+            }],
+          },
+          options: {
+            responsive: true,
+            maintainAspectRatio: true,
+            scales: {
+              y: {
+                beginAtZero: true,
+              },
+            },
+          },
+        });
+      }
+    }
+  }, [dataFeira]);
+
   const filtrarDadosNotas = (dados) => {
     const filtroPorCoordenador = dados.reduce((acc, curr) => {
       if (!acc[curr.coordenador] || new Date(curr.date) > new Date(acc[curr.coordenador].date)) {
@@ -214,6 +265,26 @@ const Dashboard = () => {
       return acc;
     }, {});
     return Object.values(filtroPorCoordenador);
+  };
+
+  const filtrarDadosFeira = (dados) => {
+    const filtroPorCoordenador = dados.reduce((acc, curr) => {
+      if (!acc[curr.coordenador] || new Date(curr.date) > new Date(acc[curr.coordenador].date)) {
+        acc[curr.coordenador] = curr;
+      }
+      return acc;
+    }, {});
+    const notasPorCoordenador = Object.values(filtroPorCoordenador).map(curr => {
+      let nota = 0;
+      if (curr.apresentacao === 'Sim') nota += 3;
+      if (curr.estrutural === 'Sim') nota += 3;
+      if (curr.cronograma === 'Sim') nota += 3;
+      if (curr.apresentacao === 'Sim' && curr.estrutural === 'Sim' && curr.cronograma === 'Sim') {
+        nota += 1; // Bonus de 1 ponto se todos forem 'Sim'
+      }
+      return { coordenador: curr.coordenador, nota };
+    });
+    return notasPorCoordenador;
   };
 
   const handleMonthChange = (event) => {
@@ -260,6 +331,10 @@ const Dashboard = () => {
       <div>
         <h2>Gráfico de Diários</h2>
         <canvas ref={chartDiariosRef} />
+      </div>
+      <div>
+        <h2>Gráfico de Feira</h2>
+        <canvas ref={chartFeiraRef} />
       </div>
     </div>
   );

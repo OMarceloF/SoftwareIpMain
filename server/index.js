@@ -555,6 +555,40 @@ app.get('/diarioscor/notas-por-coordenador', (req, res) => {
   });
 });
 
+app.get('/feiracor/notas-por-coordenador', (req, res) => {
+  const { month } = req.query;
+
+  if (!month) {
+    return res.status(400).json({ error: "O parâmetro 'month' é obrigatório." });
+  }
+
+  const query = `
+    SELECT coordenador,
+           SUM(CASE WHEN apresentacao = 'Sim' THEN 3 ELSE 0 END) +
+           SUM(CASE WHEN estrutural = 'Sim' THEN 3 ELSE 0 END) +
+           SUM(CASE WHEN cronograma = 'Sim' THEN 3 ELSE 0 END) +
+           CASE WHEN apresentacao = 'Sim' AND estrutural = 'Sim' AND cronograma = 'Sim' THEN 1 ELSE 0 END AS nota
+    FROM feiracor AS f
+    WHERE f.date = (
+      SELECT MAX(f2.date)
+      FROM feiracor AS f2
+      WHERE f2.coordenador = f.coordenador
+        AND MONTH(f2.date) = ?
+    )
+    AND MONTH(f.date) = ?
+    GROUP BY coordenador
+  `;
+
+  db.query(query, [month, month], (error, results) => {
+    if (error) {
+      console.error('Erro ao buscar dados de feiracor:', error);
+      return res.status(500).json({ error: 'Erro ao buscar dados.' });
+    }
+
+    res.json(results);
+  });
+});
+
 app.put('/unidades/:cidade', (req, res) => {
   const { cidade } = req.params;
   const { endereco, telefone, coordenador } = req.body;
