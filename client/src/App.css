@@ -189,12 +189,10 @@ img, video {
   flex-basis: 50%;
   margin: auto;
   flex-direction: column;
-  gap: 1.5rem;
   transform: translateY(-1rem);
 }
 .loginPage .container .formDiv .headerDiv, .registerPage .container .formDiv .headerDiv {
   text-align: center;
-  padding: 1.5rem 0;
 }
 .loginPage .container .formDiv img, .registerPage .container .formDiv img {
   width: 130px;
