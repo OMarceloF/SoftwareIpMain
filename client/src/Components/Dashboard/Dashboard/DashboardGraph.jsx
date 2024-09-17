@@ -402,32 +402,32 @@ const Dashboard = () => {
         </select>
       </div>
 
-      <div className="dashboard-graphs">
-        <div className="graph-container">
+      <div className="chart-container">
+        <div className="chart">
           <h2>Aula</h2>
           <canvas id="myChartAula"></canvas>
         </div>
-        <div className="graph-container">
+        <div className="chart">
           <h2>Contato</h2>
           <canvas id="myChartContato"></canvas>
         </div>
-        <div className="graph-container">
+        <div className="chart">
           <h2>Diarios</h2>
           <canvas id="myChartDiarios"></canvas>
         </div>
-        <div className="graph-container">
+        <div className="chart">
           <h2>Feira</h2>
           <canvas id="myChartFeira"></canvas>
         </div>
-        <div className="graph-container">
+        <div className="chart">
           <h2>Fotos e Vídeos</h2>
           <canvas id="myChartPhotosEVideos"></canvas>
         </div>
-        <div className="graph-container">
+        <div className="chart">
           <h2>Guia de Conformidade</h2>
           <canvas id="myChartGuide"></canvas>
         </div>
-        <div className="graph-container">
+        <div className="chart">
           <h2>Planos de Aula</h2>
           <canvas id="myChartPlanos"></canvas>
         </div>

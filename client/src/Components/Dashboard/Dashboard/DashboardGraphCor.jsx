@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import axios from 'axios';
 import { Chart as ChartJS, CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend } from 'chart.js';
 import { Bar } from 'react-chartjs-2';
+import './DashboardGraphCor.css';
 
 // Registro dos componentes do Chart.js
 ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend);
@@ -369,25 +370,27 @@ const Dashboard = () => {
         </select>
       </div>
 
-      <div>
+      <div className="chart-container">
+      <div className="chart">
         <h2>Gráfico de Notas</h2>
         <canvas ref={chartNotasRef} />
       </div>
-      <div>
+      <div className="chart">
         <h2>Gráfico de Retorno</h2>
         <canvas ref={chartRetornoRef} />
       </div>
-      <div>
+      <div className="chart">
         <h2>Gráfico de Diários</h2>
         <canvas ref={chartDiariosRef} />
       </div>
-      <div>
+      <div className="chart">
         <h2>Gráfico de Feira</h2>
         <canvas ref={chartFeiraRef} />
       </div>
-      <div>
+      <div className="chart">
         <h2>Gráfico de Fotos e Vídeos</h2>
         <canvas ref={chartFotosEVideosRef} />
+      </div>
       </div>
     </div>
   );
