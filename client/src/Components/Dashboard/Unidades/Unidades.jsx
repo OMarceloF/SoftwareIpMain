@@ -103,6 +103,19 @@ const Unidades = () => {
         setSelectedUnidade(null);
     };
 
+    const renderCreateUnitButton = () => {
+        switch (userRole) {
+            case 'admin':
+                return (
+                    <Link to="/dashboard/unidades/criarunidade">
+                        <button>Adicionar Nova Unidade</button>
+                    </Link>
+                );
+            default:
+                return null;
+        }
+    }
+
     return (
         <>
             {location.pathname === "/dashboard/unidades" ? (
@@ -132,7 +145,7 @@ const Unidades = () => {
                             </div>
                         ))}
                     </div>
-                    <Link to={"/dashboard/unidades/criarunidade"}><button>Adicionar Nova Unidade</button></Link>
+                    {renderCreateUnitButton()}
 
                     {/* Modal */}
                     {isModalOpen && (

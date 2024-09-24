@@ -163,7 +163,7 @@ const router = createBrowserRouter([
         children: [
           {
             path: 'criarunidade',
-            element: <ProtectedRoute element={CriarUnidades} allowedRoles={['admin', 'user', 'dev']} />
+            element: <ProtectedRoute element={CriarUnidades} allowedRoles={['admin', 'dev']} />
           }
         ]
       }
