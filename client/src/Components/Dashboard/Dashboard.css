@@ -50,6 +50,7 @@
   background-size: cover;
   background-repeat: no-repeat;
   width: 85%;
+  height: 100vh !important;
   display: flex;
   align-items: center;
   flex-direction: column;

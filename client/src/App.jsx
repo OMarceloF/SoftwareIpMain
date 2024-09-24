@@ -11,6 +11,7 @@ import Contato from './Components/Dashboard/Review/Components/Contato';
 import Guide from './Components/Dashboard/Review/Components/Guide';
 import Feira from './Components/Dashboard/Review/Components/Feira';
 import Unidades from './Components/Dashboard/Unidades/Unidades';
+import Historico from './Components/Dashboard/Historico/Historico';
 import CriarUnidades from './Components/Dashboard/Unidades/Components/CriarUnidades';
 import DashboardGraph from './Components/Dashboard/Dashboard/DashboardGraph';
 import EscolherUnidade from './Components/Dashboard/Dashboard/EscolherUnidade';
@@ -151,6 +152,10 @@ const router = createBrowserRouter([
             element: <ProtectedRoute element={DashboardGraphCor} allowedRoles={['dev', 'admin']} />
           }
         ]
+      },
+      {
+        path: 'historico',
+        element: <ProtectedRoute element={Historico} allowedRoles={['user', 'supervisor', 'dev']} />
       },
       {
         path: 'unidades',
