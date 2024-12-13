@@ -640,21 +640,18 @@ app.put('/unidades/:cidade', (req, res) => {
 });
 
 
-
-// Criando uma rota até o servidor para logar
+// Login
 app.post('/login', (req, res) => {
   const loginEmail = req.body.LoginEmail;
   const loginPassword = req.body.LoginPassword;
 
-  // Verificando se as variáveis foram recebidas corretamente
   console.log('Login Email:', loginEmail);
   console.log('Login Password:', loginPassword);
 
-  // Criando SQL para selecionar os dados
   const SQL = 'SELECT * FROM coordenadores WHERE email = ? AND password = ?';
   const values = [loginEmail, loginPassword];
 
-  // Conectando ao SQL
+  // Conectar
   db.query(SQL, values, (err, results) => {
     if (err) {
       console.error('Erro ao buscar dados:', err);

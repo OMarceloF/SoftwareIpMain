@@ -2,7 +2,6 @@
   margin: 0;
   padding: 0;
   box-sizing: border-box;
-  font-family: 'Arial', sans-serif;
 }
 
 .homepage {
@@ -50,11 +49,11 @@
   background-size: cover;
   background-repeat: no-repeat;
   width: 85%;
-  height: 100vh !important;
+  height: 100vh;
   display: flex;
   align-items: center;
   flex-direction: column;
-  justify-content: center;
+  justify-content: flex-start;
   padding: 40px;
   text-align: center;
 }

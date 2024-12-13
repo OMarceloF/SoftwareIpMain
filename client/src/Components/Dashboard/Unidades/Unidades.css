@@ -4,7 +4,6 @@
 
 .container {
   padding: 20px;
-  font-family: Arial, sans-serif;
 }
 
 .search-container {
@@ -158,6 +157,7 @@ button:active, .edit-button:active, .info-button:active {
 
 button {
   transition: background-color 0.3s ease;
+  margin-right: 1rem;
 }
 
 .modal-content {
