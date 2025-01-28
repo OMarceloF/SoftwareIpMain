@@ -1,0 +1,219 @@
+* {
+  background-color: transparent;
+}
+
+.container {
+  padding: 20px;
+}
+
+.search-container {
+  display: flex;
+  align-items: center;
+  margin-bottom: 20px;
+  width: 100%;
+  position: relative;
+}
+
+.search-container input {
+  width: 100%;
+  padding: 10px;
+  border-radius: 4px;
+  border: 1px solid #ccc;
+  font-size: 1em;
+}
+
+.search-icon {
+  position: absolute;
+  right: 10px;
+  font-size: 1.2em;
+  color: #666;
+}
+
+.list-container {
+  width: 100%;
+  background-color: white;
+}
+
+.list-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px;
+  border-bottom: 1px solid #ccc;
+}
+
+.list-item span {
+  font-size: 1.2em;
+  color: #333;
+}
+
+.edit-button, .info-button {
+  background-color: #0044cc;
+  color: white;
+  border: none;
+  padding: 5px 10px;
+  border-radius: 4px;
+  cursor: pointer;
+  margin-left: 5px;
+  transition: background-color 0.2s;
+}
+
+.edit-button:hover, .info-button:hover {
+  background-color: #0033a0;
+}
+
+button {
+  margin-top: 20px;
+  padding: 10px 20px;
+  font-size: 1em;
+  color: white;
+  background-color: #0044cc;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+button:hover {
+  background-color: #0033a0;
+}
+
+/* Modal styles */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.modal-content {
+  background: white;
+  padding: 20px;
+  border-radius: 8px;
+  width: 50%;
+  max-width: 500px;
+  text-align: center;
+}
+
+.modal-content h2 {
+  margin-bottom: 20px;
+  font-size: 1.5em;
+}
+
+.modal-content .info-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 15px;
+}
+
+.modal-content .info-item span {
+  font-size: 1.1em;
+}
+
+.modal-content .edit-icon {
+  font-size: 1.1em;
+  cursor: pointer;
+  color: #666;
+}
+
+.modal-content .edit-icon:hover {
+  color: #333;
+}
+
+.modal-content button {
+  padding: 10px 20px;
+  font-size: 1em;
+  background-color: #0044cc;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.modal-content button:hover {
+  background-color: #0033a0;
+}
+
+button, .edit-button, .info-button {
+  outline: none;
+}
+
+button:focus, .edit-button:focus, .info-button:focus,
+button:active, .edit-button:active, .info-button:active {
+  background-color: #002f75;
+  outline: 2px solid #fff;
+  outline-offset: 2px;
+}
+
+.edit-button, .info-button {
+  transition: background-color 0.3s ease;
+}
+
+button {
+  transition: background-color 0.3s ease;
+  margin-right: 1rem;
+}
+
+.modal-content {
+  margin: 0 10px;
+  width: 90%;
+  max-width: 500px;
+  padding: 20px;
+}
+
+.search-icon {
+  color: #333;
+}
+
+.modal-content .edit-icon {
+  color: #0044cc;
+}
+
+.modal-content .edit-icon:hover {
+  color: #002f75;
+}
+
+@media (max-width: 768px) {
+  .modal-content {
+    width: 80%;
+    padding: 15px;
+  }
+  .list-item {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  .list-item span {
+    font-size: 1em;
+    margin-bottom: 10px;
+  }
+  .edit-button, .info-button {
+    width: 100%;
+    margin-top: 10px;
+    margin-left: 0;
+  }
+}
+@media (max-width: 480px) {
+  .search-container input {
+    font-size: 0.9em;
+    padding: 8px;
+  }
+  .modal-content {
+    width: 95%;
+  }
+  .modal-content h2 {
+    font-size: 1.2em;
+  }
+  .modal-content .info-item span {
+    font-size: 1em;
+  }
+  button {
+    padding: 8px 16px;
+    font-size: 0.9em;
+  }
+}/*# sourceMappingURL=Unidades.css.map */

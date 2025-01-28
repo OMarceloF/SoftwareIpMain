@@ -1,0 +1,151 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+.homepage {
+  display: flex;
+  width: 100%;
+  height: 100vh;
+}
+
+.left {
+  background-color: white;
+  width: 15%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 20px;
+}
+
+.buttonLeft {
+  display: flex;
+  align-items: center;
+  color: #ecf0f1;
+  background-color: #34495e;
+  padding: 10px 20px;
+  margin: 10px 0;
+  width: 100%;
+  text-align: center;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.buttonLeft:hover {
+  background-color: #1abc9c;
+}
+
+.buttonLeft span {
+  margin-left: 10px;
+  font-size: 1rem;
+  color: white;
+}
+
+.content {
+  background-image: url("./Imagens/fundo.png");
+  background-position: center;
+  background-size: cover;
+  background-repeat: no-repeat;
+  width: 85%;
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  justify-content: flex-start;
+  padding: 40px;
+  text-align: center;
+}
+
+.content h2 {
+  font-size: 2rem;
+  color: blue;
+  margin-bottom: 20px;
+}
+
+.content a {
+  color: #2c3e50;
+  font-size: 2rem;
+  margin-bottom: 20px;
+  transition: color 0.3s ease;
+}
+
+.content a:hover {
+  color: #1abc9c;
+}
+
+.content video {
+  width: 80%;
+  margin-top: 20px;
+  align-items: center;
+  height: auto;
+  border-radius: 8px;
+}
+
+.logoPage img {
+  width: 80%;
+  margin-bottom: 20px;
+}
+
+div {
+  margin-bottom: 0px;
+}
+
+@media screen and (max-width: 1024px) {
+  .homepage {
+    flex-direction: column;
+    height: auto;
+  }
+  .left {
+    width: 100%;
+    height: auto;
+    padding: 10px;
+  }
+  .content {
+    width: 100%;
+    padding: 20px;
+  }
+}
+@media screen and (max-width: 768px) {
+  .buttonLeft {
+    padding: 8px 16px;
+    margin: 8px 0;
+  }
+  .buttonLeft span {
+    font-size: 0.875rem;
+  }
+  .content h2, .content a {
+    font-size: 1.5rem;
+  }
+  .content video {
+    width: 100%;
+    margin-top: 15px;
+  }
+}
+@media screen and (max-width: 600px) {
+  .logoPage img {
+    width: 60%;
+  }
+  .content video {
+    width: 100%;
+    margin-top: 10px;
+  }
+}
+@media screen and (max-width: 480px) {
+  .content {
+    background-size: cover;
+    padding: 10px;
+  }
+  .content h2 {
+    font-size: 1.25rem;
+  }
+  .content a {
+    font-size: 1.25rem;
+  }
+}
+@media screen and (max-width: 400px) {
+  .buttonLeft span {
+    display: none;
+  }
+}/*# sourceMappingURL=Dashboard.css.map */

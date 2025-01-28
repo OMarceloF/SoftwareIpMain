@@ -1,0 +1,90 @@
+@charset "UTF-8";
+:root {
+  --errorColor: #ff4444;
+  --successColor: #4CAF50;
+  --textColor: #ffffff;
+}
+
+.error-message {
+  background: var(--errorColor);
+  color: var(--textColor);
+}
+
+.success {
+  background: var(--successColor);
+  color: var(--textColor);
+}
+
+.unidadeCriar {
+  display: none;
+}
+
+.error-message {
+  display: block;
+  color: var(--whiteColor);
+  padding: 10px;
+  background: rgb(255, 0, 0);
+  border-radius: 3px;
+  text-align: center;
+}
+
+.success {
+  display: block;
+  color: var(--whiteColor);
+  padding: 10px;
+  background: #4CAF50;
+  border-radius: 3px;
+  text-align: center;
+}
+
+.unidadeCriar {
+  display: none; /* Inicialmente oculto */
+  /* Alternativas possíveis: */
+  /* visibility: hidden; */
+  /* opacity: 0; */
+}
+
+/* Exemplo de como poderia ser mostrado */
+.unidadeCriar.show {
+  display: block; /* Exibe o elemento */
+  /* Outras alternativas: */
+  /* visibility: visible; */
+  /* opacity: 1; */
+}
+
+.error-message {
+  display: block;
+  color: #ffffff; /* Cor branca */
+  padding: 10px;
+  background: #ff4444; /* Vermelho mais acessível */
+  border-radius: 3px;
+  text-align: center;
+}
+
+.success {
+  display: block;
+  color: #ffffff; /* Cor branca */
+  padding: 10px;
+  background: #4CAF50; /* Verde sucesso */
+  border-radius: 3px;
+  text-align: center;
+}
+
+.error-message, .success {
+  animation: fadeIn 0.5s ease-in-out;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+.error-message:focus, .success:focus {
+  outline: 2px solid #fff;
+  outline-offset: 2px;
+}/*# sourceMappingURL=CriarUnidades.css.map */

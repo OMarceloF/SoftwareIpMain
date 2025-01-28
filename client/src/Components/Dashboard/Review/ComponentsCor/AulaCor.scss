@@ -1,0 +1,65 @@
+form {
+    background-color: transparent;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    max-width: 900px;
+    margin: 20px auto;
+    padding: 20px;
+    font-family: 'Arial', sans-serif;
+  }
+  
+  form div {
+    margin-bottom: 15px;
+  }
+  
+  label {
+    display: block;
+    font-weight: bold;
+    margin-bottom: 5px;
+    color: rgb(16, 35, 205);
+  }
+  
+  input[type="text"], select {
+    width: 100%;
+    padding: 10px;
+    margin-top: 5px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+  }
+  
+  input[type="radio"] {
+    margin-right: 5px;
+  }
+  
+  .escolhaQuestion {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 10px;
+  }
+  
+  .escolhaQuestion label {
+    display: flex;
+    align-items: center;
+    color: rgb(16, 35, 205);
+  }
+  
+  button {
+    background-color: rgb(16, 35, 205);
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+  }
+  
+  button:hover {
+    background-color: rgb(12, 26, 153);
+  }
+  
+  input:focus, select:focus {
+    outline: none;
+    border-color: rgb(16, 35, 205);
+    box-shadow: 0 0 5px rgba(16, 35, 205, 0.5);
+  }
+  
