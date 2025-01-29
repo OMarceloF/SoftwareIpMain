@@ -5,6 +5,7 @@ import axios from 'axios';
 const PropostasCor = () => {
   const [textQuestion2, setTextQuestion2] = useState('');
   const [error, setError] = useState('');
+  const [successMessage, setSuccessMessage] = useState(''); // Novo estado para mensagem de sucesso
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const handleSubmit = (event) => {
@@ -29,10 +30,16 @@ const PropostasCor = () => {
     };
 
     axios.post('http://localhost:3002/propostasCor', formData)
-      .then(response => {
-        console.log('Dados enviados com sucesso:', response.data);
-        setError('');
+      .then(() => {
+        // Exibe a mensagem de sucesso e reseta os campos
+        setSuccessMessage('Dados enviados com sucesso!');
+        setTextQuestion2('');
         setIsSubmitting(false);
+
+        // Remove a mensagem após 4 segundos
+        setTimeout(() => {
+          setSuccessMessage('');
+        }, 4000);
       })
       .catch(error => {
         console.error('Erro ao enviar dados:', error);
@@ -44,6 +51,7 @@ const PropostasCor = () => {
     <>
       <h2>Propostas de Aulas e Projetos de Destaque</h2>
       {error && <p className="error-message">{error}</p>}
+      {successMessage && <p className="success-message">{successMessage}</p>}
       <form onSubmit={handleSubmit}>
         <div>
           <label htmlFor="textQuestion2">Observações</label>

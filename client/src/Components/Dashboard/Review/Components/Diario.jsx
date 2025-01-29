@@ -10,6 +10,7 @@ const Diario = () => {
     const [textQuestion2, setTextQuestion2] = useState('');
     const [unidades, setUnidades] = useState([]);
     const [errorMessage, setErrorMessage] = useState('');
+    const [successMessage, setSuccessMessage] = useState(''); // Novo estado para mensagem de sucesso
 
     useEffect(() => {
         axios.get('http://localhost:3002/unidades')
@@ -33,9 +34,8 @@ const Diario = () => {
             return;
         }
 
-        setErrorMessage(''); // Clear error message if all fields are filled
+        setErrorMessage(''); // Limpa a mensagem de erro
 
-        // Aqui você pode enviar os dados para o backend
         const formData = {
             date: currentDate,
             unidade: unit,
@@ -45,8 +45,18 @@ const Diario = () => {
         };
 
         axios.post('http://localhost:3002/diarios', formData)
-            .then(response => {
-                console.log('Dados enviados com sucesso:', response.data);
+            .then(() => {
+                // Exibe a mensagem de sucesso e reseta os campos
+                setSuccessMessage('Dados enviados com sucesso!');
+                setUnit('');
+                setRating(0);
+                setTextQuestion1('');
+                setTextQuestion2('');
+
+                // Remove a mensagem após 4 segundos
+                setTimeout(() => {
+                    setSuccessMessage('');
+                }, 4000);
             })
             .catch(error => {
                 console.error('Erro ao enviar dados:', error);
@@ -55,8 +65,9 @@ const Diario = () => {
 
     return (
         <>
-            <h2>Conferencia e Avaliação de Diário</h2>
+            <h2>Conferência e Avaliação de Diário</h2>
             {errorMessage && <div className="error-message">{errorMessage}</div>}
+            {successMessage && <div className="success-message">{successMessage}</div>}
             <form onSubmit={handleSubmit}>
                 <div>
                     <label htmlFor="unit">Unidade:</label>

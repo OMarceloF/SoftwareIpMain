@@ -6,11 +6,12 @@ const ContatoCor = () => {
     const [textQuestion2, setTextQuestion2] = useState('');
     const [yesNoQuestion, setYesNoQuestion] = useState('');
     const [errorMessage, setErrorMessage] = useState('');
+    const [successMessage, setSuccessMessage] = useState(''); // Novo estado para mensagem de sucesso
 
     const handleSubmit = (event) => {
         event.preventDefault();
 
-        if ( !yesNoQuestion || !textQuestion2) {
+        if (!yesNoQuestion || !textQuestion2) {
             setErrorMessage('Por favor, preencha todos os campos antes de enviar.');
             setTimeout(() => {
                 setErrorMessage('');
@@ -18,7 +19,7 @@ const ContatoCor = () => {
             return;
         }
 
-        setErrorMessage(''); // Clear error message if all fields are filled
+        setErrorMessage(''); // Limpa a mensagem de erro
 
         const currentDate = new Date().toISOString().split('T')[0];
         const formData = {
@@ -29,8 +30,16 @@ const ContatoCor = () => {
         };
 
         axios.post('http://localhost:3002/contatocor', formData)
-            .then(response => {
-                console.log('Dados enviados com sucesso:', response.data);
+            .then(() => {
+                // Exibe a mensagem de sucesso e reseta os campos
+                setSuccessMessage('Dados enviados com sucesso!');
+                setYesNoQuestion('');
+                setTextQuestion2('');
+
+                // Remove a mensagem após 4 segundos
+                setTimeout(() => {
+                    setSuccessMessage('');
+                }, 4000);
             })
             .catch(error => {
                 console.error('Erro ao enviar dados:', error);
@@ -41,6 +50,7 @@ const ContatoCor = () => {
         <>
             <h2>Registro de Contato com Unidades</h2>
             {errorMessage && <div className="error-message">{errorMessage}</div>}
+            {successMessage && <div className="success-message">{successMessage}</div>}
             <form onSubmit={handleSubmit}>
                 <div>
                     <label>Retorno?</label>

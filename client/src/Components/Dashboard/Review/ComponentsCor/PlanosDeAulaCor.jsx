@@ -7,12 +7,13 @@ const PlanosDeAulaCor = () => {
     const [rating, setRating] = useState(0);
     const [textQuestion2, setTextQuestion2] = useState('');
     const [errorMessage, setErrorMessage] = useState('');
+    const [successMessage, setSuccessMessage] = useState(''); // Novo estado para mensagem de sucesso
 
     const handleSubmit = (event) => {
         event.preventDefault();
 
         // Validação para garantir que todos os campos necessários estão preenchidos
-        if ( !textQuestion2 || rating === null) {
+        if (!textQuestion2 || rating === null) {
             setErrorMessage('Por favor, preencha todos os campos antes de enviar.');
             setTimeout(() => {
                 setErrorMessage('');
@@ -20,7 +21,7 @@ const PlanosDeAulaCor = () => {
             return;
         }
 
-        setErrorMessage(''); // Clear error message if all fields are filled
+        setErrorMessage(''); // Limpa a mensagem de erro
 
         const currentDate = new Date().toISOString().split('T')[0];
         const formData = {
@@ -31,8 +32,16 @@ const PlanosDeAulaCor = () => {
         };
 
         axios.post('http://localhost:3002/planosCor', formData)
-            .then(response => {
-                console.log('Dados enviados com sucesso:', response.data);
+            .then(() => {
+                // Exibe a mensagem de sucesso e reseta os campos
+                setSuccessMessage('Dados enviados com sucesso!');
+                setRating(0);
+                setTextQuestion2('');
+
+                // Remove a mensagem após 4 segundos
+                setTimeout(() => {
+                    setSuccessMessage('');
+                }, 4000);
             })
             .catch(error => {
                 console.error('Erro ao enviar dados:', error);
@@ -43,6 +52,7 @@ const PlanosDeAulaCor = () => {
         <>
             <h2>Avaliação de Planos de Aulas</h2>
             {errorMessage && <div className="error-message">{errorMessage}</div>}
+            {successMessage && <div className="success-message">{successMessage}</div>}
             <form onSubmit={handleSubmit}>
                 <div>
                     <label>Nota:</label>

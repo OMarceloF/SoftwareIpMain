@@ -1,1 +1,11 @@
-/*# sourceMappingURL=Feira.css.map */
+.success-message {
+  color: green;
+  font-size: 1.2rem;
+  margin-top: 1rem;
+}
+
+.error-message {
+  color: red;
+  font-size: 1rem;
+  margin-top: 1rem;
+}/*# sourceMappingURL=Feira.css.map */

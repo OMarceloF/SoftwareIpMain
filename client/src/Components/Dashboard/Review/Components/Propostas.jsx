@@ -3,12 +3,13 @@ import '../../../../App.css';
 import './Propostas.css';
 import axios from 'axios';
 
-const Aulas = () => {
+const Propostas = () => {
   const [unit, setUnit] = useState('');
   const [textQuestion1, setTextQuestion1] = useState('');
   const [textQuestion2, setTextQuestion2] = useState('');
   const [unidades, setUnidades] = useState([]);
   const [error, setError] = useState('');
+  const [successMessage, setSuccessMessage] = useState(''); // Novo estado para mensagem de sucesso
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   useEffect(() => {
@@ -44,10 +45,19 @@ const Aulas = () => {
     };
 
     axios.post('http://localhost:3002/propostas', formData)
-      .then(response => {
-        console.log('Dados enviados com sucesso:', response.data);
+      .then(() => {
+        // Exibir mensagem de sucesso e resetar campos do formulário
+        setSuccessMessage('Dados enviados com sucesso!');
+        setUnit('');
+        setTextQuestion1('');
+        setTextQuestion2('');
         setError('');
         setIsSubmitting(false);
+
+        // Remover a mensagem de sucesso após 4 segundos
+        setTimeout(() => {
+          setSuccessMessage('');
+        }, 4000);
       })
       .catch(error => {
         console.error('Erro ao enviar dados:', error);
@@ -59,6 +69,7 @@ const Aulas = () => {
     <>
       <h2>Propostas de Aulas e Projetos de Destaque</h2>
       {error && <p className="error-message">{error}</p>}
+      {successMessage && <p className="success-message">{successMessage}</p>}
       <form onSubmit={handleSubmit}>
         <div>
           <label htmlFor="unit">Unidade:</label>
@@ -100,4 +111,4 @@ const Aulas = () => {
   );
 };
 
-export default Aulas;
+export default Propostas;

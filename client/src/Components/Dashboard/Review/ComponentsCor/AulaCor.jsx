@@ -6,6 +6,7 @@ const AulaCor = () => {
     const [rating, setRating] = useState(0);
     const [textQuestion2, setTextQuestion2] = useState('');
     const [errorMessage, setErrorMessage] = useState('');
+    const [successMessage, setSuccessMessage] = useState(''); // Novo estado para mensagem de sucesso
 
     const handleSubmit = (event) => {
         event.preventDefault();
@@ -19,9 +20,8 @@ const AulaCor = () => {
             return;
         }
 
-        setErrorMessage(''); // Clear error message if all fields are filled
+        setErrorMessage(''); // Limpa a mensagem de erro
 
-        // Aqui você pode enviar os dados para o backend
         const formData = {
             date: currentDate,
             nota: rating,
@@ -29,9 +29,18 @@ const AulaCor = () => {
             coordenador: localStorage.getItem('coordenadorStorage'),
         };
 
-        axios.post('http://localhost:3002/aulacor', formData).then(response => {
-            console.log('Dados enviados com sucesso:', response.data);
-        })
+        axios.post('http://localhost:3002/aulacor', formData)
+            .then(() => {
+                // Exibe a mensagem de sucesso e reseta os campos
+                setSuccessMessage('Dados enviados com sucesso!');
+                setRating(0);
+                setTextQuestion2('');
+
+                // Remove a mensagem após 4 segundos
+                setTimeout(() => {
+                    setSuccessMessage('');
+                }, 4000);
+            })
             .catch(error => {
                 console.error('Erro ao enviar dados:', error);
             });
@@ -43,6 +52,7 @@ const AulaCor = () => {
                 <h2>Avaliação de Aulas Assistidas</h2>
             </div>
             {errorMessage && <div className="error-message">{errorMessage}</div>}
+            {successMessage && <div className="success-message">{successMessage}</div>}
             <form onSubmit={handleSubmit}>
                 <div>
                     <label>Nota:</label>

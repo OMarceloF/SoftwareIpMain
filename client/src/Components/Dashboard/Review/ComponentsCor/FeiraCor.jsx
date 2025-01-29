@@ -8,6 +8,7 @@ const FeiraCor = () => {
     const [textQuestion3, setTextQuestion3] = useState('');
     const [textQuestion4, setTextQuestion4] = useState('');
     const [errorMessage, setErrorMessage] = useState('');
+    const [successMessage, setSuccessMessage] = useState(''); // Novo estado para mensagem de sucesso
 
     const handleSubmit = (event) => {
         event.preventDefault();
@@ -23,9 +24,8 @@ const FeiraCor = () => {
             return;
         }
 
-        setErrorMessage(''); // Clear error message if all fields are filled
+        setErrorMessage(''); // Limpa a mensagem de erro
 
-        // Aqui você pode enviar os dados para o backend
         const formData = {
             coordenador: localStorage.getItem('coordenadorStorage'),
             cronograma: textQuestion1,
@@ -36,8 +36,18 @@ const FeiraCor = () => {
         };
 
         axios.post('http://localhost:3002/feiraCor', formData)
-            .then(response => {
-                console.log('Dados enviados com sucesso:', response.data);
+            .then(() => {
+                // Exibe a mensagem de sucesso e reseta os campos
+                setSuccessMessage('Dados enviados com sucesso!');
+                setTextQuestion1('');
+                setTextQuestion2('');
+                setTextQuestion3('');
+                setTextQuestion4('');
+
+                // Remove a mensagem após 4 segundos
+                setTimeout(() => {
+                    setSuccessMessage('');
+                }, 4000);
             })
             .catch(error => {
                 console.error('Erro ao enviar dados:', error);
@@ -48,6 +58,7 @@ const FeiraCor = () => {
         <>
             <h2>Acompanhamento de Feiras</h2>
             {errorMessage && <div className="error-message">{errorMessage}</div>}
+            {successMessage && <div className="success-message">{successMessage}</div>}
             <form onSubmit={handleSubmit}>
                 <div>
                     <label>Cronograma</label>

@@ -62,4 +62,17 @@ form {
     border-color: rgb(16, 35, 205);
     box-shadow: 0 0 5px rgba(16, 35, 205, 0.5);
   }
+
+  .success-message {
+    color: green;
+    font-size: 1.2rem;
+    margin-top: 1rem;
+}
+
+.error-message {
+    color: red;
+    font-size: 1rem;
+    margin-top: 1rem;
+}
+
   

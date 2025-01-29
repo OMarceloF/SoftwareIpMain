@@ -6,6 +6,7 @@ const GuideCor = () => {
   const [textQuestion3, setTextQuestion3] = useState('');
   const [yesNoQuestion, setYesNoQuestion] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
+  const [successMessage, setSuccessMessage] = useState(''); // Novo estado para mensagem de sucesso
 
   const handleSubmit = (event) => {
     event.preventDefault();
@@ -19,7 +20,7 @@ const GuideCor = () => {
       return;
     }
 
-    setErrorMessage(''); // Clear error message if all fields are filled
+    setErrorMessage(''); // Limpa a mensagem de erro
 
     const currentDate = new Date().toISOString().split('T')[0];
     const formData = {
@@ -30,8 +31,16 @@ const GuideCor = () => {
     };
 
     axios.post('http://localhost:3002/guideCor', formData)
-      .then(response => {
-        console.log('Dados enviados com sucesso:', response.data);
+      .then(() => {
+        // Exibe a mensagem de sucesso e reseta os campos
+        setSuccessMessage('Dados enviados com sucesso!');
+        setYesNoQuestion('');
+        setTextQuestion3('');
+
+        // Remove a mensagem após 4 segundos
+        setTimeout(() => {
+          setSuccessMessage('');
+        }, 4000);
       })
       .catch(error => {
         console.error('Erro ao enviar dados:', error);
@@ -42,6 +51,7 @@ const GuideCor = () => {
     <>
       <h2>Avaliação de Conformidade com o Teachers Guide</h2>
       {errorMessage && <div className="error-message">{errorMessage}</div>}
+      {successMessage && <div className="success-message">{successMessage}</div>}
       <form onSubmit={handleSubmit}>
         <div>
           <label>Conformidade com o Teachers Guide?</label>
