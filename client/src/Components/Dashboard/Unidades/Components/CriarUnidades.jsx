@@ -1,19 +1,31 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import './CriarUnidades.css';
 
 const Aulas = () => {
     const [textQuestion1, setTextQuestion1] = useState('');
-    const [textQuestion2, setTextQuestion2] = useState('');
+    const [coordenadores, setCoordenadores] = useState([]);
+    const [coordenadorSelecionado, setCoordenadorSelecionado] = useState('');
     const [error, setError] = useState('');
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [successMessage, setSuccessMessage] = useState('');
+
+    // Buscar os coordenadores no backend ao carregar a página
+    useEffect(() => {
+        axios.get('http://localhost:3002/coordenadores')
+            .then(response => {
+                setCoordenadores(response.data);
+            })
+            .catch(error => {
+                console.error('Erro ao buscar coordenadores:', error);
+            });
+    }, []);
 
     const handleSubmit = (event) => {
         event.preventDefault();
 
         // Verificar se todos os campos estão preenchidos
-        if (!textQuestion1 || !textQuestion2) {
+        if (!textQuestion1 || !coordenadorSelecionado) {
             setError('Por favor, preencha todos os campos.');
             setSuccessMessage('');
             setIsSubmitting(false);
@@ -26,7 +38,7 @@ const Aulas = () => {
         setIsSubmitting(true);
         const formData = {
             cidade: textQuestion1,
-            coordenador: textQuestion2,
+            coordenador: coordenadorSelecionado,
         };
 
         axios.post('http://localhost:3002/unidades', formData)
@@ -37,11 +49,11 @@ const Aulas = () => {
                 setIsSubmitting(false);
                 // Limpar campos após envio bem-sucedido
                 setTextQuestion1('');
-                setTextQuestion2('');
+                setCoordenadorSelecionado('');
                 // Remover mensagem de sucesso após 4 segundos
                 setTimeout(() => {
                     setSuccessMessage('');
-                }, 40000);
+                }, 4000);
             })
             .catch(error => {
                 console.error('Erro ao enviar dados:', error);
@@ -67,17 +79,22 @@ const Aulas = () => {
                 </div>
 
                 <div>
-                    <label htmlFor="textQuestion2">Coordenador</label>
-                    <input
-                        type="text"
-                        id="textQuestion2"
-                        value={textQuestion2}
-                        onChange={(e) => setTextQuestion2(e.target.value)}
-                    />
+                    <label htmlFor="coordenador">Coordenador</label>
+                    <select
+                        id="coordenador"
+                        value={coordenadorSelecionado}
+                        onChange={(e) => setCoordenadorSelecionado(e.target.value)}
+                    >
+                        <option value="">Selecione um coordenador...</option>
+                        {coordenadores.map((coord, index) => (
+                            <option key={index} value={coord.username}>
+                                {coord.username}
+                            </option>
+                        ))}
+                    </select>
                 </div>
 
-                <button type="submit" disabled={isSubmitting}>Enviar
-                </button>
+                <button type="submit" disabled={isSubmitting}>Enviar</button>
             </form>
         </>
     );

@@ -40,18 +40,19 @@ app.get('/unidades', (req, res) => {
 });
 
 // Criando uma rota para buscar a tabela coordenadores
+// Criando uma rota para buscar a tabela coordenadores com filtro
 app.get('/coordenadores', (req, res) => {
-  // Criando SQL para selecionar os dados
-  const SQL = 'SELECT username FROM coordenadores';
+  const SQL = "SELECT username FROM coordenadores WHERE role = 'user'";
 
   db.query(SQL, (err, results) => {
     if (err) {
-      console.error('Erro ao buscar dados:', err);
+      console.error('Erro ao buscar coordenadores:', err);
       return res.status(500).send({ error: err });
     }
     res.status(200).send(results);
   });
 });
+
 
 // Adicionando uma rota para salvar dados na tabela aulas
 app.post('/aula', (req, res) => {
