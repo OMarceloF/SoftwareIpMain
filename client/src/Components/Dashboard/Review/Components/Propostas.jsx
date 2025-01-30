@@ -8,24 +8,44 @@ const Propostas = () => {
   const [textQuestion1, setTextQuestion1] = useState('');
   const [textQuestion2, setTextQuestion2] = useState('');
   const [unidades, setUnidades] = useState([]);
+  const [coordenador, setCoordenador] = useState('');
   const [error, setError] = useState('');
-  const [successMessage, setSuccessMessage] = useState(''); // Novo estado para mensagem de sucesso
+  const [successMessage, setSuccessMessage] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
 
+  // Obtendo o email do usuário logado
+  const email = localStorage.getItem('emailStorage');
+
   useEffect(() => {
-    axios.get('http://localhost:3002/unidades')
+    if (!email) {
+      setError('Usuário não autenticado.');
+      return;
+    }
+
+    // Buscar o nome do coordenador com base no email
+    axios.get(`http://localhost:3002/getUsername/${email}`)
       .then(response => {
-        setUnidades(response.data);
+        const nomeCoordenador = response.data.name;
+        setCoordenador(nomeCoordenador);
+
+        // Buscar as unidades e filtrar apenas as que pertencem ao coordenador logado
+        axios.get('http://localhost:3002/unidades')
+          .then(response => {
+            const unidadesFiltradas = response.data.filter(unidade => unidade.coordenador === nomeCoordenador);
+            setUnidades(unidadesFiltradas);
+          })
+          .catch(error => {
+            console.error('Erro ao buscar unidades:', error);
+          });
       })
       .catch(error => {
-        console.error('Erro ao buscar dados:', error);
+        console.error('Erro ao obter coordenador:', error);
       });
-  }, []);
+  }, [email]);
 
   const handleSubmit = (event) => {
     event.preventDefault();
 
-    // Verificar se todos os campos estão preenchidos
     if (!unit || !textQuestion1 || !textQuestion2) {
       setError('Por favor, preencha todos os campos.');
       setIsSubmitting(false);
@@ -46,7 +66,6 @@ const Propostas = () => {
 
     axios.post('http://localhost:3002/propostas', formData)
       .then(() => {
-        // Exibir mensagem de sucesso e resetar campos do formulário
         setSuccessMessage('Dados enviados com sucesso!');
         setUnit('');
         setTextQuestion1('');
@@ -54,7 +73,6 @@ const Propostas = () => {
         setError('');
         setIsSubmitting(false);
 
-        // Remover a mensagem de sucesso após 4 segundos
         setTimeout(() => {
           setSuccessMessage('');
         }, 4000);

@@ -26,7 +26,7 @@ const Review = () => {
       <div className="content">
         {location.pathname === "/dashboard/review" ? (
           <>
-            <h2>Acompanhamento Semanal</h2>
+            <h2>Faça sua Avaliação</h2>
             <div className="left">
               <div className="buttonLeft">
                 <TfiLayoutMediaRightAlt />

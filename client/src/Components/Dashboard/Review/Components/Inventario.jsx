@@ -10,23 +10,43 @@ const Inventario = () => {
   const [textQuestion3, setTextQuestion3] = useState('');
   const [yesNoQuestion, setYesNoQuestion] = useState('');
   const [unidades, setUnidades] = useState([]);
+  const [coordenador, setCoordenador] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
-  const [successMessage, setSuccessMessage] = useState(''); // Novo estado para mensagem de sucesso
+  const [successMessage, setSuccessMessage] = useState('');
+
+  // Obtendo o email do usuário logado
+  const email = localStorage.getItem('emailStorage');
 
   useEffect(() => {
-    axios.get('http://localhost:3002/unidades')
+    if (!email) {
+      setErrorMessage('Usuário não autenticado.');
+      return;
+    }
+
+    // Buscar o nome do coordenador com base no email
+    axios.get(`http://localhost:3002/getUsername/${email}`)
       .then(response => {
-        setUnidades(response.data);
+        const nomeCoordenador = response.data.name;
+        setCoordenador(nomeCoordenador);
+
+        // Buscar as unidades e filtrar apenas as que pertencem ao coordenador logado
+        axios.get('http://localhost:3002/unidades')
+          .then(response => {
+            const unidadesFiltradas = response.data.filter(unidade => unidade.coordenador === nomeCoordenador);
+            setUnidades(unidadesFiltradas);
+          })
+          .catch(error => {
+            console.error('Erro ao buscar unidades:', error);
+          });
       })
       .catch(error => {
-        console.error('Erro ao buscar dados:', error);
+        console.error('Erro ao obter coordenador:', error);
       });
-  }, []);
+  }, [email]);
 
   const handleSubmit = (event) => {
     event.preventDefault();
 
-    // Validação para garantir que todos os campos necessários estão preenchidos
     if (!unit || !textQuestion1 || !textQuestion2 || !textQuestion3 || !yesNoQuestion) {
       setErrorMessage('Por favor, preencha todos os campos antes de enviar.');
       setTimeout(() => {
@@ -35,7 +55,7 @@ const Inventario = () => {
       return;
     }
 
-    setErrorMessage(''); // Limpa a mensagem de erro
+    setErrorMessage('');
 
     const currentDate = new Date().toISOString().split('T')[0];
     const formData = {
@@ -49,7 +69,6 @@ const Inventario = () => {
 
     axios.post('http://localhost:3002/inventario', formData)
       .then(() => {
-        // Exibe a mensagem de sucesso e reseta os campos
         setSuccessMessage('Dados enviados com sucesso!');
         setUnit('');
         setTextQuestion1('');
@@ -57,7 +76,6 @@ const Inventario = () => {
         setTextQuestion3('');
         setYesNoQuestion('');
 
-        // Remove a mensagem após 4 segundos
         setTimeout(() => {
           setSuccessMessage('');
         }, 4000);
