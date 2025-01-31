@@ -16,6 +16,7 @@ const Dashboard = () => {
   const location = useLocation();
   const [role, setRole] = useState('');
   const [name, setName] = useState('');
+  const [greeting, setGreeting] = useState('Seja bem vindo');
 
   const handleClick = () => {
     window.location.reload();
@@ -37,7 +38,16 @@ const Dashboard = () => {
     if (email) {
       axios.get(`http://localhost:3002/getUsername/${email}`)
         .then(response => {
-          setName(response.data.name);
+          const fullName = response.data.name;
+          setName(fullName);
+
+          // Pegando o primeiro nome e verificando a última letra
+          const firstName = fullName.split(" ")[0]; 
+          if (firstName.slice(-1).toLowerCase() === 'a') {
+            setGreeting("Seja bem vinda");
+          } else {
+            setGreeting("Seja bem vindo");
+          }
         })
         .catch(error => {
           console.error('Erro ao buscar o name:', error);
@@ -159,7 +169,7 @@ const Dashboard = () => {
       <div className="content">
         {location.pathname === "/dashboard" ? (
           <>
-            <h2>Bem vindo, {name}!</h2>
+            <h2>{greeting}, {name}!</h2>
             <video src={video} autoPlay muted loop></video>
           </>
         ) : (
