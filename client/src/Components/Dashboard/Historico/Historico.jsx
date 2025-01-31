@@ -218,7 +218,7 @@ const Historico = () => {
             <option value="">Selecione...</option>
             {avaliacoes.map((data, index) => (
               <option key={index} value={data}>
-                {data}
+                {new Date(data).toLocaleDateString("pt-BR")}
               </option>
             ))}
           </select>
@@ -248,7 +248,20 @@ const Historico = () => {
                 <strong>
                   {coluna.charAt(0).toUpperCase() + coluna.slice(1)}:
                 </strong>{" "}
-                {typeof dadosSelecionados[coluna] === "number"
+                {coluna === "date" && dadosSelecionados[coluna]
+                  ? (() => {
+                      const data = new Date(dadosSelecionados[coluna]);
+                      const dia = String(data.getUTCDate()).padStart(2, "0");
+                      const mes = String(data.getUTCMonth() + 1).padStart(
+                        2,
+                        "0"
+                      );
+                      const ano = data.getUTCFullYear();
+                      return `${dia}/${mes}/${ano}`;
+                    })()
+                  : coluna === "nota"
+                  ? dadosSelecionados[coluna] // Exibe normalmente se for nota
+                  : typeof dadosSelecionados[coluna] === "number"
                   ? dadosSelecionados[coluna] === 0
                     ? "Sim"
                     : "Não"
