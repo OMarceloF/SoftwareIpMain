@@ -4,12 +4,11 @@ import './Feira.css';
 import axios from 'axios';
 
 const Feira = () => {
-    const [unit, setUnit] = useState('');
-    const [textQuestion1, setTextQuestion1] = useState('');
-    const [textQuestion2, setTextQuestion2] = useState('');
-    const [textQuestion3, setTextQuestion3] = useState('');
-    const [textQuestion4, setTextQuestion4] = useState('');
-    const [yesNoQuestion, setYesNoQuestion] = useState('');
+    const [unidade, setUnidade] = useState('');
+    const [cronograma, setCronograma] = useState('');
+    const [estrutural, setEstrutural] = useState('');
+    const [apresentacao, setApresentacao] = useState('');
+    const [observacoes, setObservacoes] = useState('');
     const [unidades, setUnidades] = useState([]);
     const [coordenador, setCoordenador] = useState('');
     const [errorMessage, setErrorMessage] = useState('');
@@ -47,8 +46,9 @@ const Feira = () => {
 
     const handleSubmit = (event) => {
         event.preventDefault();
+        const currentDate = new Date().toISOString().split('T')[0]; // Formato YYYY-MM-DD
 
-        if (!unit || !textQuestion1 || !textQuestion2 || !textQuestion3 || !textQuestion4) {
+        if (!unidade || !cronograma || !estrutural || !apresentacao || !observacoes) {
             setErrorMessage('Por favor, preencha todos os campos antes de enviar.');
             setTimeout(() => {
                 setErrorMessage('');
@@ -59,23 +59,24 @@ const Feira = () => {
         setErrorMessage('');
 
         const formData = {
-            unit,
-            textQuestion1,
-            textQuestion2,
-            textQuestion3,
-            textQuestion4,
-            yesNoQuestion
+            date: currentDate,  // 🔹 Agora a data é adicionada automaticamente
+            unidade,
+            cronograma,
+            estrutural,
+            apresentacao,
+            comentarios: observacoes
         };
 
-        axios.post('http://localhost:3002/inventario', formData)
+        axios.post('http://localhost:3002/feira', formData)
             .then(() => {
                 setSuccessMessage('Dados enviados com sucesso!');
-                setUnit('');
-                setTextQuestion1('');
-                setTextQuestion2('');
-                setTextQuestion3('');
-                setTextQuestion4('');
-                setYesNoQuestion('');
+                
+                // 🔹 Resetando corretamente os campos do formulário
+                setUnidade('');
+                setCronograma('');
+                setEstrutural('');
+                setApresentacao('');
+                setObservacoes('');
 
                 setTimeout(() => {
                     setSuccessMessage('');
@@ -93,11 +94,11 @@ const Feira = () => {
             {successMessage && <div className="success-message">{successMessage}</div>}
             <form onSubmit={handleSubmit}>
                 <div>
-                    <label htmlFor="unit">Unidade:</label>
+                    <label htmlFor="unidade">Unidade:</label>
                     <select
-                        id="unit"
-                        value={unit}
-                        onChange={(e) => setUnit(e.target.value)}
+                        id="unidade"
+                        value={unidade}
+                        onChange={(e) => setUnidade(e.target.value)}
                     >
                         <option value="">Selecione uma unidade</option>
                         {unidades.map((unidade, index) => (
@@ -113,8 +114,8 @@ const Feira = () => {
                             <input
                                 type="radio"
                                 value="Sim"
-                                checked={textQuestion1 === 'Sim'}
-                                onChange={(e) => setTextQuestion1(e.target.value)}
+                                checked={cronograma === 'Sim'}
+                                onChange={(e) => setCronograma(e.target.value)}
                             />
                             Sim
                         </label>
@@ -122,8 +123,8 @@ const Feira = () => {
                             <input
                                 type="radio"
                                 value="Não"
-                                checked={textQuestion1 === 'Não'}
-                                onChange={(e) => setTextQuestion1(e.target.value)}
+                                checked={cronograma === 'Não'}
+                                onChange={(e) => setCronograma(e.target.value)}
                             />
                             Não
                         </label>
@@ -137,8 +138,8 @@ const Feira = () => {
                             <input
                                 type="radio"
                                 value="Sim"
-                                checked={textQuestion2 === 'Sim'}
-                                onChange={(e) => setTextQuestion2(e.target.value)}
+                                checked={estrutural === 'Sim'}
+                                onChange={(e) => setEstrutural(e.target.value)}
                             />
                             Sim
                         </label>
@@ -146,8 +147,8 @@ const Feira = () => {
                             <input
                                 type="radio"
                                 value="Não"
-                                checked={textQuestion2 === 'Não'}
-                                onChange={(e) => setTextQuestion2(e.target.value)}
+                                checked={estrutural === 'Não'}
+                                onChange={(e) => setEstrutural(e.target.value)}
                             />
                             Não
                         </label>
@@ -161,8 +162,8 @@ const Feira = () => {
                             <input
                                 type="radio"
                                 value="Sim"
-                                checked={textQuestion3 === 'Sim'}
-                                onChange={(e) => setTextQuestion3(e.target.value)}
+                                checked={apresentacao === 'Sim'}
+                                onChange={(e) => setApresentacao(e.target.value)}
                             />
                             Sim
                         </label>
@@ -170,8 +171,8 @@ const Feira = () => {
                             <input
                                 type="radio"
                                 value="Não"
-                                checked={textQuestion3 === 'Não'}
-                                onChange={(e) => setTextQuestion3(e.target.value)}
+                                checked={apresentacao === 'Não'}
+                                onChange={(e) => setApresentacao(e.target.value)}
                             />
                             Não
                         </label>
@@ -179,12 +180,12 @@ const Feira = () => {
                 </div>
 
                 <div>
-                    <label htmlFor="textQuestion4">Observações</label>
+                    <label htmlFor="observacoes">Observações</label>
                     <input
                         type="text"
-                        id="textQuestion4"
-                        value={textQuestion4}
-                        onChange={(e) => setTextQuestion4(e.target.value)}
+                        id="observacoes"
+                        value={observacoes}
+                        onChange={(e) => setObservacoes(e.target.value)}
                     />
                 </div>
 

@@ -72,10 +72,10 @@ app.post('/aula', (req, res) => {
 
 // Adicionando uma rota para salvar dados na tabela contato
 app.post('/contato', (req, res) => {
-  const { date, retorno, comentarios } = req.body;
+  const { date, retorno, comentarios, unidade } = req.body;
 
-  const SQL = 'INSERT INTO contato (date, retorno, comentarios) VALUES (?, ?, ?)';
-  const values = [date, retorno, comentarios];
+  const SQL = 'INSERT INTO contato (date, retorno, comentarios, unidade) VALUES (?, ?, ?, ?)';
+  const values = [date, retorno, comentarios, unidade];
 
   db.query(SQL, values, (err, results) => {
       if (err) {
@@ -104,10 +104,10 @@ app.post('/diarios', (req, res) => {
 
 // Adicionando uma rota para salvar dados na tabela fotosevideos
 app.post('/fotosEVideos', (req, res) => {
-  const { date, nota, comentarios } = req.body;
+  const { date, nota, comentarios, unidade } = req.body;
 
-  const SQL = 'INSERT INTO fotosevideos (date, nota, comentarios) VALUES (?, ?, ?)';
-  const values = [date, nota, comentarios];
+  const SQL = 'INSERT INTO fotosevideos (date, nota, comentarios, unidade) VALUES (?, ?, ?, ?)';
+  const values = [date, nota, comentarios, unidade];
 
   db.query(SQL, values, (err, results) => {
     if(err) {
@@ -246,6 +246,21 @@ app.post('/diarioscor', (req, res) => {
   })
 })
 
+app.post('/feira', (req, res) => {
+  const { unidade, cronograma, estrutural, apresentacao, comentarios, date  } = req.body;
+
+  const SQL = 'INSERT INTO feira (unidade, cronograma, estrutural, apresentacao, comentarios, date) VALUES (?, ?, ?, ?, ?, ?)';
+  const values = [unidade, cronograma, estrutural, apresentacao, comentarios, date];
+
+  db.query(SQL, values, (err, results) => {
+    if(err) {
+      console.error('Erro ao inserir dados:', err);
+      return res.status(500).send({ error: err })
+    }
+    res.status(200).send({ message: 'Dados inseridos com sucesso!' })
+  })
+})
+
 // Adicionando uma rota para salvar dados na tabela feiraCor
 app.post('/feiracor', (req, res) => {
   const { coordenador, cronograma, estrutural, apresentacao, comentarios, date  } = req.body;
@@ -341,6 +356,176 @@ app.get('/aula/:unidade', (req, res) => {
     res.status(200).send(results);
   });
 });
+
+app.get('/aula/detalhes/:unidade', (req, res) => {
+  const { unidade } = req.params;
+  const SQL = 'SELECT date, nota, regente, comentarios FROM aula WHERE unidade = ?';
+  
+  db.query(SQL, [unidade], (err, results) => {
+    if (err) {
+      console.error('Erro ao buscar dados completos:', err);
+      return res.status(500).send({ error: err });
+    }
+    res.status(200).send(results);
+  });
+});
+
+app.get('/diarios/detalhes/:unidade', (req, res) => {
+  const { unidade } = req.params;
+  const SQL = 'SELECT date, nota, regente, comentarios FROM diarios WHERE unidade = ?';
+  
+  db.query(SQL, [unidade], (err, results) => {
+    if (err) {
+      console.error('Erro ao buscar dados completos:', err);
+      return res.status(500).send({ error: err });
+    }
+    res.status(200).send(results);
+  });
+});
+
+app.get('/planos/detalhes/:unidade', (req, res) => {
+  const { unidade } = req.params;
+  const SQL = 'SELECT date, nota, regente, comentarios FROM planos WHERE unidade = ?';
+  
+  db.query(SQL, [unidade], (err, results) => {
+    if (err) {
+      console.error('Erro ao buscar dados completos:', err);
+      return res.status(500).send({ error: err });
+    }
+    res.status(200).send(results);
+  });
+});
+
+app.get('/fotosevideos/detalhes/:unidade', (req, res) => {
+  const { unidade } = req.params;
+  const SQL = 'SELECT date, nota, comentarios FROM fotosevideos WHERE unidade = ?';
+  
+  db.query(SQL, [unidade], (err, results) => {
+    if (err) {
+      console.error('Erro ao buscar dados completos:', err);
+      return res.status(500).send({ error: err });
+    }
+    res.status(200).send(results);
+  });
+});
+
+app.get('/propostas/:unidade', (req, res) => {
+  const { unidade } = req.params;
+  const SQL = 'SELECT date, regente, comentarios FROM propostas WHERE unidade = ?';
+  
+  db.query(SQL, [unidade], (err, results) => {
+    if (err) {
+      console.error('Erro ao buscar dados completos:', err);
+      return res.status(500).send({ error: err });
+    }
+    res.status(200).send(results);
+  });
+});
+
+app.get('/propostas/detalhes/:unidade', (req, res) => {
+  const { unidade } = req.params;
+  const SQL = 'SELECT date, regente, comentarios FROM propostas WHERE unidade = ?';
+  
+  db.query(SQL, [unidade], (err, results) => {
+    if (err) {
+      console.error('Erro ao buscar dados completos:', err);
+      return res.status(500).send({ error: err });
+    }
+    res.status(200).send(results);
+  });
+});
+
+app.get('/inventario/:unidade', (req, res) => {
+  const { unidade } = req.params;
+  const SQL = 'SELECT date, regente, comentarios, quem, resolvido FROM inventario WHERE unidade = ?';
+  
+  db.query(SQL, [unidade], (err, results) => {
+    if (err) {
+      console.error('Erro ao buscar dados completos:', err);
+      return res.status(500).send({ error: err });
+    }
+    res.status(200).send(results);
+  });
+});
+
+app.get('/inventario/detalhes/:unidade', (req, res) => {
+  const { unidade } = req.params;
+  const SQL = 'SELECT date, regente, comentarios, quem, resolvido FROM inventario WHERE unidade = ?';
+  
+  db.query(SQL, [unidade], (err, results) => {
+    if (err) {
+      console.error('Erro ao buscar dados completos:', err);
+      return res.status(500).send({ error: err });
+    }
+    res.status(200).send(results);
+  });
+});
+
+app.get('/contato/detalhes/:unidade', (req, res) => {
+  const { unidade } = req.params;
+  const SQL = 'SELECT date, retorno, comentarios FROM contato WHERE unidade = ?';
+  
+  db.query(SQL, [unidade], (err, results) => {
+    if (err) {
+      console.error('Erro ao buscar dados completos:', err);
+      return res.status(500).send({ error: err });
+    }
+    res.status(200).send(results);
+  });
+});
+
+app.get('/contato/:unidade', (req, res) => {
+  const { unidade } = req.params;
+  const SQL = 'SELECT date, retorno, comentarios FROM contato WHERE unidade = ?';
+  
+  db.query(SQL, [unidade], (err, results) => {
+    if (err) {
+      console.error('Erro ao buscar dados completos:', err);
+      return res.status(500).send({ error: err });
+    }
+    res.status(200).send(results);
+  });
+});
+
+app.get('/guide/detalhes/:unidade', (req, res) => {
+  const { unidade } = req.params;
+  const SQL = 'SELECT date, turma, conformidade, comentarios FROM guide WHERE unidade = ?';
+  
+  db.query(SQL, [unidade], (err, results) => {
+    if (err) {
+      console.error('Erro ao buscar dados completos:', err);
+      return res.status(500).send({ error: err });
+    }
+    res.status(200).send(results);
+  });
+});
+
+app.get('/feira/detalhes/:unidade', (req, res) => {
+  const { unidade } = req.params;
+  const SQL = 'SELECT cronograma, estrutural, apresentacao, comentarios, date FROM feira WHERE unidade = ?';
+  
+  db.query(SQL, [unidade], (err, results) => {
+    if (err) {
+      console.error('Erro ao buscar dados completos:', err);
+      return res.status(500).send({ error: err });
+    }
+    res.status(200).send(results);
+  });
+});
+
+app.get('/feira/:unidade', (req, res) => {
+  const { unidade } = req.params;
+  const SQL = 'SELECT cronograma, estrutural, apresentacao, comentarios, date FROM feira WHERE unidade = ?';
+  
+  db.query(SQL, [unidade], (err, results) => {
+    if (err) {
+      console.error('Erro ao buscar dados completos:', err);
+      return res.status(500).send({ error: err });
+    }
+    res.status(200).send(results);
+  });
+});
+
 
 // Rota para buscar dados de contato filtrados por unidade
 app.get('/contato/:unidade', (req, res) => {
