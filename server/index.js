@@ -666,6 +666,29 @@ app.get('/getUsername/:email', (req, res) => {
   });
 });
 
+// Rota para buscar registros filtrados pelo coordenador
+app.get('/:tabela/:coordenador', (req, res) => {
+  const { tabela, coordenador } = req.params;
+
+  // Evita SQL Injection
+  const tabelasPermitidas = ["planoscor", "aulacor", "diarioscor", "fotosevideoscor", "propostascor", "contatocor", "guidecor", "feiracor"];
+  
+  if (!tabelasPermitidas.includes(tabela)) {
+    return res.status(400).send({ error: "Tabela inválida!" });
+  }
+
+  const SQL = `SELECT * FROM ?? WHERE coordenador = ?`;
+  
+  db.query(SQL, [tabela, coordenador], (err, results) => {
+    if (err) {
+      console.error('Erro ao buscar dados:', err);
+      return res.status(500).send({ error: err });
+    }
+    res.status(200).send(results);
+  });
+});
+
+
 // Rodando o servidor
 app.listen(3002, () => {
   console.log('Server is running on port 3002');

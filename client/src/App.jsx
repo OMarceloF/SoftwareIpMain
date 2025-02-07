@@ -12,11 +12,13 @@ import Guide from './Components/Dashboard/Review/Components/Guide';
 import Feira from './Components/Dashboard/Review/Components/Feira';
 import Unidades from './Components/Dashboard/Unidades/Unidades';
 import Historico from './Components/Dashboard/Historico/Historico';
+import HistoricoCor from './Components/Dashboard/Historico/HistoricoCor';
 import CriarUnidades from './Components/Dashboard/Unidades/Components/CriarUnidades';
 import DashboardGraph from './Components/Dashboard/Dashboard/DashboardGraph';
 import EscolherUnidade from './Components/Dashboard/Dashboard/EscolherUnidade';
 import ReviewCoordenadores from './Components/Dashboard/Review/ReviewCoordenadores';
 import EscolherCoordenador from './Components/Dashboard/Review/EscolherCoordenador';
+import EscolherCoordenadorCor from './Components/Dashboard/Historico/EscolhaCoordenadorCor';
 import AulaCor from './Components/Dashboard/Review/ComponentsCor/AulaCor';
 import ContatoCor from './Components/Dashboard/Review/ComponentsCor/ContatoCor';
 import DiariosCor from './Components/Dashboard/Review/ComponentsCor/DiariosCor';
@@ -130,7 +132,7 @@ const router = createBrowserRouter([
                 element: <ProtectedRoute element={PropostasCor} allowedRoles={['supervisor', 'dev']} />
               }
             ]
-          },
+          }
         ]
       },
       {
@@ -155,7 +157,21 @@ const router = createBrowserRouter([
       },
       {
         path: 'historico',
-        element: <ProtectedRoute element={Historico} allowedRoles={['user', 'supervisor', 'dev']} />
+        element: <ProtectedRoute element={Historico} allowedRoles={['user', 'dev']} />
+      },
+      {
+        path: 'historicoCor',
+        element: <ProtectedRoute element={HistoricoCor} allowedRoles={['supervisor']} />
+      },
+      {
+        path: 'escolherCoordenadorCor',
+        element: <ProtectedRoute element={EscolherCoordenadorCor} allowedRoles={['supervisor', 'dev']}/>,
+        children: [
+          {
+            path: 'historicoCor',
+            element: <ProtectedRoute element={HistoricoCor} allowedRoles={['supervisor', 'dev']}/>
+          }
+        ]
       },
       {
         path: 'unidades',
