@@ -138,9 +138,9 @@ const Dashboard = () => {
               {
                 label: 'Status',
                 data: [
-                  cronograma.toLowerCase() === 'sim' ? 1 : 0,
-                  apresentacao.toLowerCase() === 'sim' ? 1 : 0,
-                  estrutural.toLowerCase() === 'sim' ? 1 : 0
+                  cronograma.toLowerCase() === 'sim' ? 1 : 1,
+                  apresentacao.toLowerCase() === 'sim' ? 1 : 1,
+                  estrutural.toLowerCase() === 'sim' ? 1 : 1
                 ],
                 backgroundColor: [
                   cronograma.toLowerCase() === 'sim' ? 'rgba(54, 162, 235, 0.7)' : 'rgba(255, 99, 132, 0.7)',
