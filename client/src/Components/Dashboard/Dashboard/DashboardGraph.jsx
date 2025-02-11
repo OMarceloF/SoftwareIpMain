@@ -53,7 +53,7 @@ const Dashboard = () => {
         const dateCounts = data.reduce((acc, item) => {
           const date = new Date(item.date).toLocaleDateString();
           if (!acc[date]) {
-            acc[date] = { Sim: 0, Nao: 0 };
+            acc[date] = { Sim: 0, Não: 0 };
           }
           acc[date][item.retorno] += 1;
           return acc;
