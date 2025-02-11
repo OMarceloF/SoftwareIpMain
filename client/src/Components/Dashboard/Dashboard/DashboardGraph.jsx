@@ -359,7 +359,7 @@ const Dashboard = () => {
               callbacks: {
                 label: function (context) {
                   const value = context.raw;
-                  return value === 1 ? 'Sim' : 'Não';
+                  return value === 1 ? 'Sim' : 'Nao';
                 },
               },
             },
