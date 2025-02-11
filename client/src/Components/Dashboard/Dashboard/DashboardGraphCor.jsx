@@ -26,6 +26,11 @@ const Dashboard = () => {
   const chartFeiraInstance = useRef(null); // Novo instance ref para o gráfico de feiracor
   const chartFotosEVideosRef = useRef(null);
   const chartFotosEVideosInstance = useRef(null);
+  const [chartDataFeira, setChartDataFeira] = useState({});
+  const [coordenadores, setCoordenadores] = useState([]);
+  const [selectedCoordenador, setSelectedCoordenador] = useState('');
+  const chartRefFeira = useRef(null);
+  const unidade = localStorage.getItem('unidadeStorage');
 
   useEffect(() => {
     const monthMapping = {
@@ -98,7 +103,7 @@ const Dashboard = () => {
         setLoading(false);
       });
 
-      axios.get(`http://localhost:3002/fotosevideoscor/notas-por-coordenador?month=${monthNumber}`)
+    axios.get(`http://localhost:3002/fotosevideoscor/notas-por-coordenador?month=${monthNumber}`)
       .then(response => {
         console.log("Dados de fotosevideoscor recebidos da API:", response.data);
         setDataFotosEVideos(response.data);
@@ -110,6 +115,13 @@ const Dashboard = () => {
       .finally(() => {
         setLoading(false);
       });
+
+    axios.get(`http://localhost:3002/coordenadores`)
+      .then(response => {
+        setCoordenadores(response.data);
+      })
+      .catch(error => console.error('Erro ao buscar coordenadores:', error));
+
   }, [selectedMonth]);
 
   // Lógica de criação dos gráficos
@@ -277,6 +289,39 @@ const Dashboard = () => {
     }
   }, [dataFotosEVideos]);
 
+  useEffect(() => {
+    if (selectedCoordenador) {
+      axios.get(`http://localhost:3002/feira/${unidade}?coordenador=${selectedCoordenador}&month=${selectedMonth}`)
+        .then(response => {
+          const data = response.data;
+          if (data.length > 0) {
+            const lastEntry = data[data.length - 1];
+            const { cronograma, apresentacao, estrutural } = lastEntry;
+
+            setChartDataFeira({
+              labels: ['Cronograma', 'Apresentação', 'Estrutural'],
+              datasets: [
+                {
+                  label: 'Status',
+                  data: [
+                    cronograma?.toLowerCase() === 'sim' ? 1 : 0,
+                    apresentacao?.toLowerCase() === 'sim' ? 1 : 0,
+                    estrutural?.toLowerCase() === 'sim' ? 1 : 0
+                  ],
+                  backgroundColor: [
+                    cronograma?.toLowerCase() === 'sim' ? 'rgba(54, 162, 235, 0.7)' : 'rgba(255, 99, 132, 0.7)',
+                    apresentacao?.toLowerCase() === 'sim' ? 'rgba(54, 162, 235, 0.7)' : 'rgba(255, 99, 132, 0.7)',
+                    estrutural?.toLowerCase() === 'sim' ? 'rgba(54, 162, 235, 0.7)' : 'rgba(255, 99, 132, 0.7)'
+                  ],
+                },
+              ],
+            });
+          }
+        })
+        .catch(error => console.error('Erro ao buscar dados:', error));
+    }
+  }, [unidade, selectedCoordenador, selectedMonth]);
+
   const filtrarDadosNotas = (dados) => {
     const filtroPorCoordenador = dados.reduce((acc, curr) => {
       if (!acc[curr.coordenador] || new Date(curr.date) > new Date(acc[curr.coordenador].date)) {
@@ -353,8 +398,26 @@ const Dashboard = () => {
   return (
     <div>
       <div>
-        <label htmlFor="month-select">Selecione o Mês: </label>
-        <select id="month-select" value={selectedMonth} onChange={handleMonthChange}>
+        <div>
+          <label htmlFor="coordenador-select">Selecione o Coordenador:</label>
+          <select id="coordenador-select" value={selectedCoordenador} onChange={e => setSelectedCoordenador(e.target.value)}>
+            <option value="">Selecione</option>
+            {coordenadores.map(coord => (
+              <option key={coord.id} value={coord.nome}>{coord.nome}</option>
+            ))}
+          </select>
+        </div>
+        <div>
+          <label htmlFor="month-select">Selecione o Mês:</label>
+          <select id="month-select" value={selectedMonth} onChange={e => setSelectedMonth(e.target.value)}>
+            {[...Array(12)].map((_, i) => (
+              <option key={i + 1} value={i + 1}>{new Date(0, i).toLocaleString('pt-BR', { month: 'long' })}</option>
+            ))}
+          </select>
+        </div>
+        
+        {/* <label htmlFor="month-select">Selecione o Mês: </label> */}
+        {/* <select id="month-select" value={selectedMonth} onChange={handleMonthChange}>
           <option value="Janeiro">Janeiro</option>
           <option value="Fevereiro">Fevereiro</option>
           <option value="Março">Março</option>
@@ -367,7 +430,7 @@ const Dashboard = () => {
           <option value="Outubro">Outubro</option>
           <option value="Novembro">Novembro</option>
           <option value="Dezembro">Dezembro</option>
-        </select>
+        </select> */}
       </div>
 
       <div className="chart-container">
