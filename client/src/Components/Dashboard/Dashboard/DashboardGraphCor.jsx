@@ -27,10 +27,10 @@ const Dashboard = () => {
   const chartFotosEVideosRef = useRef(null);
   const chartFotosEVideosInstance = useRef(null);
   const [chartDataFeira, setChartDataFeira] = useState({});
-  const [coordenadores, setCoordenadores] = useState([]);
   const [selectedCoordenador, setSelectedCoordenador] = useState('');
   const chartRefFeira = useRef(null);
   const unidade = localStorage.getItem('unidadeStorage');
+  const [coordenadores, setCoordenadores] = useState([]);
 
   useEffect(() => {
     const monthMapping = {
@@ -116,11 +116,14 @@ const Dashboard = () => {
         setLoading(false);
       });
 
-    axios.get(`http://localhost:3002/coordenadores`)
+    // Buscar coordenadores cadastrados como "user"
+    axios.get('http://localhost:3002/coordenadores')
       .then(response => {
         setCoordenadores(response.data);
       })
-      .catch(error => console.error('Erro ao buscar coordenadores:', error));
+      .catch(error => {
+        console.error('Erro ao buscar coordenadores:', error);
+      });
 
   }, [selectedMonth]);
 
@@ -289,38 +292,6 @@ const Dashboard = () => {
     }
   }, [dataFotosEVideos]);
 
-  useEffect(() => {
-    if (selectedCoordenador) {
-      axios.get(`http://localhost:3002/feira/${unidade}?coordenador=${selectedCoordenador}&month=${selectedMonth}`)
-        .then(response => {
-          const data = response.data;
-          if (data.length > 0) {
-            const lastEntry = data[data.length - 1];
-            const { cronograma, apresentacao, estrutural } = lastEntry;
-
-            setChartDataFeira({
-              labels: ['Cronograma', 'Apresentação', 'Estrutural'],
-              datasets: [
-                {
-                  label: 'Status',
-                  data: [
-                    cronograma?.toLowerCase() === 'sim' ? 1 : 0,
-                    apresentacao?.toLowerCase() === 'sim' ? 1 : 0,
-                    estrutural?.toLowerCase() === 'sim' ? 1 : 0
-                  ],
-                  backgroundColor: [
-                    cronograma?.toLowerCase() === 'sim' ? 'rgba(54, 162, 235, 0.7)' : 'rgba(255, 99, 132, 0.7)',
-                    apresentacao?.toLowerCase() === 'sim' ? 'rgba(54, 162, 235, 0.7)' : 'rgba(255, 99, 132, 0.7)',
-                    estrutural?.toLowerCase() === 'sim' ? 'rgba(54, 162, 235, 0.7)' : 'rgba(255, 99, 132, 0.7)'
-                  ],
-                },
-              ],
-            });
-          }
-        })
-        .catch(error => console.error('Erro ao buscar dados:', error));
-    }
-  }, [unidade, selectedCoordenador, selectedMonth]);
 
   const filtrarDadosNotas = (dados) => {
     const filtroPorCoordenador = dados.reduce((acc, curr) => {
@@ -402,8 +373,8 @@ const Dashboard = () => {
           <label htmlFor="coordenador-select">Selecione o Coordenador:</label>
           <select id="coordenador-select" value={selectedCoordenador} onChange={e => setSelectedCoordenador(e.target.value)}>
             <option value="">Selecione</option>
-            {coordenadores.map(coord => (
-              <option key={coord.id} value={coord.nome}>{coord.nome}</option>
+            {coordenadores.map((coordenador, index) => (
+              <option key={index} value={coordenador.nome}>{coordenador.email}</option>
             ))}
           </select>
         </div>
