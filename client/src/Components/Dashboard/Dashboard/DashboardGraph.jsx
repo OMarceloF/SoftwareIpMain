@@ -138,14 +138,14 @@ const Dashboard = () => {
               {
                 label: 'Status',
                 data: [
-                  cronograma === 'Sim' ? 1 : 0,
-                  apresentacao === 'Sim' ? 1 : 0,
-                  estrutural === 'Sim' ? 1 : 0
+                  cronograma.toLowerCase() === 'sim' ? 1 : 0,
+                  apresentacao.toLowerCase() === 'sim' ? 1 : 0,
+                  estrutural.toLowerCase() === 'sim' ? 1 : 0
                 ],
                 backgroundColor: [
-                  cronograma === 'Sim' ? 'rgba(54, 162, 235, 0.7)' : 'rgba(255, 99, 132, 0.7)',
-                  apresentacao === 'Sim' ? 'rgba(54, 162, 235, 0.7)' : 'rgba(255, 99, 132, 0.7)',
-                  estrutural === 'Sim' ? 'rgba(54, 162, 235, 0.7)' : 'rgba(255, 99, 132, 0.7)'
+                  cronograma.toLowerCase() === 'sim' ? 'rgba(54, 162, 235, 0.7)' : 'rgba(255, 99, 132, 0.7)',
+                  apresentacao.toLowerCase() === 'sim' ? 'rgba(54, 162, 235, 0.7)' : 'rgba(255, 99, 132, 0.7)',
+                  estrutural.toLowerCase() === 'sim' ? 'rgba(54, 162, 235, 0.7)' : 'rgba(255, 99, 132, 0.7)'
                 ],
               },
             ],
@@ -359,7 +359,7 @@ const Dashboard = () => {
               callbacks: {
                 label: function (context) {
                   const value = context.raw;
-                  return value === 1 ? 'Sim' : 'Nao';
+                  return value === 1 ? 'Sim' : 'Não';
                 },
               },
             },
