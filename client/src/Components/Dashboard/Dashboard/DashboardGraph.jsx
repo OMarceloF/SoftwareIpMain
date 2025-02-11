@@ -61,7 +61,7 @@ const Dashboard = () => {
 
         const dates = Object.keys(dateCounts);
         const simCounts = dates.map(date => dateCounts[date].Sim);
-        const naoCounts = dates.map(date => dateCounts[date].Nao);
+        const naoCounts = dates.map(date => dateCounts[date].Não);
 
         setChartDataContato({
           labels: dates,
@@ -102,28 +102,55 @@ const Dashboard = () => {
       .catch(error => console.error('Erro ao buscar dados:', error));
 
     axios.get(`http://localhost:3002/feira/${unidade}`)
+      // .then(response => {
+      //   const data = response.data;
+      //   const { cronograma, apresentacao, estrutural } = data;
+
+      //   setChartDataFeira({
+      //     labels: ['Cronograma', 'Apresentação', 'Estrutural'],
+      //     datasets: [
+      //       {
+      //         label: 'Status',
+      //         data: [
+      //           cronograma === 'Sim' ? 1 : 0,
+      //           apresentacao === 'Sim' ? 1 : 0,
+      //           estrutural === 'Sim' ? 1 : 0
+      //         ],
+      //         backgroundColor: [
+      //           cronograma === 'Sim' ? 'rgba(54, 162, 235, 0.7)' : 'rgba(255, 99, 132, 0.7)',
+      //           apresentacao === 'Sim' ? 'rgba(54, 162, 235, 0.7)' : 'rgba(255, 99, 132, 0.7)',
+      //           estrutural === 'Sim' ? 'rgba(54, 162, 235, 0.7)' : 'rgba(255, 99, 132, 0.7)'
+      //         ],
+      //       },
+      //     ],
+      //   });
+      // })
+      // .catch(error => console.error('Erro ao buscar dados:', error));
       .then(response => {
         const data = response.data;
-        const { cronograma, apresentacao, estrutural } = data;
+        if (data.length > 0) {
+          const lastEntry = data[data.length - 1];
+          const { cronograma, apresentacao, estrutural } = lastEntry;
 
-        setChartDataFeira({
-          labels: ['Cronograma', 'Apresentação', 'Estrutural'],
-          datasets: [
-            {
-              label: 'Status',
-              data: [
-                cronograma === 'Sim' ? 1 : 0,
-                apresentacao === 'Sim' ? 1 : 0,
-                estrutural === 'Sim' ? 1 : 0
-              ],
-              backgroundColor: [
-                cronograma === 'Sim' ? 'rgba(54, 162, 235, 0.7)' : 'rgba(255, 99, 132, 0.7)',
-                apresentacao === 'Sim' ? 'rgba(54, 162, 235, 0.7)' : 'rgba(255, 99, 132, 0.7)',
-                estrutural === 'Sim' ? 'rgba(54, 162, 235, 0.7)' : 'rgba(255, 99, 132, 0.7)'
-              ],
-            },
-          ],
-        });
+          setChartDataFeira({
+            labels: ['Cronograma', 'Apresentação', 'Estrutural'],
+            datasets: [
+              {
+                label: 'Status',
+                data: [
+                  cronograma === 'Sim' ? 1 : 0,
+                  apresentacao === 'Sim' ? 1 : 0,
+                  estrutural === 'Sim' ? 1 : 0
+                ],
+                backgroundColor: [
+                  cronograma === 'Sim' ? 'rgba(54, 162, 235, 0.7)' : 'rgba(255, 99, 132, 0.7)',
+                  apresentacao === 'Sim' ? 'rgba(54, 162, 235, 0.7)' : 'rgba(255, 99, 132, 0.7)',
+                  estrutural === 'Sim' ? 'rgba(54, 162, 235, 0.7)' : 'rgba(255, 99, 132, 0.7)'
+                ],
+              },
+            ],
+          });
+        }
       })
       .catch(error => console.error('Erro ao buscar dados:', error));
 
@@ -276,6 +303,38 @@ const Dashboard = () => {
       });
     }
 
+    // if (Object.keys(chartDataFeira).length > 0) {
+    //   const ctxFeira = document.getElementById('myChartFeira').getContext('2d');
+    //   if (chartRefFeira.current) {
+    //     chartRefFeira.current.destroy();
+    //   }
+    //   chartRefFeira.current = new Chart(ctxFeira, {
+    //     type: 'bar',
+    //     data: chartDataFeira,
+    //     options: {
+    //       indexAxis: 'x',
+    //       elements: {
+    //         bar: {
+    //           borderWidth: 2,
+    //         },
+    //       },
+    //       responsive: true,
+    //       plugins: {
+    //         legend: {
+    //           position: 'top',
+    //         },
+    //         tooltip: {
+    //           callbacks: {
+    //             label: function (context) {
+    //               const value = context.raw;
+    //               return value === 1 ? 'Sim' : 'Não';
+    //             },
+    //           },
+    //         },
+    //       },
+    //     },
+    //   });
+    // }
     if (Object.keys(chartDataFeira).length > 0) {
       const ctxFeira = document.getElementById('myChartFeira').getContext('2d');
       if (chartRefFeira.current) {
