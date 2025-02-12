@@ -7,7 +7,8 @@ const Dashboard = () => {
   const [chartDataAula, setChartDataAula] = useState({});
   const [chartDataContato, setChartDataContato] = useState({});
   const [chartDataDiarios, setChartDataDiarios] = useState({});
-  const [chartDataFeira, setChartDataFeira] = useState({});
+  const [chartDataFeira, setChartDataFeira] = useState(null); // Alterado para null
+  // const [chartDataFeira, setChartDataFeira] = useState({});
   const [chartDataFotosEVideos, setChartDataFotosEVideos] = useState({});
   const [selectedMonth, setSelectedMonth] = useState(new Date().getMonth() + 1); // Mês atual
   const chartRefAula = useRef(null);
@@ -130,6 +131,8 @@ const Dashboard = () => {
     //   })
     //   .catch(error => console.error('Erro ao buscar dados:', error));
 
+    setChartDataFeira(null); // Resetar o gráfico antes de carregar novos dados
+
     axios.get(`http://localhost:3002/feira/${unidade}`)
       .then(response => {
         // Filtrar apenas os registros do mês selecionado
@@ -163,16 +166,10 @@ const Dashboard = () => {
             ],
           });
         } else {
-          // Se não houver dados para o mês, definir um gráfico totalmente vazio
+          // Se não houver dados, limpar o gráfico
           setChartDataFeira({
-            labels: [''],
-            datasets: [
-              {
-                label: '',
-                data: [0], // Força o Chart.js a limpar o gráfico
-                backgroundColor: ['rgba(255, 255, 255, 0)'], // Totalmente transparente
-              },
-            ],
+            labels: [],
+            datasets: [],
           });
         }
       })
@@ -352,7 +349,7 @@ const Dashboard = () => {
     //           callbacks: {
     //             label: function (context) {
     //               const value = context.raw;
-    //               return value === 1 ? 'Sim' : 'Não';
+    //               return backgroundColor === 'rgba(54, 162, 235, 0.7)' ? 'Sim' : 'Não';
     //             },
     //           },
     //         },
@@ -360,11 +357,15 @@ const Dashboard = () => {
     //     },
     //   });
     // }
-    if (Object.keys(chartDataFeira).length > 0) {
+
+    if (chartDataFeira !== null) {
       const ctxFeira = document.getElementById('myChartFeira').getContext('2d');
+
+      // Destruir gráfico anterior antes de criar um novo
       if (chartRefFeira.current) {
         chartRefFeira.current.destroy();
       }
+
       chartRefFeira.current = new Chart(ctxFeira, {
         type: 'bar',
         data: chartDataFeira,
@@ -384,7 +385,7 @@ const Dashboard = () => {
               callbacks: {
                 label: function (context) {
                   const value = context.raw;
-                  return backgroundColor === 'rgba(54, 162, 235, 0.7)' ? 'Sim' : 'Não';
+                  return value === 1 ? 'Sim' : 'Não';
                 },
               },
             },
