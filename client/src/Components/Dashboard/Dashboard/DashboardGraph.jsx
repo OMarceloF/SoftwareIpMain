@@ -139,7 +139,7 @@ const Dashboard = () => {
         });
 
         if (data.length > 0) {
-          // Ordenar os registros por data e pegar o mais recente
+          // Ordenar os registros por data e pegar o mais recente dentro do mês
           const lastEntry = data.sort((a, b) => new Date(b.date) - new Date(a.date))[0];
 
           const { cronograma, apresentacao, estrutural } = lastEntry;
@@ -150,9 +150,9 @@ const Dashboard = () => {
               {
                 label: 'Status',
                 data: [
-                  cronograma.toLowerCase() === 'sim' ? 1 : 1, // Garante que a altura sempre seja 1
-                  apresentacao.toLowerCase() === 'sim' ? 1 : 1,
-                  estrutural.toLowerCase() === 'sim' ? 1 : 1
+                  cronograma.toLowerCase() === 'sim' ? 1 : 0, // Agora a barra desaparece se não houver dados
+                  apresentacao.toLowerCase() === 'sim' ? 1 : 0,
+                  estrutural.toLowerCase() === 'sim' ? 1 : 0
                 ],
                 backgroundColor: [
                   cronograma.toLowerCase() === 'sim' ? 'rgba(54, 162, 235, 0.7)' : 'rgba(255, 99, 132, 0.7)',
@@ -163,14 +163,21 @@ const Dashboard = () => {
             ],
           });
         } else {
-          // Se não houver dados, não exibir nenhuma coluna no gráfico
+          // Se não houver dados para o mês, definir tudo como 0 para ocultar colunas
           setChartDataFeira({
-            labels: [],
-            datasets: [],
+            labels: ['Cronograma', 'Apresentação', 'Estrutural'],
+            datasets: [
+              {
+                label: 'Status',
+                data: [0, 0, 0], // Agora as colunas desaparecem completamente
+                backgroundColor: ['rgba(255, 99, 132, 0.7)', 'rgba(255, 99, 132, 0.7)', 'rgba(255, 99, 132, 0.7)'],
+              },
+            ],
           });
         }
       })
       .catch(error => console.error('Erro ao buscar dados:', error));
+
 
     axios.get(`http://localhost:3002/fotosevideos/${unidade}`)
       .then(response => {
