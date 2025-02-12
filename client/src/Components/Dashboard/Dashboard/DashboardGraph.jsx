@@ -163,16 +163,10 @@ const Dashboard = () => {
             ],
           });
         } else {
-          // Se não houver dados para o mês, definir tudo como 0 para ocultar colunas
+          // Se não houver dados para o mês, remover completamente os dados do gráfico
           setChartDataFeira({
-            labels: ['Cronograma', 'Apresentação', 'Estrutural'],
-            datasets: [
-              {
-                label: 'Status',
-                data: [0, 0, 0], // Agora as colunas desaparecem completamente
-                backgroundColor: ['rgba(255, 99, 132, 0.7)', 'rgba(255, 99, 132, 0.7)', 'rgba(255, 99, 132, 0.7)'],
-              },
-            ],
+            labels: [],
+            datasets: [],
           });
         }
       })
