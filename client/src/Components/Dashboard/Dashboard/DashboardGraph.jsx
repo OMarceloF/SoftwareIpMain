@@ -384,7 +384,7 @@ const Dashboard = () => {
               callbacks: {
                 label: function (context) {
                   const value = context.raw;
-                  return value === 1 ? 'Sim' : 'Não';
+                  return backgroundColor === 'rgba(54, 162, 235, 0.7)' ? 'Sim' : 'Não';
                 },
               },
             },
