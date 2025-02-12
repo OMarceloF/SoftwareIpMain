@@ -7,10 +7,10 @@ const Dashboard = () => {
   const [chartDataAula, setChartDataAula] = useState({});
   const [chartDataContato, setChartDataContato] = useState({});
   const [chartDataDiarios, setChartDataDiarios] = useState({});
-  const [chartDataFeira, setChartDataFeira] = useState(null); // Alterado para null
+  const [chartDataFeira, setChartDataFeira] = useState(null);
   // const [chartDataFeira, setChartDataFeira] = useState({});
   const [chartDataFotosEVideos, setChartDataFotosEVideos] = useState({});
-  const [selectedMonth, setSelectedMonth] = useState(new Date().getMonth() + 1); // Mês atual
+  const [selectedMonth, setSelectedMonth] = useState(new Date().getMonth() + 1); 
   const chartRefAula = useRef(null);
   const chartRefContato = useRef(null);
   const chartRefDiarios = useRef(null);
@@ -407,6 +407,7 @@ const Dashboard = () => {
       const ctxPhotosEVideos = document.getElementById('myChartPhotosEVideos').getContext('2d');
       if (chartRefFotosEVideos.current) {
         chartRefFotosEVideos.current.destroy();
+        chartRefFotosEVideos.current = null;
       }
       chartRefFotosEVideos.current = new Chart(ctxPhotosEVideos, {
         type: 'line',
@@ -425,6 +426,7 @@ const Dashboard = () => {
       const ctxGuide = document.getElementById('myChartGuide').getContext('2d');
       if (chartRefGuide.current) {
         chartRefGuide.current.destroy();
+        chartRefGuide.current = null;
       }
       chartRefGuide.current = new Chart(ctxGuide, {
         type: 'bar',
@@ -460,6 +462,7 @@ const Dashboard = () => {
       const ctxPlanos = document.getElementById('myChartPlanos').getContext('2d');
       if (chartRefPlanos.current) {
         chartRefPlanos.current.destroy();
+        chartRefPlanos.current = null;
       }
       chartRefPlanos.current = new Chart(ctxPlanos, {
         type: 'line',
