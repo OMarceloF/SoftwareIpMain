@@ -132,11 +132,14 @@ const Dashboard = () => {
 
     axios.get(`http://localhost:3002/feira/${unidade}`)
       .then(response => {
-        // Filtrar apenas os registros do mês selecionado
-        const data = response.data.filter(item => new Date(item.date).getMonth() + 1 === parseInt(selectedMonth));
+        // Converter as datas e filtrar apenas registros do mês selecionado
+        const data = response.data.filter(item => {
+          const itemDate = new Date(item.date);
+          return itemDate.getMonth() + 1 === parseInt(selectedMonth);
+        });
 
         if (data.length > 0) {
-          // Ordena os dados por data do mais recente para o mais antigo e pega o último daquele mês
+          // Ordenar os registros por data e pegar o mais recente
           const lastEntry = data.sort((a, b) => new Date(b.date) - new Date(a.date))[0];
 
           const { cronograma, apresentacao, estrutural } = lastEntry;
@@ -147,7 +150,7 @@ const Dashboard = () => {
               {
                 label: 'Status',
                 data: [
-                  cronograma.toLowerCase() === 'sim' ? 1 : 1,
+                  cronograma.toLowerCase() === 'sim' ? 1 : 1, // Garante que a altura sempre seja 1
                   apresentacao.toLowerCase() === 'sim' ? 1 : 1,
                   estrutural.toLowerCase() === 'sim' ? 1 : 1
                 ],
@@ -160,7 +163,7 @@ const Dashboard = () => {
             ],
           });
         } else {
-          // Se não houver dados para o mês, limpar o gráfico
+          // Se não houver dados, não exibir nenhuma coluna no gráfico
           setChartDataFeira({
             labels: [],
             datasets: [],
