@@ -101,35 +101,43 @@ const Dashboard = () => {
       })
       .catch(error => console.error('Erro ao buscar dados:', error));
 
-    axios.get(`http://localhost:3002/feira/${unidade}`)
-      // .then(response => {
-      //   const data = response.data;
-      //   const { cronograma, apresentacao, estrutural } = data;
+    // axios.get(`http://localhost:3002/feira/${unidade}`)
+    //   .then(response => {
+    //     const data = response.data;
+    //     if (data.length > 0) {
+    //       const lastEntry = data[data.length - 1];
+    //       const { cronograma, apresentacao, estrutural } = lastEntry;
 
-      //   setChartDataFeira({
-      //     labels: ['Cronograma', 'Apresentação', 'Estrutural'],
-      //     datasets: [
-      //       {
-      //         label: 'Status',
-      //         data: [
-      //           cronograma === 'Sim' ? 1 : 0,
-      //           apresentacao === 'Sim' ? 1 : 0,
-      //           estrutural === 'Sim' ? 1 : 0
-      //         ],
-      //         backgroundColor: [
-      //           cronograma === 'Sim' ? 'rgba(54, 162, 235, 0.7)' : 'rgba(255, 99, 132, 0.7)',
-      //           apresentacao === 'Sim' ? 'rgba(54, 162, 235, 0.7)' : 'rgba(255, 99, 132, 0.7)',
-      //           estrutural === 'Sim' ? 'rgba(54, 162, 235, 0.7)' : 'rgba(255, 99, 132, 0.7)'
-      //         ],
-      //       },
-      //     ],
-      //   });
-      // })
-      // .catch(error => console.error('Erro ao buscar dados:', error));
+    //       setChartDataFeira({
+    //         labels: ['Cronograma', 'Apresentação', 'Estrutural'],
+    //         datasets: [
+    //           {
+    //             label: 'Status',
+    //             data: [
+    //               cronograma.toLowerCase() === 'sim' ? 1 : 1,
+    //               apresentacao.toLowerCase() === 'sim' ? 1 : 1,
+    //               estrutural.toLowerCase() === 'sim' ? 1 : 1
+    //             ],
+    //             backgroundColor: [
+    //               cronograma.toLowerCase() === 'sim' ? 'rgba(54, 162, 235, 0.7)' : 'rgba(255, 99, 132, 0.7)',
+    //               apresentacao.toLowerCase() === 'sim' ? 'rgba(54, 162, 235, 0.7)' : 'rgba(255, 99, 132, 0.7)',
+    //               estrutural.toLowerCase() === 'sim' ? 'rgba(54, 162, 235, 0.7)' : 'rgba(255, 99, 132, 0.7)'
+    //             ],
+    //           },
+    //         ],
+    //       });
+    //     }
+    //   })
+    //   .catch(error => console.error('Erro ao buscar dados:', error));
+
+    axios.get(`http://localhost:3002/feira/${unidade}`)
       .then(response => {
-        const data = response.data;
+        const data = response.data.filter(item => new Date(item.date).getMonth() + 1 === parseInt(selectedMonth));
+
         if (data.length > 0) {
-          const lastEntry = data[data.length - 1];
+          // Ordena os dados pelo campo de data para pegar o mais recente
+          const lastEntry = data.sort((a, b) => new Date(b.date) - new Date(a.date))[0];
+
           const { cronograma, apresentacao, estrutural } = lastEntry;
 
           setChartDataFeira({
