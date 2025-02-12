@@ -136,7 +136,7 @@ const Dashboard = () => {
         const data = response.data.filter(item => new Date(item.date).getMonth() + 1 === parseInt(selectedMonth));
 
         if (data.length > 0) {
-          // Ordena os dados pelo campo de data para pegar o mais recente dentro do mês selecionado
+          // Ordena os dados por data do mais recente para o mais antigo e pega o último daquele mês
           const lastEntry = data.sort((a, b) => new Date(b.date) - new Date(a.date))[0];
 
           const { cronograma, apresentacao, estrutural } = lastEntry;
@@ -160,12 +160,14 @@ const Dashboard = () => {
             ],
           });
         } else {
-          // Se não houver dados, limpar o gráfico para esse mês
-          setChartDataFeira({});
+          // Se não houver dados para o mês, limpar o gráfico
+          setChartDataFeira({
+            labels: [],
+            datasets: [],
+          });
         }
       })
       .catch(error => console.error('Erro ao buscar dados:', error));
-
 
     axios.get(`http://localhost:3002/fotosevideos/${unidade}`)
       .then(response => {
