@@ -11,9 +11,9 @@ app.use(cors());
 // Criando a base de dados (MySQL)
 const db = mysql.createConnection({
   user: 'root',
-  host: 'mysql.railway.internal',
-  password: 'sXlHoDHrFGqGLViUvSGYiuvRHkTmfwGi',
-  database: 'railway'
+  host: 'localhost',
+  password: '',
+  database: 'teste'
 });
 
 // Conectando ao banco de dados
