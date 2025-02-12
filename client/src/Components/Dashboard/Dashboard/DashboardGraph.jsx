@@ -132,7 +132,7 @@ const Dashboard = () => {
 
     axios.get(`http://localhost:3002/feira/${unidade}`)
       .then(response => {
-        // Converter as datas e filtrar apenas registros do mês selecionado
+        // Filtrar apenas os registros do mês selecionado
         const data = response.data.filter(item => {
           const itemDate = new Date(item.date);
           return itemDate.getMonth() + 1 === parseInt(selectedMonth);
@@ -150,7 +150,7 @@ const Dashboard = () => {
               {
                 label: 'Status',
                 data: [
-                  cronograma.toLowerCase() === 'sim' ? 1 : 0, // Agora a barra desaparece se não houver dados
+                  cronograma.toLowerCase() === 'sim' ? 1 : 0,
                   apresentacao.toLowerCase() === 'sim' ? 1 : 0,
                   estrutural.toLowerCase() === 'sim' ? 1 : 0
                 ],
@@ -163,10 +163,16 @@ const Dashboard = () => {
             ],
           });
         } else {
-          // Se não houver dados para o mês, remover completamente os dados do gráfico
+          // Se não houver dados para o mês, definir um gráfico totalmente vazio
           setChartDataFeira({
-            labels: [],
-            datasets: [],
+            labels: [''],
+            datasets: [
+              {
+                label: '',
+                data: [0], // Força o Chart.js a limpar o gráfico
+                backgroundColor: ['rgba(255, 255, 255, 0)'], // Totalmente transparente
+              },
+            ],
           });
         }
       })
