@@ -11,7 +11,7 @@ const Dashboard = () => {
   const [dataNotas, setDataNotas] = useState(null);
   const [dataRetorno, setDataRetorno] = useState(null);
   const [dataDiarios, setDataDiarios] = useState(null);
-  const [dataFeira, setDataFeira] = useState(null); // Novo estado para o gráfico de feiracor
+  const [dataFeira, setDataFeira] = useState(null);
   const [selectedMonth, setSelectedMonth] = useState('Janeiro');
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -26,10 +26,7 @@ const Dashboard = () => {
   const chartFeiraInstance = useRef(null); // Novo instance ref para o gráfico de feiracor
   const chartFotosEVideosRef = useRef(null);
   const chartFotosEVideosInstance = useRef(null);
-  const [chartDataFeira, setChartDataFeira] = useState({});
   const [selectedCoordenador, setSelectedCoordenador] = useState('');
-  const chartRefFeira = useRef(null);
-  const unidade = localStorage.getItem('unidadeStorage');
   const [coordenadores, setCoordenadores] = useState([]);
 
   useEffect(() => {
@@ -116,14 +113,11 @@ const Dashboard = () => {
         setLoading(false);
       });
 
-    // Buscar coordenadores cadastrados como "user"
-    axios.get('http://localhost:3002/coordenadores')
-      .then(response => {
-        setCoordenadores(response.data);
-      })
-      .catch(error => {
-        console.error('Erro ao buscar coordenadores:', error);
-      });
+    // Recuperar o coordenador selecionado no localStorage
+    const storedCoordenador = localStorage.getItem('coordenadorStorage');
+    if (storedCoordenador) {
+      setSelectedCoordenador(storedCoordenador);
+    }
 
   }, [selectedMonth]);
 
@@ -370,13 +364,8 @@ const Dashboard = () => {
     <div>
       <div>
         <div>
-          <label htmlFor="coordenador-select">Selecione o Coordenador:</label>
-          <select id="coordenador-select" value={selectedCoordenador} onChange={e => setSelectedCoordenador(e.target.value)}>
-            <option value="">Selecione</option>
-            {coordenadores.map((coordenador, index) => (
-              <option key={index} value={coordenador.nome}>{coordenador.email}</option>
-            ))}
-          </select>
+          <label htmlFor="coordenador-select">Coordenador Selecionado:</label>
+          <input type="text" id="coordenador-select" value={selectedCoordenador} disabled />
         </div>
         <div>
           <label htmlFor="month-select">Selecione o Mês:</label>
