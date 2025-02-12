@@ -23,10 +23,12 @@ const Dashboard = () => {
   const unidade = localStorage.getItem('unidadeStorage');
 
   const handleMonthChange = (event) => {
-    setSelectedMonth(event.target.value);
+    // setSelectedMonth(event.target.value);
+    setSelectedMonth(parseInt(event.target.value));
   };
 
   useEffect(() => {
+    setChartDataFeira(null);
     axios.get(`http://localhost:3002/aula/${unidade}`)
       .then(response => {
         const data = response.data.filter(item => new Date(item.date).getMonth() + 1 === parseInt(selectedMonth));
@@ -167,10 +169,7 @@ const Dashboard = () => {
           });
         } else {
           // Se não houver dados, limpar o gráfico
-          setChartDataFeira({
-            labels: [],
-            datasets: [],
-          });
+          setChartDataFeira(null);
         }
       })
       .catch(error => console.error('Erro ao buscar dados:', error));
@@ -358,13 +357,13 @@ const Dashboard = () => {
     //   });
     // }
 
+    if (chartRefFeira.current) {
+      chartRefFeira.current.destroy(); // Destrói o gráfico anterior antes de criar um novo
+      chartRefFeira.current = null;
+    }
+
     if (chartDataFeira !== null) {
       const ctxFeira = document.getElementById('myChartFeira').getContext('2d');
-
-      // Destruir gráfico anterior antes de criar um novo
-      if (chartRefFeira.current) {
-        chartRefFeira.current.destroy();
-      }
 
       chartRefFeira.current = new Chart(ctxFeira, {
         type: 'bar',
@@ -393,7 +392,7 @@ const Dashboard = () => {
         },
       });
     }
-
+    
     if (Object.keys(chartDataFotosEVideos).length > 0) {
       const ctxPhotosEVideos = document.getElementById('myChartPhotosEVideos').getContext('2d');
       if (chartRefFotosEVideos.current) {
