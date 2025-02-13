@@ -8,7 +8,7 @@ const EscolherCoordenadorCor = () => {
     const location = useLocation();
 
     useEffect(() => {
-        axios.get('http://localhost:3002/coordenadores')
+        axios.get('https://softwareipmain-production.up.railway.app/coordenadores')
             .then(response => {
                 setCoordenadores(response.data);
             })

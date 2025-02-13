@@ -29,7 +29,7 @@ const PropostasCor = () => {
       comentarios: textQuestion2,
     };
 
-    axios.post('http://localhost:3002/propostasCor', formData)
+    axios.post('https://softwareipmain-production.up.railway.app/propostasCor', formData)
       .then(() => {
         // Exibe a mensagem de sucesso e reseta os campos
         setSuccessMessage('Dados enviados com sucesso!');

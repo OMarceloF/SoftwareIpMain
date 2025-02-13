@@ -29,7 +29,7 @@ const ContatoCor = () => {
             coordenador: localStorage.getItem('coordenadorStorage'),
         };
 
-        axios.post('http://localhost:3002/contatocor', formData)
+        axios.post('https://softwareipmain-production.up.railway.app/contatocor', formData)
             .then(() => {
                 // Exibe a mensagem de sucesso e reseta os campos
                 setSuccessMessage('Dados enviados com sucesso!');

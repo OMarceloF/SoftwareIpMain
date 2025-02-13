@@ -65,13 +65,13 @@ const Historico = () => {
     if (!email) return;
 
     axios
-      .get(`http://localhost:3002/getUsername/${email}`)
+      .get(`https://softwareipmain-production.up.railway.app/getUsername/${email}`)
       .then((response) => {
         const nomeCoordenador = response.data.name;
         setCoordenador(nomeCoordenador);
 
         axios
-          .get("http://localhost:3002/unidades")
+          .get("https://softwareipmain-production.up.railway.app/unidades")
           .then((response) => {
             const unidadesFiltradas = response.data.filter(
               (unidade) => unidade.coordenador === nomeCoordenador
@@ -95,7 +95,7 @@ const Historico = () => {
     if (!tabela) return;
 
     axios
-      .get(`http://localhost:3002/${tabela}/${unidadeSelecionada}`)
+      .get(`https://softwareipmain-production.up.railway.app/${tabela}/${unidadeSelecionada}`)
       .then((response) => {
         const datasOrdenadas = response.data
           .map((item) => item.date)
@@ -132,7 +132,7 @@ const Historico = () => {
         : `/${tabela}/${unidadeSelecionada}`;
 
     axios
-      .get(`http://localhost:3002${rota}`)
+      .get(`https://softwareipmain-production.up.railway.app${rota}`)
       .then((response) => {
         const linhaSelecionada = response.data.find(
           (item) => item.date === avaliacaoSelecionada

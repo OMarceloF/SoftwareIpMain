@@ -29,7 +29,7 @@ const Dashboard = () => {
 
   useEffect(() => {
     
-    axios.get(`http://localhost:3002/aula/${unidade}`)
+    axios.get(`https://softwareipmain-production.up.railway.app/aula/${unidade}`)
       .then(response => {
         const data = response.data.filter(item => new Date(item.date).getMonth() + 1 === parseInt(selectedMonth));
         const dates = data.map(item => new Date(item.date).toLocaleDateString());
@@ -49,7 +49,7 @@ const Dashboard = () => {
       })
       .catch(error => console.error('Erro ao buscar dados:', error));
 
-    axios.get(`http://localhost:3002/contato/${unidade}`)
+    axios.get(`https://softwareipmain-production.up.railway.app/contato/${unidade}`)
       .then(response => {
         const data = response.data.filter(item => new Date(item.date).getMonth() + 1 === parseInt(selectedMonth));
 
@@ -84,7 +84,7 @@ const Dashboard = () => {
       })
       .catch(error => console.error('Erro ao buscar dados:', error));
 
-    axios.get(`http://localhost:3002/diarios/${unidade}`)
+    axios.get(`https://softwareipmain-production.up.railway.app/diarios/${unidade}`)
       .then(response => {
         const data = response.data.filter(item => new Date(item.date).getMonth() + 1 === parseInt(selectedMonth));
         const dates = data.map(item => new Date(item.date).toLocaleDateString());
@@ -133,7 +133,7 @@ const Dashboard = () => {
     //   })
     //   .catch(error => console.error('Erro ao buscar dados:', error));
 
-    axios.get(`http://localhost:3002/feira/${unidade}`)
+    axios.get(`https://softwareipmain-production.up.railway.app/feira/${unidade}`)
       .then(response => {
         const data = response.data.filter(item => new Date(item.date).getMonth() + 1 === parseInt(selectedMonth));
 
@@ -187,7 +187,7 @@ const Dashboard = () => {
       });
 
 
-      axios.get(`http://localhost:3002/fotosevideos/${unidade}`)
+      axios.get(`https://softwareipmain-production.up.railway.app/fotosevideos/${unidade}`)
         .then(response => {
           const data = response.data.filter(item => new Date(item.date).getMonth() + 1 === parseInt(selectedMonth));
 
@@ -222,7 +222,7 @@ const Dashboard = () => {
         })
         .catch(error => console.error('Erro ao buscar dados:', error));
 
-      axios.get(`http://localhost:3002/guide/${unidade}`)
+      axios.get(`https://softwareipmain-production.up.railway.app/guide/${unidade}`)
         .then(response => {
           const data = response.data.filter(item => new Date(item.date).getMonth() + 1 === parseInt(selectedMonth));
       
@@ -261,7 +261,7 @@ const Dashboard = () => {
         })
         .catch(error => console.error('Erro ao buscar dados:', error));      
 
-      axios.get(`http://localhost:3002/planos/${unidade}`)
+      axios.get(`https://softwareipmain-production.up.railway.app/planos/${unidade}`)
         .then(response => {
           const data = response.data.filter(item => new Date(item.date).getMonth() + 1 === parseInt(selectedMonth));
       

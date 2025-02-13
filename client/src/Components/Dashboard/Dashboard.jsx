@@ -26,7 +26,7 @@ const Dashboard = () => {
     const email = localStorage.getItem('emailStorage');
 
     if (email) {
-      axios.get(`http://localhost:3002/getRole/${email}`)
+      axios.get(`https://softwareipmain-production.up.railway.app/getRole/${email}`)
         .then(response => {
           setRole(response.data.role);
         })
@@ -36,7 +36,7 @@ const Dashboard = () => {
     }
 
     if (email) {
-      axios.get(`http://localhost:3002/getUsername/${email}`)
+      axios.get(`https://softwareipmain-production.up.railway.app/getUsername/${email}`)
         .then(response => {
           const fullName = response.data.name;
           setName(fullName);

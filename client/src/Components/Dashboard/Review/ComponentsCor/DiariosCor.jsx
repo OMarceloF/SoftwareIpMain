@@ -29,7 +29,7 @@ const DiariosCor = () => {
             coordenador: localStorage.getItem('coordenadorStorage'),
         };
 
-        axios.post('http://localhost:3002/diariosCor', formData)
+        axios.post('https://softwareipmain-production.up.railway.app/diariosCor', formData)
             .then(() => {
                 // Exibe a mensagem de sucesso e reseta os campos
                 setSuccessMessage('Dados enviados com sucesso!');

@@ -68,7 +68,7 @@ const HistoricoCor = () => {
     if (!tabela || !coordenador) return;
 
     axios
-      .get(`http://localhost:3002/${tabela}/${coordenador}`)
+      .get(`https://softwareipmain-production.up.railway.app/${tabela}/${coordenador}`)
       .then((response) => {
         setDados(response.data);
         setDatasDisponiveis(response.data.map((item) => item.date));

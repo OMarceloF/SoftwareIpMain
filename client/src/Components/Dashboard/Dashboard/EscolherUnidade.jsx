@@ -9,7 +9,7 @@ const Aulas = () => {
     const location = useLocation();
 
     useEffect(() => {
-        axios.get('http://localhost:3002/unidades')
+        axios.get('https://softwareipmain-production.up.railway.app/unidades')
             .then(response => {
                 setUnidades(response.data);
             })

@@ -30,7 +30,7 @@ const GuideCor = () => {
       comentarios: textQuestion3,
     };
 
-    axios.post('http://localhost:3002/guideCor', formData)
+    axios.post('https://softwareipmain-production.up.railway.app/guideCor', formData)
       .then(() => {
         // Exibe a mensagem de sucesso e reseta os campos
         setSuccessMessage('Dados enviados com sucesso!');

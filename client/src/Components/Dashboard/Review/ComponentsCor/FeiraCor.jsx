@@ -35,7 +35,7 @@ const FeiraCor = () => {
             date: currentDate,
         };
 
-        axios.post('http://localhost:3002/feiraCor', formData)
+        axios.post('https://softwareipmain-production.up.railway.app/feiraCor', formData)
             .then(() => {
                 // Exibe a mensagem de sucesso e reseta os campos
                 setSuccessMessage('Dados enviados com sucesso!');

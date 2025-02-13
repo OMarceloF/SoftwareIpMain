@@ -48,7 +48,7 @@ const Dashboard = () => {
     const monthNumber = monthMapping[selectedMonth];
 
     // Buscar dados para o gráfico de notas
-    axios.get(`http://localhost:3002/aulacor/notas-por-coordenador?month=${monthNumber}`)
+    axios.get(`https://softwareipmain-production.up.railway.app/aulacor/notas-por-coordenador?month=${monthNumber}`)
       .then(response => {
         console.log("Dados de notas recebidos da API:", response.data); 
         const filteredDataNotas = filtrarDadosNotas(response.data);
@@ -60,7 +60,7 @@ const Dashboard = () => {
       });
 
     // Buscar dados para o gráfico de retorno
-    axios.get(`http://localhost:3002/contatocor/retornos-por-coordenador?month=${monthNumber}`)
+    axios.get(`https://softwareipmain-production.up.railway.app/contatocor/retornos-por-coordenador?month=${monthNumber}`)
       .then(response => {
         console.log("Dados de retorno recebidos da API:", response.data); 
         const filteredDataRetorno = filtrarDadosRetorno(response.data);
@@ -72,7 +72,7 @@ const Dashboard = () => {
       });
 
     // Buscar dados para o gráfico de diários
-    axios.get(`http://localhost:3002/diarioscor/notas-por-coordenador?month=${monthNumber}`)
+    axios.get(`https://softwareipmain-production.up.railway.app/diarioscor/notas-por-coordenador?month=${monthNumber}`)
       .then(response => {
         console.log("Dados de diários recebidos da API:", response.data); 
         const filteredDataDiarios = filtrarDadosDiarios(response.data);
@@ -87,7 +87,7 @@ const Dashboard = () => {
       });
 
     // Buscar dados para o gráfico de feiracor
-    axios.get(`http://localhost:3002/feiracor/notas-por-coordenador?month=${monthNumber}`)
+    axios.get(`https://softwareipmain-production.up.railway.app/feiracor/notas-por-coordenador?month=${monthNumber}`)
       .then(response => {
         console.log("Dados de feiracor recebidos da API:", response.data);
         setDataFeira(response.data);
@@ -100,7 +100,7 @@ const Dashboard = () => {
         setLoading(false);
       });
 
-    axios.get(`http://localhost:3002/fotosevideoscor/notas-por-coordenador?month=${monthNumber}`)
+    axios.get(`https://softwareipmain-production.up.railway.app/fotosevideoscor/notas-por-coordenador?month=${monthNumber}`)
       .then(response => {
         console.log("Dados de fotosevideoscor recebidos da API:", response.data);
         setDataFotosEVideos(response.data);

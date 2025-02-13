@@ -29,7 +29,7 @@ const AulaCor = () => {
             coordenador: localStorage.getItem('coordenadorStorage'),
         };
 
-        axios.post('http://localhost:3002/aulacor', formData)
+        axios.post('https://softwareipmain-production.up.railway.app/aulacor', formData)
             .then(() => {
                 // Exibe a mensagem de sucesso e reseta os campos
                 setSuccessMessage('Dados enviados com sucesso!');
