@@ -8,6 +8,28 @@ const bcrypt = require('bcrypt');
 app.use(express.json());
 app.use(cors());
 
+async function testDatabaseConnection() {
+  try {
+    const connection = await mysql.createConnection({
+      user: 'uuoouvnk3rn33xoi',
+      host: 'bpnjokvpezbjichmh33i-mysql.services.clever-cloud.com',
+      password: 'vGPPGUa2jDLrjbREgblx',
+      database: 'bpnjokvpezbjichmh33i',
+      port: 3306
+    });
+
+    const [result] = await connection.query('SELECT 1+1 AS result');
+    console.log('✅ Conexão bem-sucedida no backend:', result);
+
+    await connection.end();
+  } catch (error) {
+    console.error('❌ Erro ao conectar ao banco de dados no backend:', error.message);
+  }
+}
+
+// Testar a conexão ao iniciar o servidor
+testDatabaseConnection();
+
 // Criando a base de dados (MySQL)
 const db = mysql.createConnection({
   user: 'uuoouvnk3rn33xoi',
