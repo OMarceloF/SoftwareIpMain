@@ -44,12 +44,13 @@
 }
 
 .content {
-  background-image: url("./Imagens/fundo.png");
+  /* background-image: url("./Imagens/fundo.png");
   background-position: center;
   background-size: cover;
-  background-repeat: no-repeat;
+  background-repeat: no-repeat; */
+  background-color: #d8f3ee3d;
   width: 85%;
-  height: 100vh;
+  min-height: 100vh;
   display: flex;
   align-items: center;
   flex-direction: column;

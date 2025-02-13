@@ -147,9 +147,9 @@ const Dashboard = () => {
               {
                 label: 'Status',
                 data: [
-                  cronograma.toLowerCase() === 'sim' ? 1 : 0,
-                  apresentacao.toLowerCase() === 'sim' ? 1 : 0,
-                  estrutural.toLowerCase() === 'sim' ? 1 : 0
+                  cronograma.toLowerCase() === 'sim' ? 1 : 1,
+                  apresentacao.toLowerCase() === 'sim' ? 1 : 1,
+                  estrutural.toLowerCase() === 'sim' ? 1 : 1
                 ],
                 backgroundColor: [
                   cronograma.toLowerCase() === 'sim' ? 'rgba(54, 162, 235, 0.7)' : 'rgba(255, 99, 132, 0.7)',
@@ -160,12 +160,30 @@ const Dashboard = () => {
             ],
           });
         } else {
-          setChartDataFeira({ labels: [], datasets: [] });
+          setChartDataFeira({
+            labels: ['Sem dados'],
+            datasets: [
+              {
+                label: 'Status',
+                data: [0], // Mantém o gráfico visível, mas sem dados
+                backgroundColor: 'rgba(200, 200, 200, 0.3)', // Cor neutra para indicar ausência de dados
+              },
+            ],
+          });
         }
       })
       .catch(error => {
         console.error('Erro ao buscar dados:', error);
-        setChartDataFeira({ labels: [], datasets: [] });
+        setChartDataFeira({
+          labels: ['Sem dados'],
+          datasets: [
+            {
+              label: 'Status',
+              data: [0], // Mantém o gráfico visível, mas sem dados
+              backgroundColor: 'rgba(200, 200, 200, 0.3)', // Cor neutra para indicar ausência de dados
+            },
+          ],
+        });
       });
 
 
@@ -189,7 +207,17 @@ const Dashboard = () => {
               ],
             });
           } else {
-            setChartDataFotosEVideos({ labels: [], datasets: [] });
+            setChartDataFotosEVideos({
+              labels: ['Sem dados'],
+              datasets: [
+                {
+                  label: 'Notas',
+                  data: [0],
+                  borderColor: 'rgba(200, 200, 200, 0.3)',
+                  backgroundColor: 'rgba(200, 200, 200, 0.2)',
+                },
+              ],
+            });
           }
         })
         .catch(error => console.error('Erro ao buscar dados:', error));
@@ -253,7 +281,17 @@ const Dashboard = () => {
               ],
             });
           } else {
-            setChartDataPlanos({ labels: [], datasets: [] });
+              setChartDataPlanos({
+                labels: ['Sem dados'],
+                datasets: [
+                  {
+                    label: 'Notas',
+                    data: [0],
+                    borderColor: 'rgba(200, 200, 200, 0.3)',
+                    backgroundColor: 'rgba(200, 200, 200, 0.2)',
+                  },
+                ],
+              });
           }
         })
         .catch(error => console.error('Erro ao buscar dados:', error));      
@@ -274,6 +312,11 @@ const Dashboard = () => {
             x: {
               type: 'category',
             },
+            y: { 
+              min: 0, 
+              max: 10, 
+              beginAtZero: true 
+            }, 
           },
         },
       });
@@ -327,6 +370,11 @@ const Dashboard = () => {
             x: {
               type: 'category',
             },
+            y: { 
+              min: 0, 
+              max: 10, 
+              beginAtZero: true 
+            }, 
           },
         },
       });
@@ -428,6 +476,11 @@ const Dashboard = () => {
             x: {
               type: 'category',
             },
+            y: { 
+              min: 0, 
+              max: 10, 
+              beginAtZero: true 
+            }, 
           },
         },
       });
@@ -483,6 +536,11 @@ const Dashboard = () => {
             x: {
               type: 'category',
             },
+            y: { 
+              min: 0, 
+              max: 10, 
+              beginAtZero: true 
+            }, 
           },
         },
       });
