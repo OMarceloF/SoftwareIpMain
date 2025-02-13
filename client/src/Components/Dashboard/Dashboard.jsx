@@ -145,7 +145,7 @@ const Dashboard = () => {
             </div>
             <div className="buttonLeft">
               <FaHistory />
-              <a href="/dashboard/escolherCoordenadorCor"><span>Histórico</span></a>
+              <a href="/dashboard/escolhaCoordenadorCor"><span>Histórico</span></a>
             </div>
             <div className="buttonLeft">
               <IoMdExit />

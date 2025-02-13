@@ -11,14 +11,18 @@ import Contato from './Components/Dashboard/Review/Components/Contato';
 import Guide from './Components/Dashboard/Review/Components/Guide';
 import Feira from './Components/Dashboard/Review/Components/Feira';
 import Unidades from './Components/Dashboard/Unidades/Unidades';
+
 import Historico from './Components/Dashboard/Historico/Historico';
+
 import HistoricoCor from './Components/Dashboard/Historico/HistoricoCor';
 import CriarUnidades from './Components/Dashboard/Unidades/Components/CriarUnidades';
 import DashboardGraph from './Components/Dashboard/Dashboard/DashboardGraph';
 import EscolherUnidade from './Components/Dashboard/Dashboard/EscolherUnidade';
 import ReviewCoordenadores from './Components/Dashboard/Review/ReviewCoordenadores';
 import EscolherCoordenador from './Components/Dashboard/Review/EscolherCoordenador';
+
 import EscolherCoordenadorCor from './Components/Dashboard/Historico/EscolhaCoordenadorCor';
+
 import AulaCor from './Components/Dashboard/Review/ComponentsCor/AulaCor';
 import ContatoCor from './Components/Dashboard/Review/ComponentsCor/ContatoCor';
 import DiariosCor from './Components/Dashboard/Review/ComponentsCor/DiariosCor';
