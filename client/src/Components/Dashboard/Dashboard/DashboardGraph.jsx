@@ -186,9 +186,9 @@ const Dashboard = () => {
               {
                 label: 'Status',
                 data: [
-                  cronograma.toLowerCase() === 'sim' ? 1 : 1,
-                  apresentacao.toLowerCase() === 'sim' ? 1 : 1,
-                  estrutural.toLowerCase() === 'sim' ? 1 : 1
+                  cronograma.toLowerCase() === 'sim' ? 1 : 0,
+                  apresentacao.toLowerCase() === 'sim' ? 1 : 0,
+                  estrutural.toLowerCase() === 'sim' ? 1 : 0
                 ],
                 backgroundColor: [
                   cronograma.toLowerCase() === 'sim' ? 'rgba(54, 162, 235, 0.7)' : 'rgba(255, 99, 132, 0.7)',
@@ -199,16 +199,13 @@ const Dashboard = () => {
             ],
           });
         } else {
-          // Evita undefined, garantindo um objeto vazio
           setChartDataFeira({ labels: [], datasets: [] });
         }
       })
       .catch(error => {
         console.error('Erro ao buscar dados:', error);
-        // Se houver erro na API, mantém um objeto vazio para evitar falhas
         setChartDataFeira({ labels: [], datasets: [] });
       });
-
 
 
       axios.get(`http://localhost:3002/fotosevideos/${unidade}`)
@@ -415,36 +412,49 @@ const Dashboard = () => {
     //   return;
     // }
 
-    if (chartDataFeira !== null) {
-      const ctxFeira = document.getElementById('myChartFeira').getContext('2d');
-
-      chartRefFeira.current = new Chart(ctxFeira, {
-        type: 'bar',
-        data: chartDataFeira,
-        options: {
-          indexAxis: 'x',
-          elements: {
-            bar: {
-              borderWidth: 2,
-            },
-          },
-          responsive: true,
-          plugins: {
-            legend: {
-              position: 'top',
-            },
-            tooltip: {
-              callbacks: {
-                label: function (context) {
-                  const value = context.raw;
-                  return value === 1 ? 'Sim' : 'Não';
+    useEffect(() => {
+      if (chartRefFeira.current) {
+        chartRefFeira.current.destroy();
+        chartRefFeira.current = null;
+      }
+    
+      if (chartDataFeira && chartDataFeira.labels && chartDataFeira.labels.length > 0) {
+        const canvas = document.getElementById('myChartFeira');
+    
+        if (canvas) {
+          const ctxFeira = canvas.getContext('2d');
+    
+          if (ctxFeira) {
+            chartRefFeira.current = new Chart(ctxFeira, {
+              type: 'bar',
+              data: chartDataFeira,
+              options: {
+                indexAxis: 'x',
+                elements: {
+                  bar: {
+                    borderWidth: 2,
+                  },
+                },
+                responsive: true,
+                plugins: {
+                  legend: {
+                    position: 'top',
+                  },
+                  tooltip: {
+                    callbacks: {
+                      label: function (context) {
+                        return context.raw === 1 ? 'Sim' : 'Não';
+                      },
+                    },
+                  },
                 },
               },
-            },
-          },
-        },
-      });
-    }
+            });
+          }
+        }
+      }
+    }, [chartDataFeira]);
+    
 
     if (Object.keys(chartDataFotosEVideos).length > 0) {
       const ctxPhotosEVideos = document.getElementById('myChartPhotosEVideos').getContext('2d');
