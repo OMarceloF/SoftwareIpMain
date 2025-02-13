@@ -11,7 +11,7 @@ const Dashboard = () => {
   const [dataNotas, setDataNotas] = useState(null);
   const [dataRetorno, setDataRetorno] = useState(null);
   const [dataDiarios, setDataDiarios] = useState(null);
-  const [dataFeira, setDataFeira] = useState(null); // Novo estado para o gráfico de feiracor
+  const [dataFeira, setDataFeira] = useState(null);
   const [selectedMonth, setSelectedMonth] = useState('Janeiro');
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -26,6 +26,8 @@ const Dashboard = () => {
   const chartFeiraInstance = useRef(null); // Novo instance ref para o gráfico de feiracor
   const chartFotosEVideosRef = useRef(null);
   const chartFotosEVideosInstance = useRef(null);
+  const [selectedCoordenador, setSelectedCoordenador] = useState('');
+  const [coordenadores, setCoordenadores] = useState([]);
 
   useEffect(() => {
     const monthMapping = {
@@ -98,7 +100,7 @@ const Dashboard = () => {
         setLoading(false);
       });
 
-      axios.get(`http://localhost:3002/fotosevideoscor/notas-por-coordenador?month=${monthNumber}`)
+    axios.get(`http://localhost:3002/fotosevideoscor/notas-por-coordenador?month=${monthNumber}`)
       .then(response => {
         console.log("Dados de fotosevideoscor recebidos da API:", response.data);
         setDataFotosEVideos(response.data);
@@ -110,6 +112,13 @@ const Dashboard = () => {
       .finally(() => {
         setLoading(false);
       });
+
+    // Recuperar o coordenador selecionado no localStorage
+    const storedCoordenador = localStorage.getItem('coordenadorStorage');
+    if (storedCoordenador) {
+      setSelectedCoordenador(storedCoordenador);
+    }
+
   }, [selectedMonth]);
 
   // Lógica de criação dos gráficos
@@ -277,6 +286,7 @@ const Dashboard = () => {
     }
   }, [dataFotosEVideos]);
 
+
   const filtrarDadosNotas = (dados) => {
     const filtroPorCoordenador = dados.reduce((acc, curr) => {
       if (!acc[curr.coordenador] || new Date(curr.date) > new Date(acc[curr.coordenador].date)) {
@@ -353,8 +363,21 @@ const Dashboard = () => {
   return (
     <div>
       <div>
-        <label htmlFor="month-select">Selecione o Mês: </label>
-        <select id="month-select" value={selectedMonth} onChange={handleMonthChange}>
+        <div>
+          <label htmlFor="coordenador-select">Coordenador Selecionado:</label>
+          <input type="text" id="coordenador-select" value={selectedCoordenador} disabled />
+        </div>
+        <div>
+          <label htmlFor="month-select">Selecione o Mês:</label>
+          <select id="month-select" value={selectedMonth} onChange={e => setSelectedMonth(e.target.value)}>
+            {[...Array(12)].map((_, i) => (
+              <option key={i + 1} value={i + 1}>{new Date(0, i).toLocaleString('pt-BR', { month: 'long' })}</option>
+            ))}
+          </select>
+        </div>
+        
+        {/* <label htmlFor="month-select">Selecione o Mês: </label> */}
+        {/* <select id="month-select" value={selectedMonth} onChange={handleMonthChange}>
           <option value="Janeiro">Janeiro</option>
           <option value="Fevereiro">Fevereiro</option>
           <option value="Março">Março</option>
@@ -367,7 +390,7 @@ const Dashboard = () => {
           <option value="Outubro">Outubro</option>
           <option value="Novembro">Novembro</option>
           <option value="Dezembro">Dezembro</option>
-        </select>
+        </select> */}
       </div>
 
       <div className="chart-container">

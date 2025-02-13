@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 
-const HistoricoCoordenador = () => {
+const HistoricoCor = () => {
   const [tipoSelecionado, setTipoSelecionado] = useState("");
   const [dados, setDados] = useState([]);
   const [carregar, setCarregar] = useState(false);
@@ -176,4 +176,4 @@ const HistoricoCoordenador = () => {
   );
 };
 
-export default HistoricoCoordenador;
+export default HistoricoCor;
