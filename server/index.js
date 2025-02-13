@@ -10,10 +10,10 @@ app.use(cors());
 
 // Criando a base de dados (MySQL)
 const db = mysql.createConnection({
-  user: 'root',
-  host: 'localhost',
-  password: '',
-  database: 'teste'
+  user: 'uuoouvnk3rn33xoi',
+  host: 'bpnjokvpezbjichmh33i-mysql.services.clever-cloud.com',
+  password: 'vGPPGUa2jDLrjbREgblx',
+  database: 'bpnjokvpezbjichmh33i'
 });
 
 // Conectando ao banco de dados

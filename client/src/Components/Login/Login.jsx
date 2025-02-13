@@ -31,7 +31,7 @@ const Login = () => {
     }
 
     // Pedindo ao Axios para criar uma API e conectar ao servidor
-    Axios.post('http://localhost:3002/login', {
+    Axios.post('softwareipmain-production.up.railway.app/login', {
       LoginEmail: loginEmail,
       LoginPassword: loginPassword
     }).then((response) => {
@@ -40,7 +40,7 @@ const Login = () => {
         setLoginStatus(response.data.message); // Mostrar mensagem de erro
       } else {
         // Após o login bem-sucedido, buscar o papel do usuário
-        axios.get(`http://localhost:3002/getRole/${loginEmail}`)
+        axios.get(`softwareipmain-production.up.railway.app/getRole/${loginEmail}`)
           .then(roleResponse => {
             const userRole = roleResponse.data.role; 
             localStorage.setItem('emailStorage', loginEmail); // Salvar email no localStorage
