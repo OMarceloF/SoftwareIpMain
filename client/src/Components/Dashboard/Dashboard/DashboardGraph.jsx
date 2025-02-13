@@ -33,7 +33,6 @@ const Dashboard = () => {
       chartRefFeira.current.destroy();
       chartRefFeira.current = null;
     }
-    setChartDataFeira(null);
 
     axios.get(`http://localhost:3002/aula/${unidade}`)
       .then(response => {
@@ -139,20 +138,12 @@ const Dashboard = () => {
     //   })
     //   .catch(error => console.error('Erro ao buscar dados:', error));
 
-    setChartDataFeira(null); // Resetar o gráfico antes de carregar novos dados
-
     axios.get(`http://localhost:3002/feira/${unidade}`)
       .then(response => {
-        // Filtrar apenas os registros do mês selecionado
-        const data = response.data.filter(item => {
-          const itemDate = new Date(item.date);
-          return itemDate.getMonth() + 1 === parseInt(selectedMonth);
-        });
+        const data = response.data.filter(item => new Date(item.date).getMonth() + 1 === parseInt(selectedMonth));
 
         if (data.length > 0) {
-          // Ordenar os registros por data e pegar o mais recente dentro do mês
           const lastEntry = data.sort((a, b) => new Date(b.date) - new Date(a.date))[0];
-
           const { cronograma, apresentacao, estrutural } = lastEntry;
 
           setChartDataFeira({
@@ -174,87 +165,100 @@ const Dashboard = () => {
             ],
           });
         } else {
-          // Se não houver dados, limpar o gráfico
-          setChartDataFeira(null);
+          setChartDataFeira({ labels: [], datasets: [] });
         }
       })
       .catch(error => console.error('Erro ao buscar dados:', error));
 
 
-    axios.get(`http://localhost:3002/fotosevideos/${unidade}`)
-      .then(response => {
-        const data = response.data.filter(item => new Date(item.date).getMonth() + 1 === parseInt(selectedMonth));
-        const dates = data.map(item => new Date(item.date).toLocaleDateString());
-        const notas = data.map(item => item.nota);
+      axios.get(`http://localhost:3002/fotosevideos/${unidade}`)
+        .then(response => {
+          const data = response.data.filter(item => new Date(item.date).getMonth() + 1 === parseInt(selectedMonth));
 
-        setChartDataFotosEVideos({
-          labels: dates,
-          datasets: [
-            {
-              label: 'Notas',
-              data: notas,
-              borderColor: 'rgb(75, 192, 192)',
-              backgroundColor: 'rgba(75, 192, 192, 0.2)',
-            },
-          ],
-        });
-      })
-      .catch(error => console.error('Erro ao buscar dados:', error));
+          if (data.length > 0) {
+            const dates = data.map(item => new Date(item.date).toLocaleDateString());
+            const notas = data.map(item => item.nota);
 
-    axios.get(`http://localhost:3002/guide/${unidade}`)
-      .then(response => {
-        const data = response.data.filter(item => new Date(item.date).getMonth() + 1 === parseInt(selectedMonth));
-
-        const dateCounts = data.reduce((acc, item) => {
-          const date = new Date(item.date).toLocaleDateString();
-          if (!acc[date]) {
-            acc[date] = { Sim: 0, Nao: 0 };
+            setChartDataFotosEVideos({
+              labels: dates,
+              datasets: [
+                {
+                  label: 'Notas',
+                  data: notas,
+                  borderColor: 'rgb(75, 192, 192)',
+                  backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                },
+              ],
+            });
+          } else {
+            setChartDataFotosEVideos({ labels: [], datasets: [] });
           }
-          acc[date][item.conformidade] += 1;
-          return acc;
-        }, {});
+        })
+        .catch(error => console.error('Erro ao buscar dados:', error));
 
-        const dates = Object.keys(dateCounts);
-        const simCounts = dates.map(date => dateCounts[date].Sim);
-        const naoCounts = dates.map(date => dateCounts[date].Nao);
-
-        setChartDataGuide({
-          labels: dates,
-          datasets: [
-            {
-              label: 'Sim',
-              data: simCounts,
-              backgroundColor: 'rgba(75, 192, 192, 0.7)',
-            },
-            {
-              label: 'Não',
-              data: naoCounts,
-              backgroundColor: 'rgba(255, 99, 132, 0.7)',
-            },
-          ],
-        });
-      })
-      .catch(error => console.error('Erro ao buscar dados:', error));
+      axios.get(`http://localhost:3002/guide/${unidade}`)
+        .then(response => {
+          const data = response.data.filter(item => new Date(item.date).getMonth() + 1 === parseInt(selectedMonth));
+      
+          if (data.length > 0) {
+            const dateCounts = data.reduce((acc, item) => {
+              const date = new Date(item.date).toLocaleDateString();
+              if (!acc[date]) {
+                acc[date] = { Sim: 0, Nao: 0 };
+              }
+              acc[date][item.conformidade] += 1;
+              return acc;
+            }, {});
+      
+            const dates = Object.keys(dateCounts);
+            const simCounts = dates.map(date => dateCounts[date].Sim);
+            const naoCounts = dates.map(date => dateCounts[date].Nao);
+      
+            setChartDataGuide({
+              labels: dates,
+              datasets: [
+                {
+                  label: 'Sim',
+                  data: simCounts,
+                  backgroundColor: 'rgba(75, 192, 192, 0.7)',
+                },
+                {
+                  label: 'Não',
+                  data: naoCounts,
+                  backgroundColor: 'rgba(255, 99, 132, 0.7)',
+                },
+              ],
+            });
+          } else {
+            setChartDataGuide({ labels: [], datasets: [] });
+          }
+        })
+        .catch(error => console.error('Erro ao buscar dados:', error));      
 
       axios.get(`http://localhost:3002/planos/${unidade}`)
-      .then(response => {
-        const data = response.data.filter(item => new Date(item.date).getMonth() + 1 === parseInt(selectedMonth));
-        const dates = data.map(item => new Date(item.date).toLocaleDateString());
-        const notas = data.map(item => item.nota);
-
-        setChartDataPlanos({
-          labels: dates,
-          datasets: [
-            {
-              label: 'Notas',
-              data: notas,
-              borderColor: 'rgb(255, 159, 64)',
-              backgroundColor: 'rgba(255, 159, 64, 0.2)',
-            },
-          ],
-        });
-      })
-      .catch(error => console.error('Erro ao buscar dados:', error));
+        .then(response => {
+          const data = response.data.filter(item => new Date(item.date).getMonth() + 1 === parseInt(selectedMonth));
+      
+          if (data.length > 0) {
+            const dates = data.map(item => new Date(item.date).toLocaleDateString());
+            const notas = data.map(item => item.nota);
+      
+            setChartDataPlanos({
+              labels: dates,
+              datasets: [
+                {
+                  label: 'Notas',
+                  data: notas,
+                  borderColor: 'rgb(255, 159, 64)',
+                  backgroundColor: 'rgba(255, 159, 64, 0.2)',
+                },
+              ],
+            });
+          } else {
+            setChartDataPlanos({ labels: [], datasets: [] });
+          }
+        })
+        .catch(error => console.error('Erro ao buscar dados:', error));      
 
   }, [unidade, selectedMonth]);
 
@@ -367,7 +371,6 @@ const Dashboard = () => {
     if (!chartDataFeira) {
       if (chartRefFeira.current) {
         chartRefFeira.current.destroy();
-        chartRefFeira.current = null;
       }
       return;
     }
