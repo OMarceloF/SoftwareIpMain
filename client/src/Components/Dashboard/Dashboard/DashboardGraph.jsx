@@ -29,7 +29,13 @@ const Dashboard = () => {
 
   useEffect(() => {
     
-    if (chartDataFeira && chartDataFeira.labels.length > 0) {
+    if (chartRefFeira.current) {
+      chartRefFeira.current.destroy();
+      chartRefFeira.current = null;
+    }
+    
+    // Garante que chartDataFeira é um objeto válido antes de acessar labels.length
+    if (chartDataFeira && chartDataFeira.labels && chartDataFeira.labels.length > 0) {
       const ctxFeira = document.getElementById('myChartFeira')?.getContext('2d');
     
       if (ctxFeira) {
@@ -59,7 +65,8 @@ const Dashboard = () => {
           },
         });
       }
-    } 
+    }
+    
     
     axios.get(`http://localhost:3002/aula/${unidade}`)
       .then(response => {
@@ -192,10 +199,16 @@ const Dashboard = () => {
             ],
           });
         } else {
+          // Evita undefined, garantindo um objeto vazio
           setChartDataFeira({ labels: [], datasets: [] });
         }
       })
-      .catch(error => console.error('Erro ao buscar dados:', error));
+      .catch(error => {
+        console.error('Erro ao buscar dados:', error);
+        // Se houver erro na API, mantém um objeto vazio para evitar falhas
+        setChartDataFeira({ labels: [], datasets: [] });
+      });
+
 
 
       axios.get(`http://localhost:3002/fotosevideos/${unidade}`)
