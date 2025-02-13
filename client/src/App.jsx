@@ -21,7 +21,7 @@ import EscolherUnidade from './Components/Dashboard/Dashboard/EscolherUnidade';
 import ReviewCoordenadores from './Components/Dashboard/Review/ReviewCoordenadores';
 import EscolherCoordenador from './Components/Dashboard/Review/EscolherCoordenador';
 
-import EscolherCoordenadorCor from './Components/Dashboard/Historico/EscolhaCoordenadorCor';
+import EscolherCoordenadorCor from './Components/Dashboard/Historico/EscolherCoordenadorCor';
 
 import AulaCor from './Components/Dashboard/Review/ComponentsCor/AulaCor';
 import ContatoCor from './Components/Dashboard/Review/ComponentsCor/ContatoCor';
