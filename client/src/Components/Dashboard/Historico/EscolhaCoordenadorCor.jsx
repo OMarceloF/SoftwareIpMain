@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useLocation, Outlet, Link } from "react-router-dom";
 
-const EscolherCoordenador = () => {
+const EscolherCoordenadorCor = () => {
     const [coordenador, setCoordenador] = useState('');
     const [coordenadores, setCoordenadores] = useState([]);
     const location = useLocation();
@@ -53,4 +53,4 @@ const EscolherCoordenador = () => {
     );
 };
 
-export default EscolherCoordenador;
+export default EscolherCoordenadorCor;
