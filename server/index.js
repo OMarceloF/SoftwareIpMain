@@ -18,8 +18,8 @@ async function testDatabaseConnection() {
       port: 3306
     });
 
-    const [result] = await connection.query('SELECT 1+1 AS result');
-    console.log('✅ Conexão bem-sucedida no backend:', result);
+    const [rows, fields] = await connection.query('SELECT 1+1 AS result');
+    console.log('✅ Conexão bem-sucedida no backend:', rows);
 
     await connection.end();
   } catch (error) {
