@@ -33,6 +33,37 @@ const Dashboard = () => {
       chartRefFeira.current.destroy();
       chartRefFeira.current = null;
     }
+    
+    if (chartDataFeira && chartDataFeira.labels.length > 0) {
+      const ctxFeira = document.getElementById('myChartFeira').getContext('2d');
+    
+      chartRefFeira.current = new Chart(ctxFeira, {
+        type: 'bar',
+        data: chartDataFeira,
+        options: {
+          indexAxis: 'x',
+          elements: {
+            bar: {
+              borderWidth: 2,
+            },
+          },
+          responsive: true,
+          plugins: {
+            legend: {
+              position: 'top',
+            },
+            tooltip: {
+              callbacks: {
+                label: function (context) {
+                  return context.raw === 1 ? 'Sim' : 'Não';
+                },
+              },
+            },
+          },
+        },
+      });
+    }
+    
 
     axios.get(`http://localhost:3002/aula/${unidade}`)
       .then(response => {
