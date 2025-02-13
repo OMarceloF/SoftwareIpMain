@@ -870,13 +870,10 @@ app.put('/unidades/:cidade', (req, res) => {
   });
 });
 
-app.get('/login', (req, res) => {
-  res.json({ success: true, message: "A rota /login está funcionando!" });
-});
 
 
 // Login
-/*app.post('/login', (req, res) => {
+app.post('/login', (req, res) => {
   const loginEmail = req.body.LoginEmail;
   const loginPassword = req.body.LoginPassword;
 
@@ -898,4 +895,4 @@ app.get('/login', (req, res) => {
       res.status(401).send({ message: 'Credenciais não encontradas!' });
     }
   });
-});*/
+});
