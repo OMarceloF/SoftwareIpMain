@@ -7,7 +7,7 @@ const Dashboard = () => {
   const [chartDataAula, setChartDataAula] = useState({});
   const [chartDataContato, setChartDataContato] = useState({});
   const [chartDataDiarios, setChartDataDiarios] = useState({});
-  const [chartDataFeira, setChartDataFeira] = useState(null);
+  const [chartDataFeira, setChartDataFeira] = useState({});
   // const [chartDataFeira, setChartDataFeira] = useState({});
   const [chartDataFotosEVideos, setChartDataFotosEVideos] = useState({});
   const [selectedMonth, setSelectedMonth] = useState(new Date().getMonth() + 1); 
@@ -28,43 +28,39 @@ const Dashboard = () => {
   };
 
   useEffect(() => {
-    // Destruir o gráfico antes de buscar novos dados
-    if (chartRefFeira.current) {
-      chartRefFeira.current.destroy();
-      chartRefFeira.current = null;
-    }
     
     if (chartDataFeira && chartDataFeira.labels.length > 0) {
-      const ctxFeira = document.getElementById('myChartFeira').getContext('2d');
+      const ctxFeira = document.getElementById('myChartFeira')?.getContext('2d');
     
-      chartRefFeira.current = new Chart(ctxFeira, {
-        type: 'bar',
-        data: chartDataFeira,
-        options: {
-          indexAxis: 'x',
-          elements: {
-            bar: {
-              borderWidth: 2,
+      if (ctxFeira) {
+        chartRefFeira.current = new Chart(ctxFeira, {
+          type: 'bar',
+          data: chartDataFeira,
+          options: {
+            indexAxis: 'x',
+            elements: {
+              bar: {
+                borderWidth: 2,
+              },
             },
-          },
-          responsive: true,
-          plugins: {
-            legend: {
-              position: 'top',
-            },
-            tooltip: {
-              callbacks: {
-                label: function (context) {
-                  return context.raw === 1 ? 'Sim' : 'Não';
+            responsive: true,
+            plugins: {
+              legend: {
+                position: 'top',
+              },
+              tooltip: {
+                callbacks: {
+                  label: function (context) {
+                    return context.raw === 1 ? 'Sim' : 'Não';
+                  },
                 },
               },
             },
           },
-        },
-      });
-    }
+        });
+      }
+    } 
     
-
     axios.get(`http://localhost:3002/aula/${unidade}`)
       .then(response => {
         const data = response.data.filter(item => new Date(item.date).getMonth() + 1 === parseInt(selectedMonth));
@@ -399,12 +395,12 @@ const Dashboard = () => {
     // }
 
     // Se não há dados, remover o gráfico
-    if (!chartDataFeira) {
-      if (chartRefFeira.current) {
-        chartRefFeira.current.destroy();
-      }
-      return;
-    }
+    // if (!chartDataFeira) {
+    //   if (chartRefFeira.current) {
+    //     chartRefFeira.current.destroy();
+    //   }
+    //   return;
+    // }
 
     if (chartDataFeira !== null) {
       const ctxFeira = document.getElementById('myChartFeira').getContext('2d');
