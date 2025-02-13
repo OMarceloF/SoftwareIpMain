@@ -29,45 +29,6 @@ const Dashboard = () => {
 
   useEffect(() => {
     
-    if (chartRefFeira.current) {
-      chartRefFeira.current.destroy();
-      chartRefFeira.current = null;
-    }
-    
-    // Garante que chartDataFeira é um objeto válido antes de acessar labels.length
-    if (chartDataFeira && chartDataFeira.labels && chartDataFeira.labels.length > 0) {
-      const ctxFeira = document.getElementById('myChartFeira')?.getContext('2d');
-    
-      if (ctxFeira) {
-        chartRefFeira.current = new Chart(ctxFeira, {
-          type: 'bar',
-          data: chartDataFeira,
-          options: {
-            indexAxis: 'x',
-            elements: {
-              bar: {
-                borderWidth: 2,
-              },
-            },
-            responsive: true,
-            plugins: {
-              legend: {
-                position: 'top',
-              },
-              tooltip: {
-                callbacks: {
-                  label: function (context) {
-                    return context.raw === 1 ? 'Sim' : 'Não';
-                  },
-                },
-              },
-            },
-          },
-        });
-      }
-    }
-    
-    
     axios.get(`http://localhost:3002/aula/${unidade}`)
       .then(response => {
         const data = response.data.filter(item => new Date(item.date).getMonth() + 1 === parseInt(selectedMonth));
@@ -412,49 +373,46 @@ const Dashboard = () => {
     //   return;
     // }
 
-    useEffect(() => {
-      if (chartRefFeira.current) {
-        chartRefFeira.current.destroy();
-        chartRefFeira.current = null;
-      }
+    if (chartRefFeira.current) {
+      chartRefFeira.current.destroy();
+      chartRefFeira.current = null;
+    }
     
-      if (chartDataFeira && chartDataFeira.labels && chartDataFeira.labels.length > 0) {
-        const canvas = document.getElementById('myChartFeira');
-    
-        if (canvas) {
-          const ctxFeira = canvas.getContext('2d');
-    
-          if (ctxFeira) {
-            chartRefFeira.current = new Chart(ctxFeira, {
-              type: 'bar',
-              data: chartDataFeira,
-              options: {
-                indexAxis: 'x',
-                elements: {
-                  bar: {
-                    borderWidth: 2,
-                  },
+    if (chartDataFeira && chartDataFeira.labels && chartDataFeira.labels.length > 0) {
+      const canvas = document.getElementById('myChartFeira');
+  
+      if (canvas) {
+        const ctxFeira = canvas.getContext('2d');
+  
+        if (ctxFeira) {
+          chartRefFeira.current = new Chart(ctxFeira, {
+            type: 'bar',
+            data: chartDataFeira,
+            options: {
+              indexAxis: 'x',
+              elements: {
+                bar: {
+                  borderWidth: 2,
                 },
-                responsive: true,
-                plugins: {
-                  legend: {
-                    position: 'top',
-                  },
-                  tooltip: {
-                    callbacks: {
-                      label: function (context) {
-                        return context.raw === 1 ? 'Sim' : 'Não';
-                      },
+              },
+              responsive: true,
+              plugins: {
+                legend: {
+                  position: 'top',
+                },
+                tooltip: {
+                  callbacks: {
+                    label: function (context) {
+                      return context.raw === 1 ? 'Sim' : 'Não';
                     },
                   },
                 },
               },
-            });
-          }
+            },
+          });
         }
       }
-    }, [chartDataFeira]);
-    
+    }    
 
     if (Object.keys(chartDataFotosEVideos).length > 0) {
       const ctxPhotosEVideos = document.getElementById('myChartPhotosEVideos').getContext('2d');
