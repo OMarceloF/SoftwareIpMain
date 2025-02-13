@@ -70,7 +70,7 @@ const Dashboard = () => {
             </div>
             <div className="buttonLeft">
               <FaHistory />
-              <a href="/dashboard/historico"><span>Histórico</span></a>
+              <Link to="/dashboard/historico"><span>Histórico</span></Link>
             </div>
             <div className="buttonLeft">
               <RxDashboard />
@@ -120,7 +120,7 @@ const Dashboard = () => {
             </div>
             <div className="buttonLeft">
               <FaHistory />
-              <a href="/dashboard/historico"><span>Histórico</span></a>
+              <Link to="/dashboard/historico"><span>Histórico</span></Link>
             </div>
             <div className="buttonLeft">
               <RiCommunityLine />
@@ -145,7 +145,7 @@ const Dashboard = () => {
             </div>
             <div className="buttonLeft">
               <FaHistory />
-              <a href="/dashboard/escolherCoordenadorCor"><span>Histórico</span></a>
+              <Link to="/dashboard/escolherCoordenadorCor"><span>Histórico</span></Link>
             </div>
             <div className="buttonLeft">
               <IoMdExit />
