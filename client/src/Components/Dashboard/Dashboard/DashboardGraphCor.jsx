@@ -14,7 +14,7 @@ const DashboardGraphCor = () => {
   };
 
   useEffect(() => {
-    axios.get("http://localhost:3002/coordenadores")
+    axios.get("https://softwareipmain-production.up.railway.app/coordenadores")
       .then(response => {
         setCoordenadores(response.data);
         if (response.data.length === 1) {
@@ -35,34 +35,34 @@ const DashboardGraphCor = () => {
 
   useEffect(() => {
     if (coordenador) {
-      axios.get(`http://localhost:3002/aulacor/${encodeURIComponent(coordenador)}`)
+      axios.get(`https://softwareipmain-production.up.railway.app/aulacor/${encodeURIComponent(coordenador)}`)
         .then(response => {
           const dadosFiltrados = filtrarPorMes(response.data, mes);
           console.log("Dados recebidos:", response.data); // Verifica os dados recebidos
           setDados({ aulascor: dadosFiltrados }); // Ajuste para armazenar corretamente os dados
         })
         .catch(error => console.error("Erro ao buscar dados:", error));
-      axios.get(`http://localhost:3002/contatocor/${encodeURIComponent(coordenador)}`)
+      axios.get(`https://softwareipmain-production.up.railway.app/contatocor/${encodeURIComponent(coordenador)}`)
         .then(response => {
           const dadosFiltrados = filtrarPorMes(response.data, mes);
           setDados(prev => ({ ...prev, contatocor: dadosFiltrados }));
         })
         .catch(error => console.error("Erro ao buscar dados de contatos:", error));
-      axios.get(`http://localhost:3002/diarioscor/${encodeURIComponent(coordenador)}`)
+      axios.get(`https://softwareipmain-production.up.railway.app/diarioscor/${encodeURIComponent(coordenador)}`)
         .then(response => {
           const dadosFiltrados = filtrarPorMes(response.data, mes);
           setDados(prev => ({ ...prev, diarioscor: dadosFiltrados }));
         })
         .catch(error => console.error("Erro ao buscar dados de diários:", error));
 
-      axios.get(`http://localhost:3002/fotosevideoscor/${encodeURIComponent(coordenador)}`)
+      axios.get(`https://softwareipmain-production.up.railway.app/fotosevideoscor/${encodeURIComponent(coordenador)}`)
         .then(response => {
           const dadosFiltrados = filtrarPorMes(response.data, mes);
           setDados(prev => ({ ...prev, fotosevideoscor: dadosFiltrados }));
         })
         .catch(error => console.error("Erro ao buscar dados de fotos e vídeos:", error));
 
-      axios.get(`http://localhost:3002/feiracor/${encodeURIComponent(coordenador)}`)
+      axios.get(`https://softwareipmain-production.up.railway.app/feiracor/${encodeURIComponent(coordenador)}`)
         .then(response => {
           const dadosFiltrados = filtrarPorMes(response.data, mes);
           if (dadosFiltrados.length > 0) {
