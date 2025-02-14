@@ -2,7 +2,6 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { Bar } from "react-chartjs-2";
 import "chart.js/auto";
-import { AlignHorizontalCenter } from "@mui/icons-material";
 
 const DashboardGraphCor = () => {
   const [coordenador, setCoordenador] = useState("");
