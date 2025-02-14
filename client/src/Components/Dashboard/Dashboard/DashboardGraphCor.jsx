@@ -1,422 +1,251 @@
-import React, { useState, useEffect, useRef } from 'react';
-import axios from 'axios';
-import { Chart as ChartJS, CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend } from 'chart.js';
-import { Bar } from 'react-chartjs-2';
-import './DashboardGraphCor.css';
+import React, { useState, useEffect } from "react";
+import axios from "axios";
+import { Bar } from "react-chartjs-2";
+import "chart.js/auto";
+import { AlignHorizontalCenter } from "@mui/icons-material";
 
-// Registro dos componentes do Chart.js
-ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend);
-
-const Dashboard = () => {
-  const [dataNotas, setDataNotas] = useState(null);
-  const [dataRetorno, setDataRetorno] = useState(null);
-  const [dataDiarios, setDataDiarios] = useState(null);
-  const [dataFeira, setDataFeira] = useState(null);
-  const [selectedMonth, setSelectedMonth] = useState('Janeiro');
-  const [error, setError] = useState(null);
-  const [loading, setLoading] = useState(true);
-  const [dataFotosEVideos, setDataFotosEVideos] = useState(null);
-  const chartNotasRef = useRef(null);
-  const chartRetornoRef = useRef(null);
-  const chartDiariosRef = useRef(null);
-  const chartFeiraRef = useRef(null); // Novo ref para o gráfico de feiracor
-  const chartNotasInstance = useRef(null);
-  const chartRetornoInstance = useRef(null);
-  const chartDiariosInstance = useRef(null);
-  const chartFeiraInstance = useRef(null); // Novo instance ref para o gráfico de feiracor
-  const chartFotosEVideosRef = useRef(null);
-  const chartFotosEVideosInstance = useRef(null);
-  const [selectedCoordenador, setSelectedCoordenador] = useState('');
+const DashboardGraphCor = () => {
+  const [coordenador, setCoordenador] = useState("");
   const [coordenadores, setCoordenadores] = useState([]);
+  const [mes, setMes] = useState(new Date().getMonth() + 1);
+  const [dados, setDados] = useState({});
+  const filtrarPorMes = (dados, mes) => {
+    return dados.filter(item => new Date(item.date).getMonth() + 1 === mes);
+  };
 
   useEffect(() => {
-    const monthMapping = {
-      'Janeiro': 1,
-      'Fevereiro': 2,
-      'Março': 3,
-      'Abril': 4,
-      'Maio': 5,
-      'Junho': 6,
-      'Julho': 7,
-      'Agosto': 8,
-      'Setembro': 9,
-      'Outubro': 10,
-      'Novembro': 11,
-      'Dezembro': 12
+    axios.get("http://localhost:3002/coordenadores")
+      .then(response => {
+        setCoordenadores(response.data);
+        if (response.data.length === 1) {
+          setCoordenador(response.data[0].username);
+        }
+      })
+      .catch(error => console.error("Erro ao buscar coordenadores:", error));
+    
+    axios.get("http://localhost:3002/coordenadores")
+      .then(response => {
+        setCoordenadores(response.data);
+        if (response.data.length === 1) {
+          setCoordenador(response.data[0].username);
+        }
+      })
+      .catch(error => console.error("Erro ao buscar coordenadores:", error));
+  }, []);
+
+  useEffect(() => {
+    if (coordenador) {
+      axios.get(`http://localhost:3002/aulacor/${encodeURIComponent(coordenador)}`)
+        .then(response => {
+          const dadosFiltrados = filtrarPorMes(response.data, mes);
+          console.log("Dados recebidos:", response.data); // Verifica os dados recebidos
+          setDados({ aulascor: dadosFiltrados }); // Ajuste para armazenar corretamente os dados
+        })
+        .catch(error => console.error("Erro ao buscar dados:", error));
+      axios.get(`http://localhost:3002/contatocor/${encodeURIComponent(coordenador)}`)
+        .then(response => {
+          const dadosFiltrados = filtrarPorMes(response.data, mes);
+          setDados(prev => ({ ...prev, contatocor: dadosFiltrados }));
+        })
+        .catch(error => console.error("Erro ao buscar dados de contatos:", error));
+      axios.get(`http://localhost:3002/diarioscor/${encodeURIComponent(coordenador)}`)
+        .then(response => {
+          const dadosFiltrados = filtrarPorMes(response.data, mes);
+          setDados(prev => ({ ...prev, diarioscor: dadosFiltrados }));
+        })
+        .catch(error => console.error("Erro ao buscar dados de diários:", error));
+
+      axios.get(`http://localhost:3002/fotosevideoscor/${encodeURIComponent(coordenador)}`)
+        .then(response => {
+          const dadosFiltrados = filtrarPorMes(response.data, mes);
+          setDados(prev => ({ ...prev, fotosevideoscor: dadosFiltrados }));
+        })
+        .catch(error => console.error("Erro ao buscar dados de fotos e vídeos:", error));
+
+      axios.get(`http://localhost:3002/feiracor/${encodeURIComponent(coordenador)}`)
+        .then(response => {
+          const dadosFiltrados = filtrarPorMes(response.data, mes);
+          if (dadosFiltrados.length > 0) {
+            const ultimaEntrada = dadosFiltrados.sort((a, b) => new Date(b.date) - new Date(a.date))[0];
+            setDados(prev => ({ ...prev, feiracor: ultimaEntrada }));
+          } else {
+            setDados(prev => ({ ...prev, feiracor: null }));
+          }
+        })
+        .catch(error => console.error("Erro ao buscar dados de feira:", error));
+    }
+  }, [coordenador, mes]);
+
+  const gerarDadosGrafico = (chave, labelY) => {
+    const valores = dados[chave] || []; // Se `dados[chave]` for undefined, usa um array vazio
+    return {
+      labels: valores.map(item => new Date(item.date).toLocaleDateString("pt-BR")),
+      datasets: [
+        {
+          label: labelY,
+          data: valores.map(item => item.nota ? item.nota : item.quantidade || 0), // Garante que sempre há um valor
+          backgroundColor: "rgba(75, 192, 192, 0.6)",
+        },
+      ],
     };
+  };
+  
+  const gerarDadosGraficoContatos = () => {
+    const valores = dados.contatocor || [];
+    const labels = valores.map(item => new Date(item.date).toLocaleDateString("pt-BR"));
+    const dataUnica = labels.map((label, index) => 1);
+    const cores = labels.map((label, index) => valores[index].retorno === "Sim" ? "rgba(75, 192, 192, 0.6)" : "rgba(255, 99, 132, 0.6)");
 
-    const monthNumber = monthMapping[selectedMonth];
-
-    // Buscar dados para o gráfico de notas
-    axios.get(`https://softwareipmain-production.up.railway.app/aulacor/notas-por-coordenador?month=${monthNumber}`)
-      .then(response => {
-        console.log("Dados de notas recebidos da API:", response.data); 
-        const filteredDataNotas = filtrarDadosNotas(response.data);
-        setDataNotas(filteredDataNotas);
-      })
-      .catch(error => {
-        console.error("Erro ao buscar dados de notas:", error);
-        setError(error);
-      });
-
-    // Buscar dados para o gráfico de retorno
-    axios.get(`https://softwareipmain-production.up.railway.app/contatocor/retornos-por-coordenador?month=${monthNumber}`)
-      .then(response => {
-        console.log("Dados de retorno recebidos da API:", response.data); 
-        const filteredDataRetorno = filtrarDadosRetorno(response.data);
-        setDataRetorno(filteredDataRetorno);
-      })
-      .catch(error => {
-        console.error("Erro ao buscar dados de retorno:", error);
-        setError(error);
-      });
-
-    // Buscar dados para o gráfico de diários
-    axios.get(`https://softwareipmain-production.up.railway.app/diarioscor/notas-por-coordenador?month=${monthNumber}`)
-      .then(response => {
-        console.log("Dados de diários recebidos da API:", response.data); 
-        const filteredDataDiarios = filtrarDadosDiarios(response.data);
-        setDataDiarios(filteredDataDiarios);
-      })
-      .catch(error => {
-        console.error("Erro ao buscar dados de diários:", error);
-        setError(error);
-      })
-      .finally(() => {
-        setLoading(false);
-      });
-
-    // Buscar dados para o gráfico de feiracor
-    axios.get(`https://softwareipmain-production.up.railway.app/feiracor/notas-por-coordenador?month=${monthNumber}`)
-      .then(response => {
-        console.log("Dados de feiracor recebidos da API:", response.data);
-        setDataFeira(response.data);
-      })
-      .catch(error => {
-        console.error("Erro ao buscar dados de feiracor:", error);
-        setError(error);
-      })
-      .finally(() => {
-        setLoading(false);
-      });
-
-    axios.get(`https://softwareipmain-production.up.railway.app/fotosevideoscor/notas-por-coordenador?month=${monthNumber}`)
-      .then(response => {
-        console.log("Dados de fotosevideoscor recebidos da API:", response.data);
-        setDataFotosEVideos(response.data);
-      })
-      .catch(error => {
-        console.error("Erro ao buscar dados de fotosevideoscor:", error);
-        setError(error);
-      })
-      .finally(() => {
-        setLoading(false);
-      });
-
-    // Recuperar o coordenador selecionado no localStorage
-    const storedCoordenador = localStorage.getItem('coordenadorStorage');
-    if (storedCoordenador) {
-      setSelectedCoordenador(storedCoordenador);
-    }
-
-  }, [selectedMonth]);
-
-  // Lógica de criação dos gráficos
-  useEffect(() => {
-    if (dataNotas) {
-      const ctxNotas = chartNotasRef.current?.getContext('2d');
-      if (ctxNotas) {
-        if (chartNotasInstance.current) {
-          chartNotasInstance.current.destroy();
+    return {
+      labels: labels,
+      datasets: [
+        {
+          label: "Houve retorno",
+          data: dataUnica,
+          backgroundColor: cores,
+          barThickness: 40,
         }
-        chartNotasInstance.current = new ChartJS(ctxNotas, {
-          type: 'bar',
-          data: {
-            labels: dataNotas.map(item => item.coordenador),
-            datasets: [{
-              label: 'Notas',
-              data: dataNotas.map(item => item.nota),
-              backgroundColor: 'rgb(16, 35, 205)',
-              borderColor: 'rgba(16, 35, 205, 0.2)',
-            }],
-          },
-          options: {
-            responsive: true,
-            scales: {
-              y: {
-                beginAtZero: true,
-              },
-            },
-          },
-        });
-      }
-    }
-  }, [dataNotas]);
-
-  useEffect(() => {
-    if (dataRetorno) {
-      const ctxRetorno = chartRetornoRef.current?.getContext('2d');
-      if (ctxRetorno) {
-        if (chartRetornoInstance.current) {
-          chartRetornoInstance.current.destroy();
-        }
-        chartRetornoInstance.current = new ChartJS(ctxRetorno, {
-          type: 'bar',
-          data: {
-            labels: dataRetorno.map(item => item.coordenador),
-            datasets: [
-              {
-                label: 'Retorno Sim',
-                data: dataRetorno.map(item => item.sim),
-                backgroundColor: 'rgb(16, 35, 205)', 
-              },
-              {
-                label: 'Retorno Não',
-                data: dataRetorno.map(item => item.nao),
-                backgroundColor: 'rgb(255, 99, 132)', 
-              },
-            ],
-          },
-          options: {
-            responsive: true,
-            scales: {
-              y: {
-                beginAtZero: true,
-              },
-            },
-          },
-        });
-      }
-    }
-  }, [dataRetorno]);
-
-  useEffect(() => {
-    if (dataDiarios) {
-      const ctxDiarios = chartDiariosRef.current?.getContext('2d');
-      if (ctxDiarios) {
-        if (chartDiariosInstance.current) {
-          chartDiariosInstance.current.destroy();
-        }
-        chartDiariosInstance.current = new ChartJS(ctxDiarios, {
-          type: 'bar',
-          data: {
-            labels: dataDiarios.map(item => item.coordenador),
-            datasets: [{
-              label: 'Notas Diários',
-              data: dataDiarios.map(item => item.nota),
-              backgroundColor: 'rgb(75, 192, 192)',
-            }],
-          },
-          options: {
-            responsive: true,
-            scales: {
-              y: {
-                beginAtZero: true,
-              },
-            },
-          },
-        });
-      }
-    }
-  }, [dataDiarios]);
-
-  useEffect(() => {
-    if (dataFeira) {
-      const ctxFeira = chartFeiraRef.current?.getContext('2d');
-      if (ctxFeira) {
-        if (chartFeiraInstance.current) {
-          chartFeiraInstance.current.destroy();
-        }
-        chartFeiraInstance.current = new ChartJS(ctxFeira, {
-          type: 'bar',
-          data: {
-            labels: dataFeira.map(item => item.coordenador),
-            datasets: [{
-              label: 'Notas Feira',
-              data: dataFeira.map(item => item.nota),
-              backgroundColor: 'rgba(255, 159, 64, 0.7)', // Cor das barras
-              borderColor: 'rgba(255, 159, 64, 1)',
-              borderWidth: 1,
-            }],
-          },
-          options: {
-            responsive: true,
-            maintainAspectRatio: true,
-            scales: {
-              y: {
-                beginAtZero: true,
-              },
-            },
-          },
-        });
-      }
-    }
-  }, [dataFeira]);
-
-  useEffect(() => {
-    if (dataFotosEVideos) {
-      const ctxFotosEVideos = chartFotosEVideosRef.current?.getContext('2d');
-      if (ctxFotosEVideos) {
-        if (chartFotosEVideosInstance.current) {
-          chartFotosEVideosInstance.current.destroy();
-        }
-        chartFotosEVideosInstance.current = new ChartJS(ctxFotosEVideos, {
-          type: 'bar',
-          data: {
-            labels: dataFotosEVideos.map(item => item.coordenador),
-            datasets: [{
-              label: 'Notas Fotos e Vídeos',
-              data: dataFotosEVideos.map(item => item.nota),
-              backgroundColor: 'rgba(54, 162, 235, 0.7)',
-              borderColor: 'rgba(54, 162, 235, 1)',
-              borderWidth: 1,
-            }],
-          },
-          options: {
-            responsive: true,
-            maintainAspectRatio: true,
-            scales: {
-              y: {
-                beginAtZero: true,
-              },
-            },
-          },
-        });
-      }
-    }
-  }, [dataFotosEVideos]);
-
-
-  const filtrarDadosNotas = (dados) => {
-    const filtroPorCoordenador = dados.reduce((acc, curr) => {
-      if (!acc[curr.coordenador] || new Date(curr.date) > new Date(acc[curr.coordenador].date)) {
-        acc[curr.coordenador] = curr;
-      }
-      return acc;
-    }, {});
-    return Object.values(filtroPorCoordenador);
+      ],
+    };
   };
 
-  const filtrarDadosRetorno = (dados) => {
-    const filtroPorCoordenador = dados.reduce((acc, curr) => {
-      if (!acc[curr.coordenador] || new Date(curr.date) > new Date(acc[curr.coordenador].date)) {
-        acc[curr.coordenador] = curr;
-      }
-      return acc;
-    }, {});
-    const contagemRetorno = Object.values(filtroPorCoordenador).reduce((acc, curr) => {
-      if (curr.retorno === 'Sim') {
-        acc[curr.coordenador] = (acc[curr.coordenador] || { sim: 0, nao: 0 });
-        acc[curr.coordenador].sim++;
-      } else if (curr.retorno === 'Não') {
-        acc[curr.coordenador] = (acc[curr.coordenador] || { sim: 0, nao: 0 });
-        acc[curr.coordenador].nao++;
-      }
-      return acc;
-    }, {});
-    return Object.keys(contagemRetorno).map(key => ({ coordenador: key, ...contagemRetorno[key] }));
+  const gerarDadosGraficoFeira = () => {
+    if (!dados.feiracor) return { labels: [], datasets: [] };
+    const { cronograma, estrutural, apresentacao, date } = dados.feiracor;
+    const labels = ["Cronograma", "Estrutural", "Apresentação"];
+    const valores = [cronograma, estrutural, apresentacao];
+    const cores = valores.map(valor => valor.toLowerCase() === "sim" ? "rgba(54, 162, 235, 0.7)" : "rgba(255, 99, 132, 0.7)");
+    
+    return {
+      labels: labels,
+      datasets: [
+        {
+          label: `Status - ${new Date(date).toLocaleDateString("pt-BR")}`,
+          data: [1, 1, 1],
+          backgroundColor: cores,
+        },
+      ],
+    };
   };
-
-  const filtrarDadosDiarios = (dados) => {
-    const filtroPorCoordenador = dados.reduce((acc, curr) => {
-      if (!acc[curr.coordenador] || new Date(curr.date) > new Date(acc[curr.coordenador].date)) {
-        acc[curr.coordenador] = curr;
-      }
-      return acc;
-    }, {});
-    return Object.values(filtroPorCoordenador);
-  };
-
-  const filtrarDadosFeira = (dados) => {
-    const filtroPorCoordenador = dados.reduce((acc, curr) => {
-      if (!acc[curr.coordenador] || new Date(curr.date) > new Date(acc[curr.coordenador].date)) {
-        acc[curr.coordenador] = curr;
-      }
-      return acc;
-    }, {});
-    const notasPorCoordenador = Object.values(filtroPorCoordenador).map(curr => {
-      let nota = 0;
-      if (curr.apresentacao === 'Sim') nota += 3;
-      if (curr.estrutural === 'Sim') nota += 3;
-      if (curr.cronograma === 'Sim') nota += 3;
-      if (curr.apresentacao === 'Sim' && curr.estrutural === 'Sim' && curr.cronograma === 'Sim') {
-        nota += 1; // Bonus de 1 ponto se todos forem 'Sim'
-      }
-      return { coordenador: curr.coordenador, nota };
-    });
-    return notasPorCoordenador;
-  };
-
-  const handleMonthChange = (event) => {
-    setSelectedMonth(event.target.value);
-    console.log("Mês selecionado:", event.target.value);
-  };
-
-  if (loading) {
-    return <div>Carregando...</div>;
-  }
-
-  if (error) {
-    return <div>Erro: {error.message}</div>;
-  }
 
   return (
-    <div>
-      <div>
-        <div>
-          <label htmlFor="coordenador-select">Coordenador Selecionado:</label>
-          <input type="text" id="coordenador-select" value={selectedCoordenador} disabled />
+    <div className="p-4 max-w-4xl mx-auto">
+      <h2 className="text-2xl font-bold mb-4">Dashboard do Coordenador</h2>
+      
+      <div className="mb-4">
+        <label className="block text-sm font-medium text-gray-700">Selecione o Coordenador:</label>
+        <select 
+          className="mt-1 block w-full p-2 border rounded-md"
+          value={coordenador}
+          onChange={(e) => setCoordenador(e.target.value)}
+        >
+          <option value="">Selecione um Coordenador</option>
+          {coordenadores.map((coord) => (
+            <option key={coord.username} value={coord.username}>{coord.username}</option>
+          ))}
+        </select>
+      </div>
+      
+      <div className="mb-4">
+        <label className="block text-sm font-medium text-gray-700">Selecione o Mês:</label>
+        <select 
+          className="mt-1 block w-full p-2 border rounded-md"
+          value={mes}
+          onChange={(e) => setMes(parseInt(e.target.value))}
+        >
+          {Array.from({ length: 12 }, (_, i) => (
+            <option key={i + 1} value={i + 1}>
+              {new Date(0, i).toLocaleString("pt-BR", { month: "long" })}
+            </option>
+          ))}
+        </select>
+      </div>
+      
+      {mes && coordenador && (
+        <div className="chart-container">
+          <div className="chart">
+          <h3 className="text-lg font-semibold">Aulas</h3>
+          <Bar 
+            data={gerarDadosGrafico("aulascor", "Nota das Aulas")} 
+            options={{
+              scales: {
+                y: {
+                  min: 0,
+                  max: 10,
+                  beginAtZero: true,
+                }
+              }
+            }}
+          />
+          </div>
+          <div className="chart">
+            <h3 className="text-lg font-semibold">Contatos</h3>
+            <Bar 
+              data={gerarDadosGraficoContatos()} 
+              options={{
+                responsive: true,
+                scales: {
+                  y: {
+                    beginAtZero: true,
+                    min: 0,
+                    max: 1,
+                    ticks: {
+                      display: false,
+                    }
+                  }
+                }
+              }}
+            />
+          </div>
+          <div className="chart">
+            <h3 className="text-lg font-semibold">Diários</h3>
+            <Bar 
+              data={gerarDadosGrafico("diarioscor", "Nota dos Diários")} 
+              options={{
+                scales: {
+                  y: {
+                    min: 0,
+                    max: 10,
+                    beginAtZero: true,
+                  }
+                }
+              }}
+            />
+          </div>
+          <div className="chart">
+            <h3 className="text-lg font-semibold">Feiras</h3>
+            <Bar 
+              data={gerarDadosGraficoFeira()} 
+              options={{
+                scales: {
+                  y: {
+                    min: 0,
+                    max: 1,
+                    beginAtZero: true,
+                  }
+                }
+              }}
+            />
+          </div>
+          <div className="chart">
+            <h3 className="text-lg font-semibold">Fotos e Vídeos</h3>
+            <Bar 
+              data={gerarDadosGrafico("fotosevideoscor", "Nota das Fotos e Vídeos")} 
+              options={{
+                scales: {
+                  y: {
+                    min: 0,
+                    max: 10,
+                    beginAtZero: true,
+                  }
+                }
+              }}
+            />
+          </div>
         </div>
-        <div>
-          <label htmlFor="month-select">Selecione o Mês:</label>
-          <select id="month-select" value={selectedMonth} onChange={e => setSelectedMonth(e.target.value)}>
-            {[...Array(12)].map((_, i) => (
-              <option key={i + 1} value={i + 1}>{new Date(0, i).toLocaleString('pt-BR', { month: 'long' })}</option>
-            ))}
-          </select>
-        </div>
-        
-        {/* <label htmlFor="month-select">Selecione o Mês: </label> */}
-        {/* <select id="month-select" value={selectedMonth} onChange={handleMonthChange}>
-          <option value="Janeiro">Janeiro</option>
-          <option value="Fevereiro">Fevereiro</option>
-          <option value="Março">Março</option>
-          <option value="Abril">Abril</option>
-          <option value="Maio">Maio</option>
-          <option value="Junho">Junho</option>
-          <option value="Julho">Julho</option>
-          <option value="Agosto">Agosto</option>
-          <option value="Setembro">Setembro</option>
-          <option value="Outubro">Outubro</option>
-          <option value="Novembro">Novembro</option>
-          <option value="Dezembro">Dezembro</option>
-        </select> */}
-      </div>
-
-      <div className="chart-container">
-      <div className="chart">
-        <h2>Gráfico de Notas</h2>
-        <canvas ref={chartNotasRef} />
-      </div>
-      <div className="chart">
-        <h2>Gráfico de Retorno</h2>
-        <canvas ref={chartRetornoRef} />
-      </div>
-      <div className="chart">
-        <h2>Gráfico de Diários</h2>
-        <canvas ref={chartDiariosRef} />
-      </div>
-      <div className="chart">
-        <h2>Gráfico de Feira</h2>
-        <canvas ref={chartFeiraRef} />
-      </div>
-      <div className="chart">
-        <h2>Gráfico de Fotos e Vídeos</h2>
-        <canvas ref={chartFotosEVideosRef} />
-      </div>
-      </div>
+      )}
     </div>
   );
 };
 
-export default Dashboard;
+export default DashboardGraphCor;
