@@ -10,7 +10,7 @@ app.use(cors());
 
 async function testDatabaseConnection() {
   try {
-    const connection = await mysql.createConnection({
+    const connection = mysql.createPool({
       user: 'uuoouvnk3rn33xoi',
       host: 'bpnjokvpezbjichmh33i-mysql.services.clever-cloud.com',
       password: 'vGPPGUa2jDLrjbREgblx',
@@ -30,21 +30,60 @@ async function testDatabaseConnection() {
 // Testar a conexão ao iniciar o servidor
 testDatabaseConnection();
 
-// Criando a base de dados (MySQL)
-const db = mysql.createConnection({
-  user: 'uuoouvnk3rn33xoi',
-  host: 'bpnjokvpezbjichmh33i-mysql.services.clever-cloud.com',
-  password: 'vGPPGUa2jDLrjbREgblx',
-  database: 'bpnjokvpezbjichmh33i'
-});
+function connectDatabase() {
+  db = mysql.createConnection({
+    user: 'uuoouvnk3rn33xoi',
+    host: 'bpnjokvpezbjichmh33i-mysql.services.clever-cloud.com',
+    password: 'vGPPGUa2jDLrjbREgblx',
+    database: 'bpnjokvpezbjichmh33i',
+    port: 3306,
+    multipleStatements: true, // Permite rodar múltiplas queries se necessário
+  });
 
-// Conectando ao banco de dados
-db.connect((err) => {
+  // Conectar ao banco
+  db.connect((err) => {
+    if (err) {
+      console.error('❌ Erro ao conectar ao banco:', err.message);
+      setTimeout(connectDatabase, 2000); // Se falhar, tenta reconectar em 2s
+    } else {
+      console.log('✅ Conectado ao banco de dados:', db.threadId);
+    }
+  });
+
+  // Detectar desconexões e reconectar automaticamente
+  db.on('error', (err) => {
+    if (err.code === 'PROTOCOL_CONNECTION_LOST') {
+      console.warn('⚠️ Conexão perdida. Tentando reconectar...');
+      connectDatabase();
+    } else {
+      throw err;
+    }
+  });
+}
+
+
+// 🔹 Inicia a conexão com o banco
+connectDatabase();
+
+// 🔹 Keep-Alive: Mantém a conexão ativa enviando uma query a cada 10 minutos
+setInterval(() => {
+  db.query('SELECT 1', (err) => {
+    if (err) {
+      console.error('❌ Erro no Keep-Alive:', err.message);
+      connectDatabase(); // Tenta reconectar se houver erro
+    } else {
+      console.log('🔄 Keep-Alive: Conexão mantida ativa.');
+    }
+  });
+}, 1000 * 60 * 10); // Executa a cada 10 minutos
+
+// 🔹 Teste de Conexão Inicial
+db.query('SELECT 1 + 1 AS result', (err, results) => {
   if (err) {
-    console.error('Erro ao conectar ao banco de dados:', err.stack);
-    return;
+    console.error('❌ Erro ao testar conexão:', err.message);
+  } else {
+    console.log('✅ Conexão testada com sucesso:', results);
   }
-  console.log('Conectado ao banco de dados como ID', db.threadId);
 });
 
 // Criando uma rota para buscar a tabela unidades
