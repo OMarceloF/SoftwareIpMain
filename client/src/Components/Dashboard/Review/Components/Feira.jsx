@@ -180,13 +180,8 @@ const Feira = () => {
                 </div>
 
                 <div>
-                    <label htmlFor="observacoes">Observações</label>
-                    <input
-                        type="text"
-                        id="observacoes"
-                        value={observacoes}
-                        onChange={(e) => setObservacoes(e.target.value)}
-                    />
+                <label htmlFor="observacoes">Comentários</label>
+                <textarea name="observacoes" id="observacoes" placeholder='Fale mais'></textarea>
                 </div>
 
                 <button type="submit">Enviar</button>

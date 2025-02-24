@@ -132,8 +132,8 @@ const Aulas = () => {
                 </div>
 
                 <div>
-                    <label htmlFor="textQuestion2">Observações</label>
-                    <textarea name="textQuestion2" id="textQuestion2" placeholder='Fale melhor sobre a avaliação'></textarea>
+                    <label htmlFor="textQuestion2">Comentários</label>
+                    <textarea name="textQuestion2" id="textQuestion2" placeholder='Fale mais'></textarea>
                 </div>
 
                 <button type="submit">Enviar</button>

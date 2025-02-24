@@ -133,13 +133,8 @@ const FeiraCor = () => {
                 </div>
 
                 <div>
-                    <label htmlFor="textQuestion4">Observações</label>
-                    <input
-                        type="text"
-                        id="textQuestion4"
-                        value={textQuestion4}
-                        onChange={(e) => setTextQuestion4(e.target.value)}
-                    />
+                <label htmlFor="textQuestion4">Comentários</label>
+                <textarea name="textQuestion4" id="textQuestion4" placeholder='Fale mais'></textarea>
                 </div>
 
                 <button type="submit">Enviar</button>

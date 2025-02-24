@@ -73,4 +73,9 @@ input:focus, select:focus {
   color: red;
   font-size: 1rem;
   margin-top: 1rem;
+}
+
+textarea {
+  width: 400px;
+  height: 100px;
 }/*# sourceMappingURL=AulaCor.css.map */

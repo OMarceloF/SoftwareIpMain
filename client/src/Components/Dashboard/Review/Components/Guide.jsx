@@ -137,13 +137,8 @@ const Guide = () => {
         </div>
 
         <div>
-          <label htmlFor="textQuestion3">Observações:</label>
-          <input
-            type="text"
-            id="textQuestion3"
-            value={textQuestion3}
-            onChange={(e) => setTextQuestion3(e.target.value)}
-          />
+        <label htmlFor="textQuestion3">Comentários</label>
+        <textarea name="textQuestion3" id="textQuestion2" placeholder='Fale mais'></textarea>
         </div>
 
         <button type="submit">Enviar</button>

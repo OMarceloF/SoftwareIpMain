@@ -116,13 +116,8 @@ const Inventario = () => {
         </div>
 
         <div>
-          <label htmlFor="textQuestion2">Observações:</label>
-          <input
-            type="text"
-            id="textQuestion2"
-            value={textQuestion2}
-            onChange={(e) => setTextQuestion2(e.target.value)}
-          />
+        <label htmlFor="textQuestion2">Comentários</label>
+        <textarea name="textQuestion2" id="textQuestion2" placeholder='Fale mais'></textarea>
         </div>
 
         <div>
