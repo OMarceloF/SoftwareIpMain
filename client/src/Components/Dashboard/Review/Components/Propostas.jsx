@@ -115,7 +115,11 @@ const Propostas = () => {
 
         <div>
         <label htmlFor="textQuestion2">Comentários</label>
-        <textarea name="textQuestion2" id="textQuestion2" placeholder='Fale mais'></textarea>
+        <textarea            name="textQuestion2"
+            id="textQuestion2"
+            placeholder="Fale mais"
+            value={textQuestion2}
+            onChange={(e) => setTextQuestion2(e.target.value)}></textarea>
         </div>
 
         <button type="submit" disabled={isSubmitting}>Enviar</button>

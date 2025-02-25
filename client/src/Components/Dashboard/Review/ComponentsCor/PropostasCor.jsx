@@ -1,11 +1,11 @@
-import React, { useState } from 'react';
-import './PropostasCor.css';
-import axios from 'axios';
+import React, { useState } from "react";
+import "./PropostasCor.css";
+import axios from "axios";
 
 const PropostasCor = () => {
-  const [textQuestion2, setTextQuestion2] = useState('');
-  const [error, setError] = useState('');
-  const [successMessage, setSuccessMessage] = useState(''); // Novo estado para mensagem de sucesso
+  const [textQuestion2, setTextQuestion2] = useState("");
+  const [error, setError] = useState("");
+  const [successMessage, setSuccessMessage] = useState(""); // Novo estado para mensagem de sucesso
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const handleSubmit = (event) => {
@@ -13,36 +13,40 @@ const PropostasCor = () => {
 
     // Verificar se todos os campos estão preenchidos
     if (!textQuestion2) {
-      setError('Por favor, preencha todos os campos.');
+      setError("Por favor, preencha todos os campos.");
       setIsSubmitting(false);
       setTimeout(() => {
-        setError('');
+        setError("");
       }, 4000);
       return;
     }
 
     setIsSubmitting(true);
-    const currentDate = new Date().toISOString().split('T')[0];
+    const currentDate = new Date().toISOString().split("T")[0];
     const formData = {
-      coordenador: localStorage.getItem('coordenadorStorage'),
+      coordenador: localStorage.getItem("coordenadorStorage"),
       date: currentDate,
       comentarios: textQuestion2,
     };
 
-    axios.post('https://softwareipmain-production.up.railway.app/propostasCor', formData)
+    axios
+      .post(
+        "https://softwareipmain-production.up.railway.app/propostasCor",
+        formData
+      )
       .then(() => {
         // Exibe a mensagem de sucesso e reseta os campos
-        setSuccessMessage('Dados enviados com sucesso!');
-        setTextQuestion2('');
+        setSuccessMessage("Dados enviados com sucesso!");
+        setTextQuestion2("");
         setIsSubmitting(false);
 
         // Remove a mensagem após 4 segundos
         setTimeout(() => {
-          setSuccessMessage('');
+          setSuccessMessage("");
         }, 4000);
       })
-      .catch(error => {
-        console.error('Erro ao enviar dados:', error);
+      .catch((error) => {
+        console.error("Erro ao enviar dados:", error);
         setIsSubmitting(false);
       });
   };
@@ -54,11 +58,19 @@ const PropostasCor = () => {
       {successMessage && <p className="success-message">{successMessage}</p>}
       <form onSubmit={handleSubmit}>
         <div>
-        <label htmlFor="textQuestion2">Comentários</label>
-        <textarea name="textQuestion2" id="textQuestion2" placeholder='Fale mais'></textarea>
+          <label htmlFor="textQuestion2">Comentários</label>
+          <textarea
+            name="textQuestion2"
+            id="textQuestion2"
+            placeholder="Fale mais"
+            value={textQuestion2}
+            onChange={(e) => setTextQuestion2(e.target.value)}
+          ></textarea>
         </div>
 
-        <button type="submit" disabled={isSubmitting}>Enviar</button>
+        <button type="submit" disabled={isSubmitting}>
+          Enviar
+        </button>
       </form>
     </>
   );
