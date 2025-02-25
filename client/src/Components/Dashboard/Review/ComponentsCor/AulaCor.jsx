@@ -3,6 +3,8 @@ import "./AulaCor.css";
 import axios from "axios";
 
 const AulaCor = () => {
+  const [unit, setUnit] = useState("");
+  const [unidades, setUnidades] = useState([]);
   const [rating, setRating] = useState(0);
   const [textQuestion2, setTextQuestion2] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
@@ -12,7 +14,7 @@ const AulaCor = () => {
     event.preventDefault();
     const currentDate = new Date().toISOString().split("T")[0];
 
-    if (!rating || !textQuestion2) {
+    if (!rating || !textQuestion2 || !unit) {
       setErrorMessage("Por favor, preencha todos os campos antes de enviar.");
       setTimeout(() => {
         setErrorMessage("");
@@ -60,6 +62,22 @@ const AulaCor = () => {
         <div className="success-message">{successMessage}</div>
       )}
       <form onSubmit={handleSubmit}>
+      <div>
+          <label htmlFor="unit">Unidade:</label>
+          <select
+            id="unit"
+            value={unit}
+            onChange={(e) => setUnit(e.target.value)}
+          >
+            <option value="">Selecione uma unidade</option>
+            {unidades.map((unidade, index) => (
+              <option key={index} value={unidade.cidade}>
+                {unidade.cidade}
+              </option>
+            ))}
+          </select>
+        </div>
+
         <div>
           <label>Nota:</label>
           <div className="escolhaQuestion">
