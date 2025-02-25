@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import "./AulaCor.css";
 import axios from "axios";
 
@@ -9,27 +9,35 @@ const AulaCor = () => {
   const [textQuestion2, setTextQuestion2] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
   const [successMessage, setSuccessMessage] = useState("");
-  const [loading, setLoading] = useState(false);
-  const [unidadesCarregadas, setUnidadesCarregadas] = useState(false);
+  const [loading, setLoading] = useState(true);
 
-  // Função para buscar unidades do banco de dados
-  const fetchUnidades = () => {
-    setLoading(true);
+  // Buscar coordenador salvo no localStorage
+  const coordenadorStorage = localStorage.getItem("coordenadorStorage");
+
+  useEffect(() => {
+    if (!coordenadorStorage) {
+      setErrorMessage("Erro: Coordenador não encontrado.");
+      setLoading(false);
+      return;
+    }
+
     axios
       .get("https://softwareipmain-production.up.railway.app/unidades")
       .then((response) => {
-        setUnidades(response.data);
-        setUnidadesCarregadas(true);
+        // Filtrar unidades pelo coordenador
+        const unidadesFiltradas = response.data.filter(
+          (unidade) => unidade.coordenador === coordenadorStorage
+        );
+        setUnidades(unidadesFiltradas);
       })
       .catch((error) => {
         console.error("Erro ao buscar unidades:", error);
         setErrorMessage("Erro ao carregar unidades. Tente novamente.");
-        setTimeout(() => setErrorMessage(""), 4000);
       })
       .finally(() => {
         setLoading(false);
       });
-  };
+  }, [coordenadorStorage]);
 
   const handleSubmit = (event) => {
     event.preventDefault();
@@ -47,7 +55,7 @@ const AulaCor = () => {
       date: currentDate,
       nota: rating,
       comentarios: textQuestion2,
-      coordenador: localStorage.getItem("coordenadorStorage"),
+      coordenador: coordenadorStorage,
     };
 
     axios
@@ -71,11 +79,8 @@ const AulaCor = () => {
       {errorMessage && <div className="error-message">{errorMessage}</div>}
       {successMessage && <div className="success-message">{successMessage}</div>}
 
-      {/* Botão para carregar unidades antes de exibir o formulário */}
-      {!unidadesCarregadas ? (
-        <button onClick={fetchUnidades} disabled={loading}>
-          {loading ? "Carregando..." : "Carregar Unidades"}
-        </button>
+      {loading ? (
+        <p>Carregando unidades...</p>
       ) : (
         <form onSubmit={handleSubmit}>
           <div>
