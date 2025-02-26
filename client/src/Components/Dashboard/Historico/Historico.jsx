@@ -142,9 +142,7 @@ const Historico = () => {
           {avaliacoesFiltradas.map((avaliacao, index) => (
             <div key={index} className="p-2 border-b last:border-0">
               <p><strong>Data:</strong> {new Date(avaliacao.date).toLocaleDateString("pt-BR")}</p>
-              {Object.keys(avaliacao).map((chave) => (
-                chave !== "date" && <p key={chave}><strong>{chave}:</strong> {avaliacao[chave]}</p>
-              ))}
+              <p><strong>Nota:</strong> {avaliacao.nota}</p>
               {avaliacao.regente && <p><strong>Regente:</strong> {avaliacao.regente}</p>}
               {avaliacao.comentarios && <p><strong>Comentários:</strong> {avaliacao.comentarios}</p>}
             </div>
