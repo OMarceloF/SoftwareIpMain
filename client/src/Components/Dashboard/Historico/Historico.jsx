@@ -145,6 +145,8 @@ const Historico = () => {
               {Object.keys(avaliacao).map((chave) => (
                 chave !== "date" && <p key={chave}><strong>{chave}:</strong> {avaliacao[chave]}</p>
               ))}
+              {avaliacao.regente && <p><strong>Regente:</strong> {avaliacao.regente}</p>}
+              {avaliacao.comentarios && <p><strong>Comentários:</strong> {avaliacao.comentarios}</p>}
             </div>
           ))}
         </div>
