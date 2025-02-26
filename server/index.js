@@ -891,10 +891,10 @@ app.get('/fotosevideoscor/notas-por-coordenador', (req, res) => {
 
 app.put('/unidades/:cidade', (req, res) => {
   const { cidade } = req.params;
-  const { endereco, telefone, coordenador } = req.body;
+  const { endereco, telefone, coordenador, nomedir } = req.body; // Adicionado nomedir
 
-  const query = `UPDATE unidades SET endereco = ?, telefone = ?, coordenador = ? WHERE cidade = ?`;
-  const values = [endereco, telefone, coordenador, cidade];
+  const query = `UPDATE unidades SET endereco = ?, telefone = ?, coordenador = ?, nomedir = ? WHERE cidade = ?`;
+  const values = [endereco, telefone, coordenador, nomedir, cidade]; // Incluindo nomedir nos valores
 
   db.query(query, values, (err, results) => {
       if (err) {
@@ -908,6 +908,7 @@ app.put('/unidades/:cidade', (req, res) => {
       }
   });
 });
+
 
 
 
