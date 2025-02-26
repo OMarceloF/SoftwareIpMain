@@ -11,11 +11,22 @@ const Aulas = () => {
   const [unidades, setUnidades] = useState([]);
   const [coordenador, setCoordenador] = useState("");
   const [competencias, setCompetencias] = useState([
-    "Domínio do conteúdo",
-    "Didática",
-    "Clareza na explicação",
-    "Interação com os alunos",
-    "Uso de recursos didáticos"
+    "Conformidade com o Teachers Guide",
+    "Planejamento da Aula",
+    "Oratótia do Professor",
+    "Domínio do Tema",
+    "Aplicação das habilidades e competencias",
+    "Construção do Pensamento",
+    "Postura do Professor",
+    "Divisão do Tempo entre Teoria e Prática",
+    "Criatividade",
+    "Motivação do Professor",
+    "Controle de Turma",
+    "Atendimento aos Alunos",
+    "Metodologia Ativa",
+    "Nível de Atividade Proposta",
+    "Time de Aula",
+    "Motivação dos Alunos"
   ]);
   const [respostasCompetencias, setRespostasCompetencias] = useState({});
   const [errorMessage, setErrorMessage] = useState("");
@@ -30,7 +41,9 @@ const Aulas = () => {
     }
 
     axios
-      .get(`https://softwareipmain-production.up.railway.app/getUsername/${email}`)
+      .get(
+        `https://softwareipmain-production.up.railway.app/getUsername/${email}`
+      )
       .then((response) => {
         const nomeCoordenador = response.data.name;
         setCoordenador(nomeCoordenador);
@@ -104,21 +117,34 @@ const Aulas = () => {
         <h2>Avaliação de Aulas Assistidas</h2>
       </div>
       {errorMessage && <div className="error-message">{errorMessage}</div>}
-      {successMessage && <div className="success-message">{successMessage}</div>}
+      {successMessage && (
+        <div className="success-message">{successMessage}</div>
+      )}
       <form onSubmit={handleSubmit}>
         <div>
           <label htmlFor="unit">Unidade:</label>
-          <select id="unit" value={unit} onChange={(e) => setUnit(e.target.value)}>
+          <select
+            id="unit"
+            value={unit}
+            onChange={(e) => setUnit(e.target.value)}
+          >
             <option value="">Selecione uma unidade</option>
             {unidades.map((unidade, index) => (
-              <option key={index} value={unidade.cidade}>{unidade.cidade}</option>
+              <option key={index} value={unidade.cidade}>
+                {unidade.cidade}
+              </option>
             ))}
           </select>
         </div>
 
         <div>
           <label htmlFor="textQuestion1">Regente</label>
-          <input type="text" id="textQuestion1" value={textQuestion1} onChange={(e) => setTextQuestion1(e.target.value)} />
+          <input
+            type="text"
+            id="textQuestion1"
+            value={textQuestion1}
+            onChange={(e) => setTextQuestion1(e.target.value)}
+          />
         </div>
 
         <div>
@@ -126,19 +152,26 @@ const Aulas = () => {
           {competencias.map((competencia, index) => (
             <div key={index} className="competencia-row">
               <span>{competencia}</span>
-              <div className="competencia-options">
-                {["Atendeu", "Atendeu Parcialmente", "Não Atendeu"].map((opcao) => (
-                  <label key={opcao}>
-                    <input
-                      type="radio"
-                      name={competencia}
-                      value={opcao}
-                      checked={respostasCompetencias[competencia] === opcao}
-                      onChange={(e) => handleCompetenciaChange(competencia, e.target.value)}
-                    />
-                    {opcao}
-                  </label>
-                ))}
+              <div
+                className="competencia-options"
+                style="display: flex; flex-direction: column; text-align: initial;"
+              >
+                {["Atendeu", "Atendeu Parcialmente", "Não Atendeu"].map(
+                  (opcao) => (
+                    <label key={opcao}>
+                      <input
+                        type="radio"
+                        name={competencia}
+                        value={opcao}
+                        checked={respostasCompetencias[competencia] === opcao}
+                        onChange={(e) =>
+                          handleCompetenciaChange(competencia, e.target.value)
+                        }
+                      />
+                      {opcao}
+                    </label>
+                  )
+                )}
               </div>
             </div>
           ))}
@@ -163,7 +196,12 @@ const Aulas = () => {
 
         <div>
           <label htmlFor="textQuestion2">Comentários</label>
-          <textarea id="textQuestion2" placeholder="Fale mais" value={textQuestion2} onChange={(e) => setTextQuestion2(e.target.value)}></textarea>
+          <textarea
+            id="textQuestion2"
+            placeholder="Fale mais"
+            value={textQuestion2}
+            onChange={(e) => setTextQuestion2(e.target.value)}
+          ></textarea>
         </div>
 
         <button type="submit">Enviar</button>
