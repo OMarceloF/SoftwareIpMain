@@ -26,7 +26,7 @@ const Aulas = () => {
     "Metodologia Ativa",
     "Nível de Atividade Proposta",
     "Time de Aula",
-    "Motivação dos Alunos"
+    "Motivação dos Alunos",
   ]);
   const [respostasCompetencias, setRespostasCompetencias] = useState({});
   const [errorMessage, setErrorMessage] = useState("");
@@ -152,10 +152,7 @@ const Aulas = () => {
           {competencias.map((competencia, index) => (
             <div key={index} className="competencia-row">
               <span>{competencia}</span>
-              <div
-                className="competencia-options"
-                style="display: flex; flex-direction: column; text-align: initial;"
-              >
+              <div className="competencia-options">
                 {["Atendeu", "Atendeu Parcialmente", "Não Atendeu"].map(
                   (opcao) => (
                     <label key={opcao}>
