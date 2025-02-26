@@ -78,4 +78,10 @@ input:focus, select:focus {
 textarea {
   width: 400px;
   height: 100px;
+}
+
+.competencia-options {
+  display: flex;
+  flex-direction: column;
+  text-align: initial;
 }/*# sourceMappingURL=Aulas.css.map */
