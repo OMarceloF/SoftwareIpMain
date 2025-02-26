@@ -14,6 +14,7 @@ const Unidades = () => {
     const [editEndereco, setEditEndereco] = useState('');
     const [editTelefone, setEditTelefone] = useState('');
     const [editCoordenador, setEditCoordenador] = useState('');
+    const [editNomeDirecao, setEditNomeDirecao] = useState('');
 
     const location = useLocation();
 
@@ -22,34 +23,31 @@ const Unidades = () => {
             endereco: editEndereco,
             telefone: editTelefone,
             coordenador: editCoordenador,
+            nomedir: editNomeDirecao,
         })
         .then(response => {
-            // Atualize o estado das unidades com os novos dados
             setUnidades(prevUnidades =>
                 prevUnidades.map(unidade =>
                     unidade.cidade === selectedUnidade.cidade
-                        ? { ...unidade, endereco: editEndereco, telefone: editTelefone, coordenador: editCoordenador }
+                        ? { ...unidade, endereco: editEndereco, telefone: editTelefone, coordenador: editCoordenador, nomedir: editNomeDirecao }
                         : unidade
                 )
             );
-            closeModal(); // Fecha o modal após salvar
+            closeModal();
         })
         .catch(error => {
             console.error('Erro ao atualizar a unidade:', error);
         });
     };
-    
 
     useEffect(() => {
         const email = localStorage.getItem('emailStorage');
-        const role = localStorage.getItem('role'); // Obter o valor de userRole do localStorage
-
-        console.log('User Role from localStorage:', role); // Log para verificar o valor de userRole
+        const role = localStorage.getItem('role');
 
         if (role) {
             setUserRole(role);
         } else {
-            setUserRole(''); // Define uma role padrão se não estiver presente
+            setUserRole('');
         }
 
         axios.get('https://softwareipmain-production.up.railway.app/unidades')
@@ -73,27 +71,19 @@ const Unidades = () => {
         }
     }, []);
 
-    // Filtro para mostrar apenas as unidades que possuem o mesmo coordenador que o usuário logado, a menos que o userRole seja 'admin'
     const filteredUnidades = unidades.filter(unidade => {
         const matchBySearchTerm = unidade.cidade.toLowerCase().startsWith(searchTerm.toLowerCase());
         const matchByCoordenador = userRole === 'admin' || unidade.coordenador === name;
-
-        console.log('Unidade:', unidade);
-        console.log('Match by search term:', matchBySearchTerm);
-        console.log('Match by coordenador:', matchByCoordenador);
-
         return matchBySearchTerm && matchByCoordenador;
     });
 
     const openModal = (content, unidade) => {
         setModalContent(content);
         setSelectedUnidade(unidade);
-        setIsModalOpen(true);
-        setModalContent(content);
-        setSelectedUnidade(unidade);
         setEditEndereco(unidade.endereco);
         setEditTelefone(unidade.telefone);
         setEditCoordenador(unidade.coordenador);
+        setEditNomeDirecao(unidade.nomedir || '');
         setIsModalOpen(true);
     };
 
@@ -104,16 +94,11 @@ const Unidades = () => {
     };
 
     const renderCreateUnitButton = () => {
-        switch (userRole) {
-            case 'admin':
-                return (
-                    <Link to="/dashboard/unidades/criarunidade">
-                        <button>Adicionar Nova Unidade</button>
-                    </Link>
-                );
-            default:
-                return null;
-        }
+        return userRole === 'admin' ? (
+            <Link to="/dashboard/unidades/criarunidade">
+                <button>Adicionar Nova Unidade</button>
+            </Link>
+        ) : null;
     }
 
     return (
@@ -147,7 +132,6 @@ const Unidades = () => {
                     </div>
                     {renderCreateUnitButton()}
 
-                    {/* Modal */}
                     {isModalOpen && (
                         <div className="modal-overlay" onClick={closeModal}>
                             <div className="modal-content" onClick={(e) => e.stopPropagation()}>
@@ -178,10 +162,17 @@ const Unidades = () => {
                                                 onChange={(e) => setEditCoordenador(e.target.value)}
                                             />
                                         </div>
+                                        <div className="info-item">
+                                            <span>Nome da Direção: </span>
+                                            <input
+                                                type="text"
+                                                value={editNomeDirecao}
+                                                onChange={(e) => setEditNomeDirecao(e.target.value)}
+                                            />
+                                        </div>
                                         <button onClick={handleSave}>Salvar</button>
                                     </>
                                 )}
-
                                 <button onClick={closeModal}>Fechar</button>
                             </div>
                         </div>
