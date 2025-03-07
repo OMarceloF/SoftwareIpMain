@@ -23,7 +23,7 @@ const EscolherCoordenadorHistorico = () => {
 
     return (
         <div>
-            {location.pathname === "/dashboard/escolherCoordenadorCor" ? (
+            {location.pathname === "/dashboard/escolherCoordenadorHistorico" ? (
                 <>
                     <div className="title-form">
                         <h2>Escolha o Coordenador</h2>
