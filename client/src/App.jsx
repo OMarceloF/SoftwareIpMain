@@ -34,6 +34,8 @@ import PropostasCor from './Components/Dashboard/Review/ComponentsCor/PropostasC
 import DashboardEscolha from './Components/Dashboard/Review/DashboardEscolha';
 import DashboardGraphCor from './Components/Dashboard/Dashboard/DashboardGraphCor';
 import FotosEVideos from './Components/Dashboard/Review/Components/FotosEVideos';
+import EscolherCoordenadorHistorico from './Components/Dashboard/Review/EscolherCoordenadorHistorico';
+import HistoricoCoordenadores from './Components/Dashboard/Historico/HistoricoCoordenadores';
 
 // Importando React Router DOM
 import {
@@ -174,6 +176,16 @@ const router = createBrowserRouter([
           {
             path: 'historicoCor',
             element: <ProtectedRoute element={HistoricoCor} allowedRoles={['supervisor', 'dev']}/>
+          }
+        ]
+      },
+      {
+        path: 'escolherCoordenadorHistorico',
+        element: <ProtectedRoute element={EscolherCoordenadorHistorico} allowedRoles={['supervisor']}/>,
+        children: [
+          {
+            path: 'historicoCordenadores',
+            element: <ProtectedRoute element={HistoricoCoordenadores} allowedRoles={['supervisor']}/>
           }
         ]
       },

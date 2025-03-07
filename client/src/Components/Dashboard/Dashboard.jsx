@@ -1,7 +1,7 @@
-import React, { useState, useEffect } from 'react';
-import axios from 'axios';
-import './Dashboard.css';
-import '../../App.css';
+import React, { useState, useEffect } from "react";
+import axios from "axios";
+import "./Dashboard.css";
+import "../../App.css";
 import { Link, Outlet, useLocation } from "react-router-dom";
 import { FaHistory } from "react-icons/fa";
 import { MdRateReview } from "react-icons/md";
@@ -14,142 +14,192 @@ import video from "../../LoginAssets/videoFundo.mp4";
 
 const Dashboard = () => {
   const location = useLocation();
-  const [role, setRole] = useState('');
-  const [name, setName] = useState('');
-  const [greeting, setGreeting] = useState('Seja bem vindo');
+  const [role, setRole] = useState("");
+  const [name, setName] = useState("");
+  const [greeting, setGreeting] = useState("Seja bem vindo");
 
   const handleClick = () => {
     window.location.reload();
   };
 
   useEffect(() => {
-    const email = localStorage.getItem('emailStorage');
+    const email = localStorage.getItem("emailStorage");
 
     if (email) {
-      axios.get(`https://softwareipmain-production.up.railway.app/getRole/${email}`)
-        .then(response => {
+      axios
+        .get(
+          `https://softwareipmain-production.up.railway.app/getRole/${email}`
+        )
+        .then((response) => {
           setRole(response.data.role);
         })
-        .catch(error => {
-          console.error('Erro ao buscar o role:', error);
+        .catch((error) => {
+          console.error("Erro ao buscar o role:", error);
         });
     }
 
     if (email) {
-      axios.get(`https://softwareipmain-production.up.railway.app/getUsername/${email}`)
-        .then(response => {
+      axios
+        .get(
+          `https://softwareipmain-production.up.railway.app/getUsername/${email}`
+        )
+        .then((response) => {
           const fullName = response.data.name;
           setName(fullName);
 
           // Pegando o primeiro nome e verificando a última letra
-          const firstName = fullName.split(" ")[0]; 
-          if (firstName.slice(-1).toLowerCase() === 'a') {
+          const firstName = fullName.split(" ")[0];
+          if (firstName.slice(-1).toLowerCase() === "a") {
             setGreeting("Seja bem vinda");
           } else {
             setGreeting("Seja bem vindo");
           }
         })
-        .catch(error => {
-          console.error('Erro ao buscar o name:', error);
+        .catch((error) => {
+          console.error("Erro ao buscar o name:", error);
         });
     }
   }, []);
 
   const renderMenuOptions = () => {
     switch (role) {
-      case 'dev':
+      case "dev":
         return (
           <>
             <div className="buttonLeft">
               <IoMdHome />
-              <Link to="/dashboard"><span>Home</span></Link>
+              <Link to="/dashboard">
+                <span>Home</span>
+              </Link>
             </div>
             <div className="buttonLeft">
               <MdRateReview />
-              <Link to="/dashboard/review"><span>Review</span></Link>
+              <Link to="/dashboard/review">
+                <span>Review</span>
+              </Link>
             </div>
             <div className="buttonLeft">
               <FaHistory />
-              <Link to="/dashboard/historico"><span>Histórico</span></Link>
+              <Link to="/dashboard/historico">
+                <span>Histórico</span>
+              </Link>
             </div>
             <div className="buttonLeft">
               <RxDashboard />
-              <Link to="/dashboard/dashboardEscolha"><span>Dashboard</span></Link>
+              <Link to="/dashboard/dashboardEscolha">
+                <span>Dashboard</span>
+              </Link>
             </div>
             <div className="buttonLeft">
               <RiCommunityLine />
-              <Link to="/dashboard/unidades"><span>Unidades</span></Link>
+              <Link to="/dashboard/unidades">
+                <span>Unidades</span>
+              </Link>
             </div>
             <div className="buttonLeft">
               <IoMdExit />
-              <Link to="/"><span>Sair</span></Link>
+              <Link to="/">
+                <span>Sair</span>
+              </Link>
             </div>
           </>
         );
-      case 'admin':
+      case "admin":
         return (
           <>
             <div className="buttonLeft">
               <IoMdHome />
-              <Link to="/dashboard"><span>Home</span></Link>
+              <Link to="/dashboard">
+                <span>Home</span>
+              </Link>
             </div>
             <div className="buttonLeft">
               <RxDashboard />
-              <Link to="/dashboard/dashboardEscolha"><span>Dashboard</span></Link>
+              <Link to="/dashboard/dashboardEscolha">
+                <span>Dashboard</span>
+              </Link>
             </div>
             <div className="buttonLeft">
               <RiCommunityLine />
-              <Link to="/dashboard/unidades"><span>Unidades</span></Link>
+              <Link to="/dashboard/unidades">
+                <span>Unidades</span>
+              </Link>
             </div>
             <div className="buttonLeft">
               <IoMdExit />
-              <Link to="/"><span>Sair</span></Link>
+              <Link to="/">
+                <span>Sair</span>
+              </Link>
             </div>
           </>
         );
-      case 'user':
+      case "user":
         return (
           <>
             <div className="buttonLeft">
               <IoMdHome />
-              <Link to="/dashboard"><span>Home</span></Link>
+              <Link to="/dashboard">
+                <span>Home</span>
+              </Link>
             </div>
             <div className="buttonLeft">
               <MdRateReview />
-              <Link to="/dashboard/review"><span>Review</span></Link>
+              <Link to="/dashboard/review">
+                <span>Review</span>
+              </Link>
             </div>
             <div className="buttonLeft">
               <FaHistory />
-              <Link to="/dashboard/historico"><span>Histórico</span></Link>
+              <Link to="/dashboard/historico">
+                <span>Histórico</span>
+              </Link>
             </div>
             <div className="buttonLeft">
               <RiCommunityLine />
-              <Link to="/dashboard/unidades"><span>Unidades</span></Link>
+              <Link to="/dashboard/unidades">
+                <span>Unidades</span>
+              </Link>
             </div>
             <div className="buttonLeft">
               <IoMdExit />
-              <Link to="/"><span>Sair</span></Link>
+              <Link to="/">
+                <span>Sair</span>
+              </Link>
             </div>
           </>
         );
-      case 'supervisor':
+      case "supervisor":
         return (
           <>
             <div className="buttonLeft">
               <IoMdHome />
-              <Link to="/dashboard"><span>Home</span></Link>
+              <Link to="/dashboard">
+                <span>Home</span>
+              </Link>
             </div>
             <div className="buttonLeft">
               <MdRateReview />
-              <Link to="/dashboard/escolherCoordenador"><span>Review</span></Link>
+              <Link to="/dashboard/escolherCoordenador">
+                <span>Review</span>
+              </Link>
             </div>
             <div className="buttonLeft">
               <FaHistory />
-              <Link to="/dashboard/escolherCoordenadorCor"><span>Histórico</span></Link>
+              <Link to="/dashboard/escolherCoordenadorCor">
+                <span>Histórico</span>
+              </Link>
+            </div>
+            <div className="buttonLeft">
+              <FaHistory />
+              <Link to="/dashboard/escolherCoordenadorCor">
+                <span>Coordenadores</span>
+              </Link>
             </div>
             <div className="buttonLeft">
               <IoMdExit />
-              <Link to="/"><span>Sair</span></Link>
+              <Link to="/">
+                <span>Sair</span>
+              </Link>
             </div>
           </>
         );
@@ -162,14 +212,21 @@ const Dashboard = () => {
     <div className="homepage">
       <div className="left">
         <div className="logoPage">
-          <img src={logo} alt="logo" onClick={handleClick} style={{ cursor: 'pointer' }}  />
+          <img
+            src={logo}
+            alt="logo"
+            onClick={handleClick}
+            style={{ cursor: "pointer" }}
+          />
         </div>
         {renderMenuOptions()}
       </div>
       <div className="content">
         {location.pathname === "/dashboard" ? (
           <>
-            <h2>{greeting}, {name}!</h2>
+            <h2>
+              {greeting}, {name}!
+            </h2>
             <video src={video} autoPlay muted loop></video>
           </>
         ) : (
@@ -178,6 +235,6 @@ const Dashboard = () => {
       </div>
     </div>
   );
-}
+};
 
 export default Dashboard;
