@@ -191,7 +191,7 @@ const Dashboard = () => {
             </div>
             <div className="buttonLeft">
               <FaHistory />
-              <Link to="/dashboard/escolherCoordenadorCor">
+              <Link to="/dashboard/escolherCoordenadorHistorico">
                 <span>Coordenadores</span>
               </Link>
             </div>
