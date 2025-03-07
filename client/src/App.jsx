@@ -184,7 +184,7 @@ const router = createBrowserRouter([
         element: <ProtectedRoute element={EscolherCoordenadorHistorico} allowedRoles={['supervisor']}/>,
         children: [
           {
-            path: 'historicoCordenadores',
+            path: 'historicoCoordenadores',
             element: <ProtectedRoute element={HistoricoCoordenadores} allowedRoles={['supervisor']}/>
           }
         ]
