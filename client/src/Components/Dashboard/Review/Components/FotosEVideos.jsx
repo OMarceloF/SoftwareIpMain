@@ -91,7 +91,7 @@ const FotosEVideos = () => {
 
   return (
     <>
-      <h2>Avaliação de Registro de Aulas</h2>
+      <h2>Avaliação de Registro de Fotos e Vídeos</h2>
       {errorMessage && <div className="error-message">{errorMessage}</div>}
       {successMessage && (
         <div className="success-message">{successMessage}</div>

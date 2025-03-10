@@ -70,9 +70,21 @@ const Historico = () => {
     setMesSelecionado("");
   };
 
+  // Função para formatar a data corrigindo o fuso horário
+  const formatarData = (dataISO) => {
+    const data = new Date(dataISO);
+    data.setMinutes(data.getMinutes() + data.getTimezoneOffset()); // Corrige UTC para o fuso local
+    return new Intl.DateTimeFormat("pt-BR", {
+      day: "2-digit",
+      month: "2-digit",
+      year: "numeric",
+    }).format(data);
+  };
+
   const avaliacoesFiltradas = avaliacoes.filter(avaliacao => {
     if (!mesSelecionado) return false;
     const data = new Date(avaliacao.date);
+    data.setMinutes(data.getMinutes() + data.getTimezoneOffset()); // Corrige UTC
     return data.getMonth() === meses.indexOf(mesSelecionado);
   });
 
@@ -141,7 +153,7 @@ const Historico = () => {
           <h3 className="text-lg font-semibold mb-2">Avaliações de {mesSelecionado}</h3>
           {avaliacoesFiltradas.map((avaliacao, index) => (
             <div key={index} className="p-2 border-b last:border-0">
-              <p><strong>Data:</strong> {new Date(avaliacao.date).toLocaleDateString("pt-BR")}</p>
+              <p><strong>Data:</strong> {formatarData(avaliacao.date)}</p>
               <p><strong>Nota:</strong> {avaliacao.nota}</p>
               {avaliacao.regente && <p><strong>Regente:</strong> {avaliacao.regente}</p>}
               {avaliacao.comentarios && <p><strong>Comentários:</strong> {avaliacao.comentarios}</p>}
