@@ -195,21 +195,24 @@ app.post('/guide', (req, res) => {
   })
 })
 
-// Adicionando uma rota para salvar dados na tabela Inventario
 app.post('/inventario', (req, res) => {
-  const { date, unidade, regente, comentarios, quem, resolvido } = req.body;
+  let { date, unidade, regente, comentarios, quem, resolvido } = req.body;
+
+  // Converte 'Sim' para 1 e 'Não' para 0
+  resolvido = resolvido === 'Sim' ? 1 : 0;
 
   const SQL = 'INSERT INTO inventario (date, unidade, regente, comentarios, quem, resolvido) VALUES (?, ?, ?, ?, ?, ?)';
   const values = [date, unidade, regente, comentarios, quem, resolvido];
 
   db.query(SQL, values, (err, results) => {
-    if(err) {
+    if (err) {
       console.error('Erro ao inserir dados:', err);
-      return res.status(500).send({ error: err })
+      return res.status(500).send({ error: err });
     }
-    res.status(200).send({ message: 'Dados inseridos com sucesso!' })
-  })
-})
+    res.status(200).send({ message: 'Dados inseridos com sucesso!' });
+  });
+});
+
 
 // Adicionando uma rota para salvar dados na tabela Planos
 app.post('/planos', (req, res) => {
