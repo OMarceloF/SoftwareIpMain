@@ -22,7 +22,7 @@ const DashboardGraphCor = () => {
       })
       .catch(error => console.error("Erro ao buscar coordenadores:", error));
     
-    axios.get("http://localhost:3002/coordenadores")
+    axios.get("https://softwareipmain-production.up.railway.app/coordenadores")
       .then(response => {
         setCoordenadores(response.data);
         if (response.data.length === 1) {
