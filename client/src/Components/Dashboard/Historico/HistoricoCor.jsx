@@ -10,6 +10,16 @@ const HistoricoCor = () => {
   const [dataSelecionada, setDataSelecionada] = useState("");
   const [datasDisponiveis, setDatasDisponiveis] = useState([]);
 
+  const formatarData = (dataISO) => {
+    const data = new Date(dataISO);
+    data.setMinutes(data.getMinutes() + data.getTimezoneOffset());
+    return new Intl.DateTimeFormat("pt-BR", {
+      day: "2-digit",
+      month: "2-digit",
+      year: "numeric",
+    }).format(data);
+  };
+
   const gerarPDF = () => {
     const doc = new jsPDF();
     const titulo = `Relatório - ${tipoSelecionado}`;

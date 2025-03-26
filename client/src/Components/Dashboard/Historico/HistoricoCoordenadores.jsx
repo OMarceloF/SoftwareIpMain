@@ -11,6 +11,16 @@ const HistoricoCoordenadores = () => {
   const [avaliacoes, setAvaliacoes] = useState([]);
   const [carregar, setCarregar] = useState(false);
 
+  const formatarData = (dataISO) => {
+    const data = new Date(dataISO);
+    data.setMinutes(data.getMinutes() + data.getTimezoneOffset());
+    return new Intl.DateTimeFormat("pt-BR", {
+      day: "2-digit",
+      month: "2-digit",
+      year: "numeric",
+    }).format(data);
+  };
+
   const meses = [
     "Janeiro", "Fevereiro", "Março", "Abril", "Maio", "Junho", 
     "Julho", "Agosto", "Setembro", "Outubro", "Novembro", "Dezembro"
@@ -75,6 +85,7 @@ const HistoricoCoordenadores = () => {
     const doc = new jsPDF("p", "mm", "a4");
     const pageWidth = doc.internal.pageSize.width;
     const pageHeight = doc.internal.pageSize.height;
+    const dataFormatada = new Date(dataSelecionada).toLocaleDateString("pt-BR");
   
     const titulo = `Histórico de Avaliação Mensal`;
     const subtitulo1 = `Visualizar: ${tipoSelecionado}`;
@@ -278,7 +289,7 @@ const HistoricoCoordenadores = () => {
           {avaliacoesFiltradas.map((avaliacao, index) => (
             <div key={index} className="p-2 border-b last:border-0">
             {avaliacao.date && (
-              <p><strong>Data:</strong> {new Date(avaliacao.date).toLocaleDateString("pt-BR")}</p>
+              <p><strong>Data:</strong> {new formatarData(avaliacao.date).toLocaleDateString("pt-BR")}</p>
             )}
           
             {avaliacao.regente && (
