@@ -115,12 +115,35 @@ app.get('/coordenadores', (req, res) => {
 });
 
 
-// Adicionando uma rota para salvar dados na tabela aulas
 app.post('/aula', (req, res) => {
-  const { date, unidade, regente, nota, comentarios } = req.body;
+  const { 
+    date, unidade, regente, nota, comentarios,
+    conformidade_teachers_guide, planejamento_aula, oratoria_professor,
+    dominio_tema, aplicacao_habilidades_competencias, construcao_pensamento,
+    postura_professor, divisao_tempo_teoria_pratica, criatividade, motivacao_professor,
+    controle_turma, atendimento_alunos, metodologia_ativa, nivel_atividade_proposta,
+    time_aula, motivacao_alunos
+  } = req.body;
 
-  const SQL = 'INSERT INTO aula (date, unidade, regente, nota, comentarios) VALUES (?, ?, ?, ?, ?)';
-  const values = [date, unidade, regente, nota, comentarios];
+  const SQL = `
+    INSERT INTO aula (
+      date, unidade, regente, nota, comentarios,
+      conformidade_teachers_guide, planejamento_aula, oratoria_professor,
+      dominio_tema, aplicacao_habilidades_competencias, construcao_pensamento,
+      postura_professor, divisao_tempo_teoria_pratica, criatividade, motivacao_professor,
+      controle_turma, atendimento_alunos, metodologia_ativa, nivel_atividade_proposta,
+      time_aula, motivacao_alunos
+    ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+  `;
+
+  const values = [
+    date, unidade, regente, nota, comentarios,
+    conformidade_teachers_guide, planejamento_aula, oratoria_professor,
+    dominio_tema, aplicacao_habilidades_competencias, construcao_pensamento,
+    postura_professor, divisao_tempo_teoria_pratica, criatividade, motivacao_professor,
+    controle_turma, atendimento_alunos, metodologia_ativa, nivel_atividade_proposta,
+    time_aula, motivacao_alunos
+  ];
 
   db.query(SQL, values, (err, results) => {
     if (err){
@@ -264,19 +287,28 @@ app.post('/unidades', (req, res) => {
 
 // Adicionando uma rota para salvar dados na tabela aulaCor
 app.post('/aulacor', (req, res) => {
-  const { date, nota, comentarios, coordenador } = req.body;
+  const {
+    date, unidade, nota, comentarios, coordenador,
+  } = req.body;
 
-  const SQL = 'INSERT INTO aulacor (date, nota, comentarios, coordenador) VALUES (?, ?, ?, ?)';
-  const values = [date, nota, comentarios, coordenador];
+  const SQL = `
+    INSERT INTO aulacor (
+      date, unidade, nota, comentarios, coordenador
+    ) VALUES (?, ?, ?, ?, ?)
+  `;
+
+  const values = [
+    date, unidade, nota, comentarios, coordenador,
+  ];
 
   db.query(SQL, values, (err, results) => {
-    if(err) {
+    if (err) {
       console.error('Erro ao inserir dados:', err);
-      return res.status(500).send({ error: err })
+      return res.status(500).send({ error: err });
     }
-    res.status(200).send({ message: 'Dados inseridos com sucesso!' })
-  })
-})
+    res.status(200).send({ message: 'Dados inseridos com sucesso!' });
+  });
+});
 
 // Adicionando uma rota para salvar dados na tabela contatoCor
 app.post('/contatocor', (req, res) => {
@@ -409,7 +441,7 @@ app.post('/propostascor', (req, res) => {
 app.get('/aula/:unidade', (req, res) => {
   const { unidade } = req.params;
 
-  const SQL = 'SELECT date, nota FROM aula WHERE unidade = ?';
+  const SQL = 'SELECT * FROM aula WHERE unidade = ?';
   const values = [unidade];
 
   db.query(SQL, values, (err, results) => {
@@ -609,7 +641,7 @@ app.get('/diarios/:unidade', (req, res) => {
   const unidade = req.params.unidade;
   
   // Criar SQL para selecionar os dados
-  const SQL = 'SELECT date, nota FROM diarios WHERE unidade = ?';
+  const SQL = 'SELECT date, nota, regente, comentarios FROM diarios WHERE unidade = ?';
   const values = [unidade];
   
   db.query(SQL, values, (err, results) => {
@@ -627,7 +659,7 @@ app.get('/feira/:unidade', (req, res) => {
   
   // Criar SQL para selecionar a linha mais recente para cada coluna
   const SQL = `
-    SELECT date, cronograma, apresentacao, estrutural
+    SELECT date, cronograma, apresentacao, estrutural, comentarios
     FROM feira
     WHERE unidade = ?
     ORDER BY date DESC
@@ -650,7 +682,7 @@ app.get('/feira/:unidade', (req, res) => {
 app.get('/fotosevideos/:unidade', (req, res) => {
   const { unidade } = req.params;
 
-  const SQL = 'SELECT date, nota FROM fotosevideos WHERE unidade = ?';
+  const SQL = 'SELECT date, nota, comentarios FROM fotosevideos WHERE unidade = ?';
   const values = [unidade];
 
   db.query(SQL, values, (err, results) => {
@@ -666,7 +698,7 @@ app.get('/fotosevideos/:unidade', (req, res) => {
 app.get('/guide/:unidade', (req, res) => {
   const { unidade } = req.params;
 
-  const SQL = 'SELECT date, conformidade FROM guide WHERE unidade = ?';
+  const SQL = 'SELECT date, nota, comentarios, conformidade FROM guide WHERE unidade = ?';
   const values = [unidade];
 
   db.query(SQL, values, (err, results) => {
@@ -682,7 +714,7 @@ app.get('/guide/:unidade', (req, res) => {
 app.get('/planos/:unidade', (req, res) => {
   const { unidade } = req.params;
 
-  const SQL = 'SELECT date, nota FROM planos WHERE unidade = ?';
+  const SQL = 'SELECT date, nota, regente, comentarios FROM planos WHERE unidade = ?';
   const values = [unidade];
 
   db.query(SQL, values, (err, results) => {
@@ -762,7 +794,7 @@ app.listen(3002, () => {
 app.get('/aulacor/notas-por-coordenador', (req, res) => {
   const { month } = req.query; // Captura o mês da query string
   const SQL = `
-    SELECT coordenador, nota 
+    SELECT coordenador, nota, comentarios 
     FROM aulacor 
     WHERE (date, coordenador) IN (
       SELECT MAX(date) AS date, coordenador 
@@ -810,7 +842,7 @@ app.get('/contatocor/retornos-por-coordenador', (req, res) => {
 app.get('/diarioscor/notas-por-coordenador', (req, res) => {
   const { month } = req.query;
   const query = `
-    SELECT coordenador, nota, date
+    SELECT coordenador, nota, date, comentarios
     FROM diarioscor
     WHERE (coordenador, date) IN (
       SELECT coordenador, MAX(date)
@@ -870,7 +902,7 @@ app.get('/fotosevideoscor/notas-por-coordenador', (req, res) => {
   }
 
   const query = `
-    SELECT coordenador, nota
+    SELECT coordenador, nota, comentarios
     FROM fotosevideoscor AS f
     WHERE f.date = (
       SELECT MAX(f2.date)

@@ -11,22 +11,22 @@ const Aulas = () => {
   const [unidades, setUnidades] = useState([]);
   const [coordenador, setCoordenador] = useState("");
   const [competencias, setCompetencias] = useState([
-    "Conformidade com o Teachers Guide",
-    "Planejamento da Aula",
-    "Oratótia do Professor",
-    "Domínio do Tema",
-    "Aplicação das habilidades e competencias",
-    "Construção do Pensamento",
-    "Postura do Professor",
-    "Divisão do Tempo entre Teoria e Prática",
-    "Criatividade",
-    "Motivação do Professor",
-    "Controle de Turma",
-    "Atendimento aos Alunos",
-    "Metodologia Ativa",
-    "Nível de Atividade Proposta",
-    "Time de Aula",
-    "Motivação dos Alunos",
+    "conformidade_teachers_guide",
+    "planejamento_aula",
+    "oratoria_professor",
+    "dominio_tema",
+    "aplicacao_habilidades_competencias",
+    "construcao_pensamento",
+    "postura_professor",
+    "divisao_tempo_teoria_pratica",
+    "criatividade",
+    "motivacao_professor",
+    "controle_turma",
+    "atendimento_alunos",
+    "metodologia_ativa",
+    "nivel_atividade_proposta",
+    "time_aula",
+    "motivacao_alunos",
   ]);
   const [respostasCompetencias, setRespostasCompetencias] = useState({});
   const [errorMessage, setErrorMessage] = useState("");
@@ -41,9 +41,7 @@ const Aulas = () => {
     }
 
     axios
-      .get(
-        `https://softwareipmain-production.up.railway.app/getUsername/${email}`
-      )
+      .get(`https://softwareipmain-production.up.railway.app/getUsername/${email}`)
       .then((response) => {
         const nomeCoordenador = response.data.name;
         setCoordenador(nomeCoordenador);
@@ -87,13 +85,28 @@ const Aulas = () => {
 
     setErrorMessage("");
 
+    const opcoesValidas = ["Atendeu", "Atendeu Parcialmente", "Não Atendeu"];
+
+    // Cria um objeto para armazenar os valores das competências
+    const competenciasFormatadas = {};
+    competencias.forEach((competencia) => {
+      const valorSelecionado = respostasCompetencias[competencia];
+
+      // Se o valor for válido, mantém. Caso contrário, assume "Não Atendeu".
+      competenciasFormatadas[competencia] = opcoesValidas.includes(
+        valorSelecionado
+      )
+        ? valorSelecionado
+        : "Não Atendeu";
+    });
+
     const formData = {
       date: currentDate,
       unidade: unit,
       regente: textQuestion1,
       nota: rating,
       comentarios: textQuestion2,
-      competencias: respostasCompetencias,
+      ...competenciasFormatadas,
     };
 
     axios
@@ -151,7 +164,7 @@ const Aulas = () => {
           <h3>Avaliação das Competências</h3>
           {competencias.map((competencia, index) => (
             <div key={index} className="competencia-row">
-              <span>{competencia}</span>
+              <span>{competencia.replace(/_/g, " ")}</span>
               <div className="competencia-options">
                 {["Atendeu", "Atendeu Parcialmente", "Não Atendeu"].map(
                   (opcao) => (
