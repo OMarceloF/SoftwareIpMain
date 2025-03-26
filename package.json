@@ -9,6 +9,7 @@
     "chartjs": "^0.3.24",
     "chartjs-adapter-date-fns": "^3.0.0",
     "date-fns": "^3.6.0",
+    "jspdf": "^3.0.1",
     "react-chartjs-2": "^5.2.0",
     "react-router-dom": "^6.24.1",
     "react-select": "^5.8.1"
