@@ -41,7 +41,9 @@ const Aulas = () => {
     }
 
     axios
-      .get(`https://softwareipmain-production.up.railway.app/getUsername/${email}`)
+      .get(
+        `https://softwareipmain-production.up.railway.app/getUsername/${email}`
+      )
       .then((response) => {
         const nomeCoordenador = response.data.name;
         setCoordenador(nomeCoordenador);
@@ -91,13 +93,7 @@ const Aulas = () => {
     const competenciasFormatadas = {};
     competencias.forEach((competencia) => {
       const valorSelecionado = respostasCompetencias[competencia];
-
-      // Se o valor for válido, mantém. Caso contrário, assume "Não Atendeu".
-      competenciasFormatadas[competencia] = opcoesValidas.includes(
-        valorSelecionado
-      )
-        ? valorSelecionado
-        : "Não Atendeu";
+      competenciasFormatadas[competencia] = valorSelecionado || "Não Atendeu";
     });
 
     const formData = {
