@@ -178,7 +178,12 @@ const HistoricoCoordenadores = () => {
 
       // Info básica
       const info = [
-        { label: "Data", valor: avaliacao.date ? new Date(avaliacao.date + "T12:00:00").toLocaleDateString("pt-BR") : "N/A" },
+        {
+          label: "Data",
+          valor: avaliacao.date
+            ? new Date(avaliacao.date + "T12:00:00").toLocaleDateString("pt-BR")
+            : "N/A",
+        },
         { label: "Nota", valor: avaliacao.nota ?? "N/A" },
         { label: "Regente", valor: avaliacao.regente ?? "N/A" },
       ];
@@ -366,8 +371,8 @@ const HistoricoCoordenadores = () => {
             <div key={index} className="p-2 border-b last:border-0">
               {avaliacao.date && (
                 <p>
-                  <strong>Data:</strong> new Date(avaliacao.date +
-                  "T12:00:00").toLocaleDateString("pt-BR")
+                  <strong>Data:</strong>{" "}
+                  {new Date(avaliacao.date).toLocaleDateString("pt-BR")}
                 </p>
               )}
 
