@@ -176,14 +176,13 @@ const HistoricoCoordenadores = () => {
 
       y += 8;
 
-      // Info básica
+      const formatarDataISO = (iso) => {
+        if (!iso || typeof iso !== "string") return "N/A";
+        return iso.split("T")[0].split("-").reverse().join("/");
+      };
+
       const info = [
-        {
-          label: "Data",
-          valor: avaliacao.date
-            ? new Date(avaliacao.date + "T12:00:00").toLocaleDateString("pt-BR")
-            : "N/A",
-        },
+        { label: "Data", valor: formatarDataISO(avaliacao.date) },
         { label: "Nota", valor: avaliacao.nota ?? "N/A" },
         { label: "Regente", valor: avaliacao.regente ?? "N/A" },
       ];
