@@ -119,7 +119,7 @@ const HistoricoCoordenadores = () => {
 
   const avaliacoesFiltradas = avaliacoes.filter((avaliacao) => {
     if (!mesSelecionado) return false;
-    const data = new Date(avaliacao.date + "T12:00:00");
+    const data = new Date(avaliacao.date);
     return data.getMonth() === meses.indexOf(mesSelecionado);
   });
 
