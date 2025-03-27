@@ -371,9 +371,9 @@ const HistoricoCoordenadores = () => {
             <div key={index} className="p-2 border-b last:border-0">
               {avaliacao.date && (
                 <p>
-                <strong>Data:</strong> {avaliacao.date.split("T")[0].split("-").reverse().join("/")}
-              </p>
-              
+                  <strong>Data:</strong>{" "}
+                  {avaliacao.date.split("T")[0].split("-").reverse().join("/")}
+                </p>
               )}
 
               {avaliacao.regente && (
