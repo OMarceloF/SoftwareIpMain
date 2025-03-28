@@ -136,23 +136,23 @@ const Inventario = () => {
         </div>
 
         <div>
-          <label htmlFor="textQuestion2">Comentários</label>
+          <label htmlFor="textQuestion3">Comentários</label>
           <textarea
-            name="textQuestion2"
-            id="textQuestion2"
+            name="textQuestion3"
+            id="textQuestion3"
             placeholder="Fale mais"
-            value={textQuestion2}
-            onChange={(e) => setTextQuestion2(e.target.value)}
+            value={textQuestion3}
+            onChange={(e) => setTextQuestion3(e.target.value)}
           ></textarea>
         </div>
 
         <div>
-          <label htmlFor="textQuestion3">Para Quem:</label>
+          <label htmlFor="textQuestion2">Para Quem:</label>
           <input
             type="text"
-            id="textQuestion3"
-            value={textQuestion3}
-            onChange={(e) => setTextQuestion3(e.target.value)}
+            id="textQuestion2"
+            value={textQuestion2}
+            onChange={(e) => setTextQuestion2(e.target.value)}
           />
         </div>
 
