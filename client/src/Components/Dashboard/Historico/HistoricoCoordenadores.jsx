@@ -10,6 +10,7 @@ const HistoricoCoordenadores = () => {
   const [mesSelecionado, setMesSelecionado] = useState("");
   const [avaliacoes, setAvaliacoes] = useState([]);
   const [carregar, setCarregar] = useState(false);
+  const [mesesDisponiveis, setMesesDisponiveis] = useState([]);
 
   const meses = [
     "Janeiro",
@@ -111,6 +112,23 @@ const HistoricoCoordenadores = () => {
       })
       .catch((error) => console.error("Erro ao buscar avaliações:", error));
   }, [tipoSelecionado, unidadeSelecionada]);
+
+  useEffect(() => {
+    if (avaliacoes.length > 0) {
+      const mesesUnicos = Array.from(
+        new Set(
+          avaliacoes.map((avaliacao) => {
+            const data = new Date(avaliacao.date);
+            return meses[data.getMonth()];
+          })
+        )
+      ).sort((a, b) => meses.indexOf(a) - meses.indexOf(b)); // ordenação cronológica
+
+      setMesesDisponiveis(mesesUnicos);
+    } else {
+      setMesesDisponiveis([]);
+    }
+  }, [avaliacoes]);
 
   const resetarDados = () => {
     setCarregar(false);
@@ -351,7 +369,7 @@ const HistoricoCoordenadores = () => {
             onChange={(e) => setMesSelecionado(e.target.value)}
           >
             <option value="">Selecione...</option>
-            {meses.map((mes, index) => (
+            {mesesDisponiveis.map((mes, index) => (
               <option key={index} value={mes}>
                 {mes}
               </option>
