@@ -11,46 +11,45 @@ const HistoricoCor = () => {
   const [datasDisponiveis, setDatasDisponiveis] = useState([]);
 
   const formatarData = (dataISO) => {
-    const data = new Date(dataISO);
-    data.setMinutes(data.getMinutes() + data.getTimezoneOffset());
-    return new Intl.DateTimeFormat("pt-BR", {
-      day: "2-digit",
-      month: "2-digit",
-      year: "numeric",
-    }).format(data);
+    // Assume data no formato YYYY-MM-DD
+    const [ano, mes, dia] = dataISO.split("T")[0].split("-");
+    const data = new Date(Number(ano), Number(mes) - 1, Number(dia)); // Mês começa do 0
+    return data.toLocaleDateString("pt-BR");
   };
 
   const gerarPDF = () => {
     const doc = new jsPDF();
     const titulo = `Relatório - ${tipoSelecionado}`;
-    const dataFormatada = new Date(dataSelecionada).toLocaleDateString("pt-BR");
-  
+    const dataFormatada = formatarData(dataSelecionada);
+
     const colunas = opcoesHistorico.find(
       (opcao) => opcao.label === tipoSelecionado
     )?.colunas;
-  
-    const registrosFiltrados = dados.filter((item) => item.date === dataSelecionada);
-  
+
+    const registrosFiltrados = dados.filter(
+      (item) => item.date === dataSelecionada
+    );
+
     let y = 20; // Posição vertical inicial
-  
+
     doc.setFontSize(16);
     doc.text(titulo, 14, y);
     y += 10;
     doc.setFontSize(12);
     doc.text(`Data: ${dataFormatada}`, 14, y);
     y += 10;
-  
+
     registrosFiltrados.forEach((registro, index) => {
       doc.setFontSize(14);
       doc.text(`Registro ${index + 1}`, 14, y);
       y += 8;
-  
+
       colunas.forEach((coluna) => {
         const label = formatarLabel(coluna);
         const valor = registro[coluna] ?? "N/A";
-  
+
         const texto = `${label}: ${valor}`;
-  
+
         // Se o texto estiver muito longo, quebre em várias linhas
         const linhas = doc.splitTextToSize(texto, 180);
         linhas.forEach((linha) => {
@@ -59,19 +58,19 @@ const HistoricoCor = () => {
           y += 6;
         });
       });
-  
+
       y += 8;
-  
+
       // Se ultrapassar o tamanho da página, cria nova página
       if (y > 270) {
         doc.addPage();
         y = 20;
       }
     });
-  
+
     doc.save(`${titulo}-${dataFormatada}.pdf`);
   };
-  
+
   const opcoesHistorico = [
     {
       label: "Planos de Aula",
@@ -82,12 +81,26 @@ const HistoricoCor = () => {
       label: "Aula",
       tabela: "aulacor",
       colunas: [
-        "unidade", "nota", "coordenador", "comentarios",
-        "conformidade_teachers_guide", "planejamento_aula", "oratoria_professor",
-        "dominio_tema", "aplicacao_habilidades_competencias", "construcao_pensamento",
-        "postura_professor", "divisao_tempo_teoria_pratica", "criatividade", "motivacao_professor",
-        "controle_turma", "atendimento_alunos", "metodologia_ativa", "nivel_atividade_proposta",
-        "time_aula", "motivacao_alunos"
+        "unidade",
+        "nota",
+        "coordenador",
+        "comentarios",
+        "conformidade_teachers_guide",
+        "planejamento_aula",
+        "oratoria_professor",
+        "dominio_tema",
+        "aplicacao_habilidades_competencias",
+        "construcao_pensamento",
+        "postura_professor",
+        "divisao_tempo_teoria_pratica",
+        "criatividade",
+        "motivacao_professor",
+        "controle_turma",
+        "atendimento_alunos",
+        "metodologia_ativa",
+        "nivel_atividade_proposta",
+        "time_aula",
+        "motivacao_alunos",
       ],
     },
     {
@@ -138,7 +151,9 @@ const HistoricoCor = () => {
     if (!tabela || !coordenador) return;
 
     axios
-      .get(`https://softwareipmain-production.up.railway.app/${tabela}/${coordenador}`)
+      .get(
+        `https://softwareipmain-production.up.railway.app/${tabela}/${coordenador}`
+      )
       .then((response) => {
         setDados(response.data);
         setDatasDisponiveis(response.data.map((item) => item.date));
@@ -153,12 +168,9 @@ const HistoricoCor = () => {
   };
 
   const formatarLabel = (coluna) => {
-    return coluna
-      .replaceAll("_", " ")
-      .replace(/\b\w/g, (l) => l.toUpperCase());
+    return coluna.replaceAll("_", " ").replace(/\b\w/g, (l) => l.toUpperCase());
   };
 
-  
   return (
     <div className="p-4 max-w-4xl mx-auto">
       <h2 className="text-2xl font-bold mb-4">Histórico do Coordenador</h2>
@@ -210,7 +222,7 @@ const HistoricoCor = () => {
             <option value="">Selecione...</option>
             {datasDisponiveis.map((data, index) => (
               <option key={index} value={data}>
-                {new Date(data).toLocaleDateString("pt-BR")}
+                {formatarData(data)}
               </option>
             ))}
           </select>
@@ -234,14 +246,16 @@ const HistoricoCor = () => {
         </div>
       )}
 
-
       {mostrarRegistros && (
         <div className="mt-4 p-4 border rounded-md bg-gray-100">
           <h3 className="text-lg font-semibold mb-2">Detalhes do Registro</h3>
           {dados
             .filter((item) => item.date === dataSelecionada)
             .map((item, index) => (
-              <div key={index} className="mb-6 p-4 border-b bg-white rounded-md shadow-sm">
+              <div
+                key={index}
+                className="mb-6 p-4 border-b bg-white rounded-md shadow-sm"
+              >
                 {opcoesHistorico
                   .find((opcao) => opcao.label === tipoSelecionado)
                   ?.colunas.map((coluna) => (
