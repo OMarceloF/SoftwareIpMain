@@ -24,12 +24,14 @@ const Propostas = () => {
 
     // Buscar o nome do coordenador com base no email
     axios.get(`https://softwareipmain-production.up.railway.app/getUsername/${email}`)
+    //axios.get(`http://localhost:3002/getUsername/${email}`)
       .then(response => {
         const nomeCoordenador = response.data.name;
         setCoordenador(nomeCoordenador);
 
         // Buscar as unidades e filtrar apenas as que pertencem ao coordenador logado
         axios.get('https://softwareipmain-production.up.railway.app/unidades')
+        //axios.get('http://localhost:3002/unidades')
           .then(response => {
             const unidadesFiltradas = response.data.filter(unidade => unidade.coordenador === nomeCoordenador);
             setUnidades(unidadesFiltradas);
@@ -65,6 +67,7 @@ const Propostas = () => {
     };
 
     axios.post('https://softwareipmain-production.up.railway.app/propostas', formData)
+    //axios.post('http://localhost:3002/propostas', formData)
       .then(() => {
         setSuccessMessage('Dados enviados com sucesso!');
         setUnit('');

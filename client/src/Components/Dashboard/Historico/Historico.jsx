@@ -56,11 +56,13 @@ const Historico = () => {
     if (!email) return;
 
     axios.get(`https://softwareipmain-production.up.railway.app/getUsername/${email}`)
+    //axios.get(`http://localhost:3002/getUsername/${email}`)
       .then(response => {
         const nomeCoordenador = response.data.name;
         setCoordenador(nomeCoordenador);
 
         axios.get("https://softwareipmain-production.up.railway.app/unidades")
+        //axios.get("http://localhost:3002/unidades")
           .then(response => {
             const unidadesFiltradas = response.data.filter(
               unidade => unidade.coordenador === nomeCoordenador
@@ -82,6 +84,7 @@ const Historico = () => {
     if (!tabela) return;
   
     axios.get(`https://softwareipmain-production.up.railway.app/${tabela}/${unidadeSelecionada}`)
+    //axios.get(`http://localhost:3002/${tabela}/${unidadeSelecionada}`)
       .then(response => {
         console.log("🚀 Dados recebidos da API:", response.data); // VERIFICAR SE `competencias` ESTÁ CHEGANDO!
         setAvaliacoes(response.data);

@@ -26,40 +26,47 @@ const ReviewCoordenadores = () => {
           <>
             <h2>Acompanhamento Semanal</h2>
             <div className="left">
-              <div className="buttonLeft">
+              {/*<Link to="/dashboard/escolherCoordenador/reviewCoordenadores/planosDeAulaCor" className="buttonLeft">
                 <TfiLayoutMediaRightAlt />
-                <Link to="/dashboard/escolherCoordenador/reviewCoordenadores/planosDeAulaCor"><span>Plano de Aula</span></Link>
-              </div>
-              <div className="buttonLeft">
-                <FaChalkboardTeacher />
-                <Link to="/dashboard/escolherCoordenador/reviewCoordenadores/aulaCor"><span>Aula</span></Link>
-              </div>
-              <div className="buttonLeft">
-                <RiPagesLine />
-                <Link to="/dashboard/escolherCoordenador/reviewCoordenadores/diariosCor"><span>Diário</span></Link>
-              </div>
-              <div className="buttonLeft">
-                <FaPhotoVideo />
-                <Link to="/dashboard/escolherCoordenador/reviewCoordenadores/fotosEVideosCor"><span>Fotos e Vídeos</span></Link>
-              </div>
-              <div className="buttonLeft">
-                <FaHandshake />
-                <Link to="/dashboard/escolherCoordenador/reviewCoordenadores/propostasCor"><span>Propostas</span></Link>
-              </div>
-              <div className="buttonLeft">
-                <IoIosContact />
-                <Link to="/dashboard/escolherCoordenador/reviewCoordenadores/contatoCor"><span>Contato</span></Link>
-              </div>
-              <div className="buttonLeft">
-                <GiTeacher />
-                <Link to="/dashboard/escolherCoordenador/reviewCoordenadores/guideCor"><span>Guide</span></Link>
-              </div>
-              <div className="buttonLeft">
-                <GiLaserSparks />
-                <Link to="/dashboard/escolherCoordenador/reviewCoordenadores/FeiraCor"><span>Feira</span></Link>
-              </div>
+                <span>Plano de Aula</span>
+              </Link>*/}
 
+              <Link to="/dashboard/escolherCoordenador/reviewCoordenadores/aulaCor" className="buttonLeft">
+                <FaChalkboardTeacher />
+                <span>Aula</span>
+              </Link>
+
+              <Link to="/dashboard/escolherCoordenador/reviewCoordenadores/diariosCor" className="buttonLeft">
+                <RiPagesLine />
+                <span>Diário</span>
+              </Link>
+
+              <Link to="/dashboard/escolherCoordenador/reviewCoordenadores/fotosEVideosCor" className="buttonLeft">
+                <FaPhotoVideo />
+                <span>Fotos e Vídeos</span>
+              </Link>
+
+              <Link to="/dashboard/escolherCoordenador/reviewCoordenadores/propostasCor" className="buttonLeft">
+                <FaHandshake />
+                <span>Propostas</span>
+              </Link>
+
+              <Link to="/dashboard/escolherCoordenador/reviewCoordenadores/contatoCor" className="buttonLeft">
+                <IoIosContact />
+                <span>Contato</span>
+              </Link>
+
+              {/*<Link to="/dashboard/escolherCoordenador/reviewCoordenadores/guideCor" className="buttonLeft">
+                <GiTeacher />
+                <span>Guide</span>
+              </Link>*/}
+
+              <Link to="/dashboard/escolherCoordenador/reviewCoordenadores/FeiraCor" className="buttonLeft">
+                <GiLaserSparks />
+                <span>Feira</span>
+              </Link>
             </div>
+
           </>
         ) : (
           <Outlet />

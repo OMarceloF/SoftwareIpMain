@@ -10,6 +10,7 @@ const Aulas = () => {
 
     useEffect(() => {
         axios.get('https://softwareipmain-production.up.railway.app/unidades')
+        //axios.get('http://localhost:3002/unidades')
             .then(response => {
                 setUnidades(response.data);
             })

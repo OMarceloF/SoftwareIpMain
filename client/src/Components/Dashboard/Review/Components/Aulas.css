@@ -85,3 +85,45 @@ textarea {
   flex-direction: column;
   text-align: initial;
 }/*# sourceMappingURL=Aulas.css.map */
+
+.error-text {
+  color: red;
+  font-size: 0.85rem;
+  margin-top: 4px;
+}
+
+.floating-alert {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  z-index: 9999;
+  padding: 12px 20px;
+  border-radius: 6px;
+  font-size: 1rem;
+  color: white;
+  box-shadow: 0 0 10px rgba(0,0,0,0.3);
+  animation: fadeInOut 4s ease-in-out forwards;
+}
+
+.error-alert {
+  background-color: #d9534f;
+}
+
+.success-alert {
+  background-color: #5cb85c;
+}
+
+@keyframes fadeInOut {
+  0% {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  10%, 90% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+}

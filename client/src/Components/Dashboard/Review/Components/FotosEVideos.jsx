@@ -25,6 +25,7 @@ const FotosEVideos = () => {
     axios
       .get(
         `https://softwareipmain-production.up.railway.app/getUsername/${email}`
+        //`http://localhost:3002/getUsername/${email}`
       )
       .then((response) => {
         const nomeCoordenador = response.data.name;
@@ -33,6 +34,7 @@ const FotosEVideos = () => {
         // Buscar as unidades e filtrar apenas as que pertencem ao coordenador logado
         axios
           .get("https://softwareipmain-production.up.railway.app/unidades")
+          //.get("http://localhost:3002/unidades")
           .then((response) => {
             const unidadesFiltradas = response.data.filter(
               (unidade) => unidade.coordenador === nomeCoordenador
@@ -72,6 +74,7 @@ const FotosEVideos = () => {
     axios
       .post(
         "https://softwareipmain-production.up.railway.app/fotosevideos",
+        //"https://localhost:3002/fotosevideos",
         formData
       )
       .then(() => {

@@ -29,6 +29,7 @@ const Dashboard = () => {
       axios
         .get(
           `https://softwareipmain-production.up.railway.app/getRole/${email}`
+          //`http://localhost:3002/getRole/${email}`
         )
         .then((response) => {
           setRole(response.data.role);
@@ -42,14 +43,19 @@ const Dashboard = () => {
       axios
         .get(
           `https://softwareipmain-production.up.railway.app/getUsername/${email}`
+          //`http://localhost:3002/getUsername/${email}`
         )
         .then((response) => {
           const fullName = response.data.name;
           setName(fullName);
 
           // Pegando o primeiro nome e verificando a última letra
+          const nomesFemininosComuns = ["Aline", "Michele", "Rute", "Ester", "Viviane", "Luane", "gisele", "beatriz", "tamires"];
           const firstName = fullName.split(" ")[0];
-          if (firstName.slice(-1).toLowerCase() === "a") {
+          if (
+            firstName.slice(-1) === "a" ||
+            nomesFemininosComuns.includes(firstName)
+          ) {
             setGreeting("Seja bem vinda");
           } else {
             setGreeting("Seja bem vindo");
@@ -66,141 +72,101 @@ const Dashboard = () => {
       case "dev":
         return (
           <>
-            <div className="buttonLeft">
+            <Link to="/dashboard/" className="buttonLeft full-link">
               <IoMdHome />
-              <Link to="/dashboard">
-                <span>Home</span>
-              </Link>
-            </div>
-            <div className="buttonLeft">
+              <span>Home</span>
+            </Link>
+            <Link to="/dashboard/review" className="buttonLeft full-link">
               <MdRateReview />
-              <Link to="/dashboard/review">
-                <span>Review</span>
-              </Link>
-            </div>
-            <div className="buttonLeft">
+              <span>Review</span>
+            </Link>
+            <Link to="/dashboard/historico" className="buttonLeft full-link">
               <FaHistory />
-              <Link to="/dashboard/historico">
-                <span>Histórico</span>
-              </Link>
-            </div>
-            <div className="buttonLeft">
+              <span>Histórico</span>
+            </Link>
+            <Link to="/dashboard/dashboardEscolha" className="buttonLeft full-link">
               <RxDashboard />
-              <Link to="/dashboard/dashboardEscolha">
-                <span>Dashboard</span>
-              </Link>
-            </div>
-            <div className="buttonLeft">
+              <span>Dashboard</span>
+            </Link>
+            <Link to="/dashboard/unidades" className="buttonLeft full-link">
               <RiCommunityLine />
-              <Link to="/dashboard/unidades">
-                <span>Unidades</span>
-              </Link>
-            </div>
-            <div className="buttonLeft">
+              <span>Unidades</span>
+            </Link>
+            <Link to="/" className="buttonLeft full-link">
               <IoMdExit />
-              <Link to="/">
-                <span>Sair</span>
-              </Link>
-            </div>
+              <span>Sair</span>
+            </Link>
           </>
         );
       case "admin":
         return (
           <>
-            <div className="buttonLeft">
+            <Link to="/dashboard/" className="buttonLeft full-link">
               <IoMdHome />
-              <Link to="/dashboard">
-                <span>Home</span>
-              </Link>
-            </div>
-            <div className="buttonLeft">
+              <span>Home</span>
+            </Link>
+            <Link to="/dashboard/dashboardEscolha" className="buttonLeft full-link">
               <RxDashboard />
-              <Link to="/dashboard/dashboardEscolha">
-                <span>Dashboard</span>
-              </Link>
-            </div>
-            <div className="buttonLeft">
+              <span>Dashboard</span>
+            </Link>
+            <Link to="/dashboard/unidades" className="buttonLeft full-link">
               <RiCommunityLine />
-              <Link to="/dashboard/unidades">
-                <span>Unidades</span>
-              </Link>
-            </div>
-            <div className="buttonLeft">
+              <span>Unidades</span>
+            </Link>
+            <Link to="/" className="buttonLeft full-link">
               <IoMdExit />
-              <Link to="/">
-                <span>Sair</span>
-              </Link>
-            </div>
+              <span>Sair</span>
+            </Link>
           </>
         );
       case "user":
         return (
           <>
-            <div className="buttonLeft">
+            <Link to="/dashboard/" className="buttonLeft full-link">
               <IoMdHome />
-              <Link to="/dashboard">
-                <span>Home</span>
-              </Link>
-            </div>
-            <div className="buttonLeft">
+              <span>Home</span>
+            </Link>
+            <Link to="/dashboard/review" className="buttonLeft full-link">
               <MdRateReview />
-              <Link to="/dashboard/review">
-                <span>Review</span>
-              </Link>
-            </div>
-            <div className="buttonLeft">
+              <span>Review</span>
+            </Link>
+            <Link to="/dashboard/historico" className="buttonLeft full-link">
               <FaHistory />
-              <Link to="/dashboard/historico">
-                <span>Histórico</span>
-              </Link>
-            </div>
-            <div className="buttonLeft">
+              <span>Histórico</span>
+            </Link>
+            <Link to="/dashboard/unidades" className="buttonLeft full-link">
               <RiCommunityLine />
-              <Link to="/dashboard/unidades">
-                <span>Unidades</span>
-              </Link>
-            </div>
-            <div className="buttonLeft">
+              <span>Unidades</span>
+            </Link>
+            <Link to="/" className="buttonLeft full-link">
               <IoMdExit />
-              <Link to="/">
-                <span>Sair</span>
-              </Link>
-            </div>
+              <span>Sair</span>
+            </Link>
           </>
         );
       case "supervisor":
         return (
           <>
-            <div className="buttonLeft">
+            <Link to="/dashboard/" className="buttonLeft full-link">
               <IoMdHome />
-              <Link to="/dashboard">
-                <span>Home</span>
-              </Link>
-            </div>
-            <div className="buttonLeft">
+              <span>Home</span>
+            </Link>
+            <Link to="/dashboard/escolherCoordenador" className="buttonLeft full-link">
               <MdRateReview />
-              <Link to="/dashboard/escolherCoordenador">
-                <span>Review</span>
-              </Link>
-            </div>
-            <div className="buttonLeft">
+              <span>Review</span>
+            </Link>
+            <Link to="/dashboard/escolherCoordenadorCor" className="buttonLeft full-link">
               <FaHistory />
-              <Link to="/dashboard/escolherCoordenadorCor">
-                <span>Histórico</span>
-              </Link>
-            </div>
-            <div className="buttonLeft">
+              <span>Histórico</span>
+            </Link>
+            <Link to="/dashboard/escolherCoordenadorHistorico" className="buttonLeft full-link">
               <FaHistory />
-              <Link to="/dashboard/escolherCoordenadorHistorico">
-                <span>Coordenadores</span>
-              </Link>
-            </div>
-            <div className="buttonLeft">
+              <span>Coordenadores</span>
+            </Link>
+            <Link to="/" className="buttonLeft full-link">
               <IoMdExit />
-              <Link to="/">
-                <span>Sair</span>
-              </Link>
-            </div>
+              <span>Sair</span>
+            </Link>
           </>
         );
       default:

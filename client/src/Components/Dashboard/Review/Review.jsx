@@ -28,43 +28,43 @@ const Review = () => {
           <>
             <h2>Faça sua Avaliação</h2>
             <div className="left">
-              <div className="buttonLeft">
+              {/*<Link to="/dashboard/review/planosDeAula" className="buttonLeft full-link">
                 <TfiLayoutMediaRightAlt />
-                <Link to="/dashboard/review/planosDeAula"><span>Plano de Aula</span></Link>
-              </div>
-              <div className="buttonLeft">
+                <span>Plano de Aula</span>
+              </Link>
+              */}
+              <Link to="/dashboard/review/aulas" className="buttonLeft full-link">
                 <FaChalkboardTeacher />
-                <Link to="/dashboard/review/aulas"><span>Aula</span></Link>
-              </div>
-              <div className="buttonLeft">
+                <span>Aula Teste</span>
+              </Link>
+              <Link to="/dashboard/review/diario" className="buttonLeft full-link">
                 <RiPagesLine />
-                <Link to="/dashboard/review/diario"><span>Diário</span></Link>
-              </div>
-              <div className="buttonLeft">
+                <span>Diário</span>
+              </Link>
+              <Link to="/dashboard/review/fotosEVideos" className="buttonLeft full-link">
                 <FaPhotoVideo />
-                <Link to="/dashboard/review/fotosEVideos"><span>Fotos e Vídeos</span></Link>
-              </div>
-              <div className="buttonLeft">
+                <span>Fotos e Vídeos</span>
+              </Link>
+              <Link to="/dashboard/review/propostas" className="buttonLeft full-link">
                 <FaHandshake />
-                <Link to="/dashboard/review/propostas"><span>Propostas</span></Link>
-              </div>
-              <div className="buttonLeft">
+                <span>Propostas</span>
+              </Link>
+              <Link to="/dashboard/review/inventario" className="buttonLeft full-link">
                 <MdInventory />
-                <Link to="/dashboard/review/inventario"><span>Inventário</span></Link>
-              </div>
-              <div className="buttonLeft">
+                <span>Inventario</span>
+              </Link>
+              <Link to="/dashboard/review/contato" className="buttonLeft full-link">
                 <IoIosContact />
-                <Link to="/dashboard/review/contato"><span>Contato</span></Link>
-              </div>
-              <div className="buttonLeft">
+                <span>Contato</span>
+              </Link>
+              {/*<Link to="/dashboard/review/guide" className="buttonLeft full-link">
                 <GiTeacher />
-                <Link to="/dashboard/review/guide"><span>Guide</span></Link>
-              </div>
-              <div className="buttonLeft">
+                <span>Guide</span>
+              </Link>*/}
+              <Link to="/dashboard/review/feira" className="buttonLeft full-link">
                 <GiLaserSparks />
-                <Link to="/dashboard/review/feira"><span>Feira</span></Link>
-              </div>
-
+                <span>Feira</span>
+              </Link>
             </div>
           </>
         ) : (

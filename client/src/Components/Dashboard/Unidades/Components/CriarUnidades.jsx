@@ -13,6 +13,7 @@ const Aulas = () => {
     // Buscar os coordenadores no backend ao carregar a página
     useEffect(() => {
         axios.get('https://softwareipmain-production.up.railway.app/coordenadores')
+        //axios.get('http://localhost:3002/coordenadores')
             .then(response => {
                 setCoordenadores(response.data);
             })
@@ -42,6 +43,7 @@ const Aulas = () => {
         };
 
         axios.post('https://softwareipmain-production.up.railway.app/unidades', formData)
+        //axios.post('http://localhost:3002/unidades', formData)
             .then(response => {
                 console.log('Dados enviados com sucesso:', response.data);
                 setSuccessMessage('Dados enviados com sucesso!');

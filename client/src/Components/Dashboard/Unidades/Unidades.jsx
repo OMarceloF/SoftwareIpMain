@@ -20,6 +20,7 @@ const Unidades = () => {
 
     const handleSave = () => {
         axios.put(`https://softwareipmain-production.up.railway.app/unidades/${selectedUnidade.cidade}`, {
+        //axios.put(`http://localhost:3002/unidades/${selectedUnidade.cidade}`, {
             endereco: editEndereco,
             telefone: editTelefone,
             coordenador: editCoordenador,
@@ -51,6 +52,7 @@ const Unidades = () => {
         }
 
         axios.get('https://softwareipmain-production.up.railway.app/unidades')
+        //axios.get('http://localhost:3002/unidades')
             .then(response => {
                 const sortedUnidades = response.data.sort((a, b) => a.cidade.localeCompare(b.cidade));
                 setUnidades(sortedUnidades);
@@ -61,6 +63,7 @@ const Unidades = () => {
 
         if (email) {
             axios.get(`https://softwareipmain-production.up.railway.app/getUsername/${email}`)
+            //axios.get(`http://localhost:3002/getUsername/${email}`)
                 .then(response => {
                     setName(response.data.name);
                     localStorage.setItem('nameStorage', response.data.name);

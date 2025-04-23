@@ -4,12 +4,26 @@ const app = express();
 const mysql = require('mysql');
 const cors = require('cors');
 const bcrypt = require('bcrypt');
+// 🔒 Controle de sessões em memória (sem alterar o banco)
+const activeSessions = new Map(); // Estrutura: email -> { loginTime, lastActive }
+const MAX_USERS = 5;
+const SESSION_TIMEOUT_MS = 10 * 60 * 1000; // 10 minutos de inatividade
 
 app.use(express.json());
 app.use(cors());
 
 async function testDatabaseConnection() {
   try {
+
+    /*//localhost
+    const connection = mysql.createPool({
+      user: 'root',
+      host: 'localhost',
+      password: '',
+      database: 'bpnjokvpezbjichmh33i',
+      port: 3306
+    });*/
+
     const connection = mysql.createPool({
       user: 'uuoouvnk3rn33xoi',
       host: 'bpnjokvpezbjichmh33i-mysql.services.clever-cloud.com',
@@ -31,17 +45,28 @@ async function testDatabaseConnection() {
 testDatabaseConnection();
 
 function connectDatabase() {
-  db = mysql.createConnection({
+  const db = mysql.createPool({
+
     user: 'uuoouvnk3rn33xoi',
     host: 'bpnjokvpezbjichmh33i-mysql.services.clever-cloud.com',
     password: 'vGPPGUa2jDLrjbREgblx',
-    database: 'bpnjokvpezbjichmh33i',
+    database: 'bpnjokvpezbjichmh33i', 
+
+    /*//localhost
+    user: 'root',
+    host: 'localhost',
+    password: '',
+    database: 'bpnjokvpezbjichmh33i',*/
+
+
     port: 3306,
-    multipleStatements: true, // Permite rodar múltiplas queries se necessário
+    waitForConnections: true,
+    connectionLimit: 5, // ou menor, dependendo do plano do banco
+    queueLimit: 0
   });
 
   // Conectar ao banco
-  db.connect((err) => {
+  /*db.connect((err) => {
     if (err) {
       console.error('❌ Erro ao conectar ao banco:', err.message);
       setTimeout(connectDatabase, 2000); // Se falhar, tenta reconectar em 2s
@@ -58,7 +83,7 @@ function connectDatabase() {
     } else {
       throw err;
     }
-  });
+  });*/
 }
 
 
@@ -68,14 +93,11 @@ connectDatabase();
 // 🔹 Keep-Alive: Mantém a conexão ativa enviando uma query a cada 10 minutos
 setInterval(() => {
   db.query('SELECT 1', (err) => {
-    if (err) {
-      console.error('❌ Erro no Keep-Alive:', err.message);
-      connectDatabase(); // Tenta reconectar se houver erro
-    } else {
-      console.log('🔄 Keep-Alive: Conexão mantida ativa.');
-    }
+    if (err) console.error('❌ Keep-Alive falhou:', err.message);
+    else console.log('🔄 Keep-Alive bem-sucedido');
   });
-}, 1000 * 60 * 10); // Executa a cada 10 minutos
+}, 10 * 60 * 1000);
+
 
 // 🔹 Teste de Conexão Inicial
 db.query('SELECT 1 + 1 AS result', (err, results) => {
@@ -116,7 +138,7 @@ app.get('/coordenadores', (req, res) => {
 
 
 app.post('/aula', (req, res) => {
-  const { 
+  const {
     date, unidade, regente, nota, comentarios,
     conformidade_teachers_guide, planejamento_aula, oratoria_professor,
     dominio_tema, aplicacao_habilidades_competencias, construcao_pensamento,
@@ -146,7 +168,7 @@ app.post('/aula', (req, res) => {
   ];
 
   db.query(SQL, values, (err, results) => {
-    if (err){
+    if (err) {
       console.error('Erro ao inserir dados:', err);
       return res.status(500).send({ error: err });
     }
@@ -162,11 +184,11 @@ app.post('/contato', (req, res) => {
   const values = [date, retorno, comentarios, unidade];
 
   db.query(SQL, values, (err, results) => {
-      if (err) {
-          console.error('Erro ao inserir dados:', err);
-          return res.status(500).send({ error: err });
-      }
-      res.status(200).send({ message: 'Dados inseridos com sucesso!' });
+    if (err) {
+      console.error('Erro ao inserir dados:', err);
+      return res.status(500).send({ error: err });
+    }
+    res.status(200).send({ message: 'Dados inseridos com sucesso!' });
   });
 });
 
@@ -178,7 +200,7 @@ app.post('/diarios', (req, res) => {
   const values = [date, unidade, regente, nota, comentarios];
 
   db.query(SQL, values, (err, results) => {
-    if(err) {
+    if (err) {
       console.error('Erro ao inserir dados:', err);
       return res.status(500).send({ error: err })
     }
@@ -194,7 +216,7 @@ app.post('/fotosEVideos', (req, res) => {
   const values = [date, nota, comentarios, unidade];
 
   db.query(SQL, values, (err, results) => {
-    if(err) {
+    if (err) {
       console.error('Erro ao inserir dados:', err);
       return res.status(500).send({ error: err })
     }
@@ -210,7 +232,7 @@ app.post('/guide', (req, res) => {
   const values = [date, unidade, turma, conformidade, comentarios];
 
   db.query(SQL, values, (err, results) => {
-    if(err) {
+    if (err) {
       console.error('Erro ao inserir dados:', err);
       return res.status(500).send({ error: err })
     }
@@ -245,7 +267,7 @@ app.post('/planos', (req, res) => {
   const values = [date, unidade, regente, nota, comentarios];
 
   db.query(SQL, values, (err, results) => {
-    if(err) {
+    if (err) {
       console.error('Erro ao inserir dados:', err);
       return res.status(500).send({ error: err })
     }
@@ -261,7 +283,7 @@ app.post('/propostas', (req, res) => {
   const values = [date, unidade, regente, comentarios];
 
   db.query(SQL, values, (err, results) => {
-    if(err) {
+    if (err) {
       console.error('Erro ao inserir dados:', err);
       return res.status(500).send({ error: err })
     }
@@ -277,7 +299,7 @@ app.post('/unidades', (req, res) => {
   const values = [cidade, coordenador];
 
   db.query(SQL, values, (err, results) => {
-    if(err) {
+    if (err) {
       console.error('Erro ao inserir dados:', err);
       return res.status(500).send({ error: err })
     }
@@ -318,7 +340,7 @@ app.post('/contatocor', (req, res) => {
   const values = [date, retorno, comentarios, coordenador];
 
   db.query(SQL, values, (err, results) => {
-    if(err) {
+    if (err) {
       console.error('Erro ao inserir dados:', err);
       return res.status(500).send({ error: err })
     }
@@ -334,7 +356,7 @@ app.post('/diarioscor', (req, res) => {
   const values = [date, nota, comentarios, coordenador];
 
   db.query(SQL, values, (err, results) => {
-    if(err) {
+    if (err) {
       console.error('Erro ao inserir dados:', err);
       return res.status(500).send({ error: err })
     }
@@ -343,13 +365,13 @@ app.post('/diarioscor', (req, res) => {
 })
 
 app.post('/feira', (req, res) => {
-  const { unidade, cronograma, estrutural, apresentacao, comentarios, date  } = req.body;
+  const { unidade, cronograma, estrutural, apresentacao, comentarios, date } = req.body;
 
   const SQL = 'INSERT INTO feira (unidade, cronograma, estrutural, apresentacao, comentarios, date) VALUES (?, ?, ?, ?, ?, ?)';
   const values = [unidade, cronograma, estrutural, apresentacao, comentarios, date];
 
   db.query(SQL, values, (err, results) => {
-    if(err) {
+    if (err) {
       console.error('Erro ao inserir dados:', err);
       return res.status(500).send({ error: err })
     }
@@ -359,13 +381,13 @@ app.post('/feira', (req, res) => {
 
 // Adicionando uma rota para salvar dados na tabela feiraCor
 app.post('/feiracor', (req, res) => {
-  const { coordenador, cronograma, estrutural, apresentacao, comentarios, date  } = req.body;
+  const { coordenador, cronograma, estrutural, apresentacao, comentarios, date } = req.body;
 
   const SQL = 'INSERT INTO feiracor (coordenador, cronograma, estrutural, apresentacao, comentarios, date) VALUES (?, ?, ?, ?, ?, ?)';
   const values = [coordenador, cronograma, estrutural, apresentacao, comentarios, date];
 
   db.query(SQL, values, (err, results) => {
-    if(err) {
+    if (err) {
       console.error('Erro ao inserir dados:', err);
       return res.status(500).send({ error: err })
     }
@@ -375,13 +397,13 @@ app.post('/feiracor', (req, res) => {
 
 // Adicionando uma rota para salvar dados na tabela fotosevideosCor
 app.post('/fotosevideoscor', (req, res) => {
-  const { coordenador, date, nota, comentarios  } = req.body;
+  const { coordenador, date, nota, comentarios } = req.body;
 
   const SQL = 'INSERT INTO fotosevideoscor (coordenador, date, nota, comentarios) VALUES (?, ?, ?, ?)';
   const values = [coordenador, date, nota, comentarios];
 
   db.query(SQL, values, (err, results) => {
-    if(err) {
+    if (err) {
       console.error('Erro ao inserir dados:', err);
       return res.status(500).send({ error: err })
     }
@@ -391,13 +413,13 @@ app.post('/fotosevideoscor', (req, res) => {
 
 // Adicionando uma rota para salvar dados na tabela guidecor
 app.post('/guidecor', (req, res) => {
-  const { coordenador, date, conformidade, comentarios  } = req.body;
+  const { coordenador, date, conformidade, comentarios } = req.body;
 
   const SQL = 'INSERT INTO guidecor (coordenador, date, conformidade, comentarios) VALUES (?, ?, ?, ?)';
   const values = [coordenador, date, conformidade, comentarios];
 
   db.query(SQL, values, (err, results) => {
-    if(err) {
+    if (err) {
       console.error('Erro ao inserir dados:', err);
       return res.status(500).send({ error: err })
     }
@@ -407,13 +429,13 @@ app.post('/guidecor', (req, res) => {
 
 // Adicionando uma rota para salvar dados na tabela planoscor
 app.post('/planoscor', (req, res) => {
-  const { coordenador, date, nota, comentarios  } = req.body;
+  const { coordenador, date, nota, comentarios } = req.body;
 
   const SQL = 'INSERT INTO planoscor (coordenador, date, nota, comentarios) VALUES (?, ?, ?, ?)';
   const values = [coordenador, date, nota, comentarios];
 
   db.query(SQL, values, (err, results) => {
-    if(err) {
+    if (err) {
       console.error('Erro ao inserir dados:', err);
       return res.status(500).send({ error: err })
     }
@@ -423,13 +445,13 @@ app.post('/planoscor', (req, res) => {
 
 // Adicionando uma rota para salvar dados na tabela propostascor
 app.post('/propostascor', (req, res) => {
-  const { coordenador, date, comentarios  } = req.body;
+  const { coordenador, date, comentarios } = req.body;
 
   const SQL = 'INSERT INTO propostascor (coordenador, date, comentarios) VALUES (?, ?, ?)';
   const values = [coordenador, date, comentarios];
 
   db.query(SQL, values, (err, results) => {
-    if(err) {
+    if (err) {
       console.error('Erro ao inserir dados:', err);
       return res.status(500).send({ error: err })
     }
@@ -456,7 +478,7 @@ app.get('/aula/:unidade', (req, res) => {
 app.get('/aula/detalhes/:unidade', (req, res) => {
   const { unidade } = req.params;
   const SQL = 'SELECT date, nota, regente, comentarios FROM aula WHERE unidade = ?';
-  
+
   db.query(SQL, [unidade], (err, results) => {
     if (err) {
       console.error('Erro ao buscar dados completos:', err);
@@ -469,7 +491,7 @@ app.get('/aula/detalhes/:unidade', (req, res) => {
 app.get('/diarios/detalhes/:unidade', (req, res) => {
   const { unidade } = req.params;
   const SQL = 'SELECT date, nota, regente, comentarios FROM diarios WHERE unidade = ?';
-  
+
   db.query(SQL, [unidade], (err, results) => {
     if (err) {
       console.error('Erro ao buscar dados completos:', err);
@@ -482,7 +504,7 @@ app.get('/diarios/detalhes/:unidade', (req, res) => {
 app.get('/planos/detalhes/:unidade', (req, res) => {
   const { unidade } = req.params;
   const SQL = 'SELECT date, nota, regente, comentarios FROM planos WHERE unidade = ?';
-  
+
   db.query(SQL, [unidade], (err, results) => {
     if (err) {
       console.error('Erro ao buscar dados completos:', err);
@@ -494,8 +516,8 @@ app.get('/planos/detalhes/:unidade', (req, res) => {
 
 app.get('/fotosevideos/detalhes/:unidade', (req, res) => {
   const { unidade } = req.params;
-  const SQL = 'SELECT date, nota, comentarios FROM fotosevideos WHERE unidade = ?';
-  
+  const SQL = 'SELECT date, nota, regente, comentarios FROM fotosevideos WHERE unidade = ?';
+
   db.query(SQL, [unidade], (err, results) => {
     if (err) {
       console.error('Erro ao buscar dados completos:', err);
@@ -508,7 +530,7 @@ app.get('/fotosevideos/detalhes/:unidade', (req, res) => {
 app.get('/propostas/:unidade', (req, res) => {
   const { unidade } = req.params;
   const SQL = 'SELECT date, regente, comentarios FROM propostas WHERE unidade = ?';
-  
+
   db.query(SQL, [unidade], (err, results) => {
     if (err) {
       console.error('Erro ao buscar dados completos:', err);
@@ -521,7 +543,7 @@ app.get('/propostas/:unidade', (req, res) => {
 app.get('/propostas/detalhes/:unidade', (req, res) => {
   const { unidade } = req.params;
   const SQL = 'SELECT date, regente, comentarios FROM propostas WHERE unidade = ?';
-  
+
   db.query(SQL, [unidade], (err, results) => {
     if (err) {
       console.error('Erro ao buscar dados completos:', err);
@@ -534,7 +556,7 @@ app.get('/propostas/detalhes/:unidade', (req, res) => {
 app.get('/inventario/:unidade', (req, res) => {
   const { unidade } = req.params;
   const SQL = 'SELECT date, regente, comentarios, quem, resolvido FROM inventario WHERE unidade = ?';
-  
+
   db.query(SQL, [unidade], (err, results) => {
     if (err) {
       console.error('Erro ao buscar dados completos:', err);
@@ -547,7 +569,7 @@ app.get('/inventario/:unidade', (req, res) => {
 app.get('/inventario/detalhes/:unidade', (req, res) => {
   const { unidade } = req.params;
   const SQL = 'SELECT date, regente, comentarios, quem, resolvido FROM inventario WHERE unidade = ?';
-  
+
   db.query(SQL, [unidade], (err, results) => {
     if (err) {
       console.error('Erro ao buscar dados completos:', err);
@@ -560,7 +582,7 @@ app.get('/inventario/detalhes/:unidade', (req, res) => {
 app.get('/contato/detalhes/:unidade', (req, res) => {
   const { unidade } = req.params;
   const SQL = 'SELECT date, retorno, comentarios FROM contato WHERE unidade = ?';
-  
+
   db.query(SQL, [unidade], (err, results) => {
     if (err) {
       console.error('Erro ao buscar dados completos:', err);
@@ -573,7 +595,7 @@ app.get('/contato/detalhes/:unidade', (req, res) => {
 app.get('/contato/:unidade', (req, res) => {
   const { unidade } = req.params;
   const SQL = 'SELECT date, retorno, comentarios FROM contato WHERE unidade = ?';
-  
+
   db.query(SQL, [unidade], (err, results) => {
     if (err) {
       console.error('Erro ao buscar dados completos:', err);
@@ -586,7 +608,7 @@ app.get('/contato/:unidade', (req, res) => {
 app.get('/guide/detalhes/:unidade', (req, res) => {
   const { unidade } = req.params;
   const SQL = 'SELECT date, turma, conformidade, comentarios FROM guide WHERE unidade = ?';
-  
+
   db.query(SQL, [unidade], (err, results) => {
     if (err) {
       console.error('Erro ao buscar dados completos:', err);
@@ -599,7 +621,7 @@ app.get('/guide/detalhes/:unidade', (req, res) => {
 app.get('/feira/detalhes/:unidade', (req, res) => {
   const { unidade } = req.params;
   const SQL = 'SELECT cronograma, estrutural, apresentacao, comentarios, date FROM feira WHERE unidade = ?';
-  
+
   db.query(SQL, [unidade], (err, results) => {
     if (err) {
       console.error('Erro ao buscar dados completos:', err);
@@ -612,7 +634,7 @@ app.get('/feira/detalhes/:unidade', (req, res) => {
 app.get('/feira/:unidade', (req, res) => {
   const { unidade } = req.params;
   const SQL = 'SELECT cronograma, estrutural, apresentacao, comentarios, date FROM feira WHERE unidade = ?';
-  
+
   db.query(SQL, [unidade], (err, results) => {
     if (err) {
       console.error('Erro ao buscar dados completos:', err);
@@ -639,11 +661,11 @@ app.get('/contato/:unidade', (req, res) => {
 // Adicionar rota para buscar dados da tabela diarios
 app.get('/diarios/:unidade', (req, res) => {
   const unidade = req.params.unidade;
-  
+
   // Criar SQL para selecionar os dados
   const SQL = 'SELECT date, nota, regente, comentarios FROM diarios WHERE unidade = ?';
   const values = [unidade];
-  
+
   db.query(SQL, values, (err, results) => {
     if (err) {
       console.error('Erro ao buscar dados:', err);
@@ -656,7 +678,7 @@ app.get('/diarios/:unidade', (req, res) => {
 // Rota para buscar dados da tabela feira filtrados por unidade
 app.get('/feira/:unidade', (req, res) => {
   const unidade = req.params.unidade;
-  
+
   // Criar SQL para selecionar a linha mais recente para cada coluna
   const SQL = `
     SELECT date, cronograma, apresentacao, estrutural, comentarios
@@ -665,13 +687,13 @@ app.get('/feira/:unidade', (req, res) => {
     ORDER BY date DESC
   `;
   const values = [unidade];
-  
+
   db.query(SQL, values, (err, results) => {
     if (err) {
       console.error('Erro ao buscar dados:', err);
       return res.status(500).send({ error: err });
     }
-    
+
     // Selecionar apenas a linha com a data mais recente
     const latestEntry = results[0]; // A linha mais recente já está na primeira posição
     res.status(200).send(latestEntry);
@@ -682,7 +704,7 @@ app.get('/feira/:unidade', (req, res) => {
 app.get('/fotosevideos/:unidade', (req, res) => {
   const { unidade } = req.params;
 
-  const SQL = 'SELECT date, nota, comentarios FROM fotosevideos WHERE unidade = ?';
+  const SQL = 'SELECT date, nota, regente, comentarios FROM fotosevideos WHERE unidade = ?';
   const values = [unidade];
 
   db.query(SQL, values, (err, results) => {
@@ -698,7 +720,7 @@ app.get('/fotosevideos/:unidade', (req, res) => {
 app.get('/guide/:unidade', (req, res) => {
   const { unidade } = req.params;
 
-  const SQL = 'SELECT date, nota, comentarios, conformidade FROM guide WHERE unidade = ?';
+  const SQL = 'SELECT date, nota, regente, comentarios, conformidade FROM guide WHERE unidade = ?';
   const values = [unidade];
 
   db.query(SQL, values, (err, results) => {
@@ -768,13 +790,13 @@ app.get('/:tabela/:coordenador', (req, res) => {
 
   // Evita SQL Injection
   const tabelasPermitidas = ["planoscor", "aulacor", "diarioscor", "fotosevideoscor", "propostascor", "contatocor", "guidecor", "feiracor"];
-  
+
   if (!tabelasPermitidas.includes(tabela)) {
     return res.status(400).send({ error: "Tabela inválida!" });
   }
 
   const SQL = `SELECT * FROM ?? WHERE coordenador = ?`;
-  
+
   db.query(SQL, [tabela, coordenador], (err, results) => {
     if (err) {
       console.error('Erro ao buscar dados:', err);
@@ -784,6 +806,16 @@ app.get('/:tabela/:coordenador', (req, res) => {
   });
 });
 
+// 🧹 Cron automático que remove sessões inativas a cada 2 minutos
+setInterval(() => {
+  const now = new Date();
+  for (const [email, session] of activeSessions.entries()) {
+    if (now - session.lastActive > SESSION_TIMEOUT_MS) {
+      activeSessions.delete(email);
+      console.log(`🕔 Sessão automaticamente expirada: ${email}`);
+    }
+  }
+}, 2 * 60 * 1000); // A cada 2 minutos
 
 // Rodando o servidor
 app.listen(3002, () => {
@@ -932,15 +964,15 @@ app.put('/unidades/:cidade', (req, res) => {
   const values = [endereco, telefone, coordenador, nomedir, cidade]; // Incluindo nomedir nos valores
 
   db.query(query, values, (err, results) => {
-      if (err) {
-          console.error('Erro ao atualizar a unidade:', err);
-          return res.status(500).send('Erro ao atualizar a unidade');
-      }
-      if (results.affectedRows > 0) {
-          res.send({ message: 'Unidade atualizada com sucesso' });
-      } else {
-          res.status(404).send({ message: 'Unidade não encontrada' });
-      }
+    if (err) {
+      console.error('Erro ao atualizar a unidade:', err);
+      return res.status(500).send('Erro ao atualizar a unidade');
+    }
+    if (results.affectedRows > 0) {
+      res.send({ message: 'Unidade atualizada com sucesso' });
+    } else {
+      res.status(404).send({ message: 'Unidade não encontrada' });
+    }
   });
 });
 
@@ -956,18 +988,46 @@ app.post('/login', (req, res) => {
   console.log('Login Password:', loginPassword);
 
   const SQL = 'SELECT * FROM coordenadores WHERE email = ? AND password = ?';
-  const values = [loginEmail, loginPassword];
+  db.query(SQL, [loginEmail, loginPassword], (err, results) => {
+    if (err) return res.status(500).send({ error: err });
+    if (results.length === 0) return res.status(401).send({ message: 'Credenciais não encontradas!' });
 
-  // Conectar
-  db.query(SQL, values, (err, results) => {
-    if (err) {
-      console.error('Erro ao buscar dados:', err);
-      return res.status(500).send({ error: err });
+    const now = new Date();
+
+    // 🧹 Remove sessões inativas
+    for (const [email, session] of activeSessions.entries()) {
+      if (now - session.lastActive > SESSION_TIMEOUT_MS) {
+        activeSessions.delete(email);
+        console.log(`🕓 Sessão expirada: ${email}`);
+      }
     }
-    if (results.length > 0) {
-      res.status(200).send(results);
-    } else {
-      res.status(401).send({ message: 'Credenciais não encontradas!' });
+
+    // 🚫 Remove a sessão mais antiga se passar do limite
+    if (activeSessions.size >= MAX_USERS) {
+      const oldest = [...activeSessions.entries()].sort((a, b) => a[1].loginTime - b[1].loginTime)[0];
+      if (oldest) {
+        activeSessions.delete(oldest[0]);
+        console.log(`🔁 Sessão removida por excesso: ${oldest[0]}`);
+      }
     }
+
+    // ✅ Adiciona nova sessão
+    activeSessions.set(loginEmail, {
+      loginTime: now,
+      lastActive: now
+    });
+
+    return res.status(200).send(results);
   });
+});
+
+// 🔁 Atualiza a última atividade do usuário
+app.put('/atualizar-atividade/:email', (req, res) => {
+  const { email } = req.params;
+  if (activeSessions.has(email)) {
+    activeSessions.get(email).lastActive = new Date();
+    return res.status(200).send({ message: 'Atividade atualizada' });
+  } else {
+    return res.status(401).send({ message: 'Sessão não encontrada ou expirada' });
+  }
 });

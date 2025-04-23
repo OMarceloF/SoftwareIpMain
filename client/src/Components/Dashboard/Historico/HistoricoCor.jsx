@@ -17,57 +17,69 @@ const HistoricoCor = () => {
     return data.toLocaleDateString("pt-BR");
   };
 
-  const gerarPDF = () => {
+
+    const gerarPDF = () => {
     const doc = new jsPDF();
+    const pageHeight = doc.internal.pageSize.height;
     const titulo = `Relatório - ${tipoSelecionado}`;
     const dataFormatada = formatarData(dataSelecionada);
-
+  
     const colunas = opcoesHistorico.find(
       (opcao) => opcao.label === tipoSelecionado
     )?.colunas;
-
+  
     const registrosFiltrados = dados.filter(
       (item) => item.date === dataSelecionada
     );
-
-    let y = 20; // Posição vertical inicial
-
+  
+    let y = 20;
+  
     doc.setFontSize(16);
     doc.text(titulo, 14, y);
     y += 10;
     doc.setFontSize(12);
     doc.text(`Data: ${dataFormatada}`, 14, y);
     y += 10;
-
+  
     registrosFiltrados.forEach((registro, index) => {
+      const alturaMinimaParaRegistro = 10 + colunas.length * 8;
+  
+      // Verifica se ainda há espaço na página, se não, cria nova
+      if (y + alturaMinimaParaRegistro > pageHeight - 20) {
+        doc.addPage();
+        y = 20;
+      }
+  
       doc.setFontSize(14);
       doc.text(`Registro ${index + 1}`, 14, y);
       y += 8;
-
+  
       colunas.forEach((coluna) => {
         const label = formatarLabel(coluna);
         const valor = registro[coluna] ?? "N/A";
-
         const texto = `${label}: ${valor}`;
-
-        // Se o texto estiver muito longo, quebre em várias linhas
+  
         const linhas = doc.splitTextToSize(texto, 180);
         linhas.forEach((linha) => {
+          if (y + 6 > pageHeight - 20) {
+            doc.addPage();
+            y = 20;
+          }
           doc.setFontSize(11);
           doc.text(linha, 14, y);
           y += 6;
         });
       });
-
+  
       y += 8;
-
-      // Se ultrapassar o tamanho da página, cria nova página
-      if (y > 270) {
+  
+      // Se o próximo registro não couber, nova página
+      if (y + alturaMinimaParaRegistro > pageHeight - 20) {
         doc.addPage();
         y = 20;
       }
     });
-
+  
     doc.save(`${titulo}-${dataFormatada}.pdf`);
   };
 
@@ -153,6 +165,7 @@ const HistoricoCor = () => {
     axios
       .get(
         `https://softwareipmain-production.up.railway.app/${tabela}/${coordenador}`
+        //`http://localhost:3002/${tabela}/${coordenador}`
       )
       .then((response) => {
         setDados(response.data);
@@ -171,10 +184,10 @@ const HistoricoCor = () => {
     return coluna.replaceAll("_", " ").replace(/\b\w/g, (l) => l.toUpperCase());
   };
 
-  return (
-    <div className="p-4 max-w-4xl mx-auto">
+   return (
+    <div className="p-4 max-w-4xl mx-auto" id="conteudo-pdf">
       <h2 className="text-2xl font-bold mb-4">Histórico do Coordenador</h2>
-
+  
       <div className="mb-4">
         <label className="block text-sm font-medium text-gray-700">
           Visualizar:
@@ -197,7 +210,7 @@ const HistoricoCor = () => {
           ))}
         </select>
       </div>
-
+  
       {tipoSelecionado && (
         <div className="mb-4">
           <button
@@ -208,7 +221,7 @@ const HistoricoCor = () => {
           </button>
         </div>
       )}
-
+  
       {carregar && datasDisponiveis.length > 0 && (
         <div className="mb-4">
           <label className="block text-sm font-medium text-gray-700">
@@ -228,7 +241,7 @@ const HistoricoCor = () => {
           </select>
         </div>
       )}
-
+  
       {dataSelecionada && (
         <div className="mb-4 flex gap-2">
           <button
@@ -245,34 +258,45 @@ const HistoricoCor = () => {
           </button>
         </div>
       )}
+  
+  {mostrarRegistros && (
+  <div className="mt-4 p-4 border rounded-md bg-gray-100">
+    <h3 className="text-lg font-semibold mb-4">Detalhes do Registro</h3>
+    {dados
+      .filter((item) => item.date === dataSelecionada)
+      .map((item, index) => (
+        <div key={index} className="mb-10">
+          <div className="p-6 bg-white rounded-lg shadow-md border-2 border-gray-300 space-y-6">
+            {/* Título da Unidade */}
+            {item.unidade && (
+              <h4
+    className="text-xl font-semibold text-blue-700 mb-4 border-b pb-2"
+    style={{ marginTop: '80px' }}
+  >
+    Unidade: {item.unidade}
+  </h4>           
+            )}
 
-      {mostrarRegistros && (
-        <div className="mt-4 p-4 border rounded-md bg-gray-100">
-          <h3 className="text-lg font-semibold mb-2">Detalhes do Registro</h3>
-          {dados
-            .filter((item) => item.date === dataSelecionada)
-            .map((item, index) => (
-              <div
-                key={index}
-                className="mb-6 p-4 border-b bg-white rounded-md shadow-sm"
-              >
-                {opcoesHistorico
-                  .find((opcao) => opcao.label === tipoSelecionado)
-                  ?.colunas.map((coluna) => (
-                    <div
-                      key={coluna}
-                      className="flex justify-between py-1 border-b last:border-b-0"
-                    >
-                      <strong>{formatarLabel(coluna)}:</strong>
-                      <span>{item[coluna] ?? "N/A"}</span>
-                    </div>
-                  ))}
-              </div>
-            ))}
+            {/* Detalhes */}
+            {opcoesHistorico
+              .find((opcao) => opcao.label === tipoSelecionado)
+              ?.colunas.map((coluna) => (
+                <div
+                  key={coluna}
+                  className="flex justify-between border-b pb-2 last:border-b-0 leading-loose"
+                >
+                  <strong className="text-gray-700">{formatarLabel(coluna)}:</strong>
+                  <span className="text-gray-900">{item[coluna] ?? "N/A"}</span>
+                </div>
+              ))}
+          </div>
         </div>
-      )}
+      ))}
+  </div>
+)}
     </div>
   );
+   
 };
 
 export default HistoricoCor;

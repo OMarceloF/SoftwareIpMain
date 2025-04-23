@@ -81,6 +81,7 @@ const HistoricoCoordenadores = () => {
       setCoordenador(coordenadorNome);
       axios
         .get("https://softwareipmain-production.up.railway.app/unidades")
+        //.get("http://localhost:3002/unidades")
         .then((response) => {
           const unidadesFiltradas = response.data.filter(
             (unidade) => unidade.coordenador === coordenadorNome
@@ -105,6 +106,7 @@ const HistoricoCoordenadores = () => {
     axios
       .get(
         `https://softwareipmain-production.up.railway.app/${tabela}/${unidadeSelecionada}`
+        //`http://localhost:3002/${tabela}/${unidadeSelecionada}`
       )
       .then((response) => {
         console.log("Avaliações recebidas:", response.data); // <-- AQUI
