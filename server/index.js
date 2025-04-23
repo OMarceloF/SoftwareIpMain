@@ -9,6 +9,8 @@ const activeSessions = new Map(); // Estrutura: email -> { loginTime, lastActive
 const MAX_USERS = 5;
 const SESSION_TIMEOUT_MS = 10 * 60 * 1000; // 10 minutos de inatividade
 
+let db; // <- Declare fora da função
+
 app.use(express.json());
 app.use(cors());
 
@@ -42,27 +44,28 @@ async function testDatabaseConnection() {
 }
 
 // Testar a conexão ao iniciar o servidor
-testDatabaseConnection();
+//testDatabaseConnection();
 
 function connectDatabase() {
-  const db = mysql.createPool({
-
+  db = mysql.createPool({
     user: 'uuoouvnk3rn33xoi',
     host: 'bpnjokvpezbjichmh33i-mysql.services.clever-cloud.com',
     password: 'vGPPGUa2jDLrjbREgblx',
-    database: 'bpnjokvpezbjichmh33i', 
+    database: 'bpnjokvpezbjichmh33i',
+    port: 3306,
+    waitForConnections: true,
+    connectionLimit: 5,
+    queueLimit: 0
 
     /*//localhost
     user: 'root',
     host: 'localhost',
     password: '',
-    database: 'bpnjokvpezbjichmh33i',*/
-
-
+    database: 'bpnjokvpezbjichmh33i',
     port: 3306,
     waitForConnections: true,
     connectionLimit: 5, // ou menor, dependendo do plano do banco
-    queueLimit: 0
+    queueLimit: 0*/
   });
 
   // Conectar ao banco
