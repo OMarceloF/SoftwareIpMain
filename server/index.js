@@ -465,6 +465,7 @@ app.post('/propostascor', (req, res) => {
 // Adicionando uma rota para buscar dados da tabela aula filtrados por unidade
 app.get('/aula/:unidade', (req, res) => {
   const { unidade } = req.params;
+  console.log("🔍 Unidade recebida:", unidade);
 
   const SQL = 'SELECT * FROM aula WHERE unidade = ?';
   const values = [unidade];
