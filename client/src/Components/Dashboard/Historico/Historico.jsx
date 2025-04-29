@@ -3,8 +3,6 @@ import axios from "axios";
 import jsPDF from "jspdf";
 import html2canvas from "html2canvas";
 
-const [role, setRole] = useState("");
-
 const Historico = () => {
   const [tipoSelecionado, setTipoSelecionado] = useState("");
   const [unidades, setUnidades] = useState([]);
@@ -77,29 +75,26 @@ const Historico = () => {
   }, [email]);
 
   useEffect(() => {
-    if (!tipoSelecionado || (!unidadeSelecionada && !coordenador)) {
+    if (!tipoSelecionado || !unidadeSelecionada) {
       setAvaliacoes([]);
       return;
     }
 
-    const baseTabela = opcoesHistorico.find(opcao => opcao.label === tipoSelecionado)?.tabela;
-    if (!baseTabela) return;
+    const tabela = opcoesHistorico.find(opcao => opcao.label === tipoSelecionado)?.tabela;
+    if (!tabela) return;
 
-    const tabela = role === "coordenador" ? `${baseTabela}cor` : baseTabela;
     const unidadeUrl = encodeURIComponent(unidadeSelecionada.trim());
 
-    const rota = role === "coordenador"
-      ? `https://softwareipmain-production.up.railway.app/${tabela}/${coordenador}`
-      : `https://softwareipmain-production.up.railway.app/${tabela}/${unidadeUrl}`;
+    axios.get(`https://softwareipmain-production.up.railway.app/${tabela}/${unidadeUrl}`)
 
-    axios.get(rota)
+
+      //axios.get(`http://localhost:3002/${tabela}/${unidadeSelecionada}`)
       .then(response => {
-        console.log("📦 Dados recebidos da API:", response.data);
+        console.log("🚀 Dados recebidos da API:", response.data); // VERIFICAR SE `competencias` ESTÁ CHEGANDO!
         setAvaliacoes(response.data);
       })
       .catch(error => console.error("❌ Erro ao buscar avaliações:", error));
-  }, [tipoSelecionado, unidadeSelecionada, coordenador, role]);
-
+  }, [tipoSelecionado, unidadeSelecionada]);
 
 
   const resetarDados = () => {
@@ -117,21 +112,17 @@ const Historico = () => {
     }).format(data);
   };
 
-  const avaliacoesFiltradas = avaliacoes
-    .filter(avaliacao => {
-      if (!mesSelecionado || !avaliacao.date) return false;
-      const data = new Date(avaliacao.date);
-      data.setMinutes(data.getMinutes() + data.getTimezoneOffset());
-      return data.getMonth() === meses.findIndex(m => m.toLowerCase() === mesSelecionado.toLowerCase());
-    })
-    .map(avaliacao => ({
-      ...avaliacao,
-      competencias: typeof avaliacao.competencias === "string"
-        ? JSON.parse(avaliacao.competencias || "{}")
-        : avaliacao.competencias || {}
-    }));
-
-
+  const avaliacoesFiltradas = avaliacoes.filter(avaliacao => {
+    if (!mesSelecionado) return false;
+    const data = new Date(avaliacao.date);
+    data.setMinutes(data.getMinutes() + data.getTimezoneOffset()); // Corrige UTC
+    return data.getMonth() === meses.findIndex(m => m.toLowerCase() === mesSelecionado.toLowerCase());
+  }); avaliacoes.map(avaliacao => ({
+    ...avaliacao,
+    competencias: typeof avaliacao.competencias === "string"
+      ? JSON.parse(avaliacao.competencias || "{}")
+      : avaliacao.competencias || {}
+  }));
 
 
   const gerarPDF = () => {
