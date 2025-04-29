@@ -83,13 +83,8 @@ const Historico = () => {
     const tabela = opcoesHistorico.find(opcao => opcao.label === tipoSelecionado)?.tabela;
     if (!tabela) return;
 
-    function normalizarTexto(str) {
-      return str
-        .normalize("NFD")
-        .replace(/[\u0300-\u036f]/g, "") // remove acentos
-        .replace(/\s+/g, " ")            // remove espaços duplicados
-        .trim()
-        .toLowerCase();                  // tudo minúsculo
+    function removerAcentos(str) {
+      return str.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
     }
     
     const unidadeNormalizada = removerAcentos(unidadeSelecionada.trim());
