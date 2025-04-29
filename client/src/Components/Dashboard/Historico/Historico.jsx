@@ -83,8 +83,13 @@ const Historico = () => {
     const tabela = opcoesHistorico.find(opcao => opcao.label === tipoSelecionado)?.tabela;
     if (!tabela) return;
 
-    const unidadeNormalizada = unidadeSelecionada.trim();
+    function removerAcentos(str) {
+      return str.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+    }
+    
+    const unidadeNormalizada = removerAcentos(unidadeSelecionada.trim());
     axios.get(`https://softwareipmain-production.up.railway.app/${tabela}/${encodeURIComponent(unidadeNormalizada)}`)
+    
 
       //axios.get(`http://localhost:3002/${tabela}/${unidadeSelecionada}`)
       .then(response => {
