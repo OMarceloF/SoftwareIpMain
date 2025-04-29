@@ -464,20 +464,20 @@ app.post('/propostascor', (req, res) => {
 
 // Adicionando uma rota para buscar dados da tabela aula filtrados por unidade
 app.get('/aula/:unidade', (req, res) => {
-  const { unidade } = req.params;
-  console.log("🔍 Unidade recebida:", unidade);
+  const unidade = req.params.unidade;
 
-  const SQL = 'SELECT * FROM aula WHERE unidade = ?';
-  const values = [unidade];
+  const SQL = 'SELECT * FROM aula WHERE LOWER(TRIM(unidade)) = ?';
+  const valorNormalizado = unidade.trim().toLowerCase();
 
-  db.query(SQL, values, (err, results) => {
+  db.query(SQL, [valorNormalizado], (err, results) => {
     if (err) {
-      console.error('Erro ao buscar dados:', err);
+      console.error('Erro ao buscar dados da aula:', err);
       return res.status(500).send({ error: err });
     }
     res.status(200).send(results);
   });
 });
+
 
 app.get('/aula/detalhes/:unidade', (req, res) => {
   const { unidade } = req.params;
