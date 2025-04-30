@@ -707,7 +707,7 @@ app.get('/feira/:unidade', (req, res) => {
 app.get('/fotosevideos/:unidade', (req, res) => {
   const { unidade } = req.params;
 
-  const SQL = 'SELECT date, nota, regente, comentarios FROM fotosevideos WHERE unidade = ?';
+  const SQL = 'SELECT date, nota, comentarios FROM fotosevideos WHERE unidade = ?';
   const values = [unidade];
 
   db.query(SQL, values, (err, results) => {
