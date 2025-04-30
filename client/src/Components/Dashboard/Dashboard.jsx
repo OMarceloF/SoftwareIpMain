@@ -50,7 +50,7 @@ const Dashboard = () => {
           setName(fullName);
 
           // Pegando o primeiro nome e verificando a última letra
-          const nomesFemininosComuns = ["Aline", "Michele", "Rute", "Ester", "Viviane", "Luane", "gisele", "beatriz", "tamires"];
+          const nomesFemininosComuns = ["Aline", "Michele", "Jane", "Ester", "Viviane", "Luane", "gisele", "beatriz", "tamires"];
           const firstName = fullName.split(" ")[0];
           if (
             firstName.slice(-1) === "a" ||
