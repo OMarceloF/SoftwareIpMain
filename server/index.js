@@ -519,7 +519,7 @@ app.get('/planos/detalhes/:unidade', (req, res) => {
 
 app.get('/fotosevideos/detalhes/:unidade', (req, res) => {
   const { unidade } = req.params;
-  const SQL = 'SELECT date, nota, regente, comentarios FROM fotosevideos WHERE unidade = ?';
+  const SQL = 'SELECT date, nota,  comentarios FROM fotosevideos WHERE unidade = ?';
 
   db.query(SQL, [unidade], (err, results) => {
     if (err) {
